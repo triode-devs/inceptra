@@ -9,8 +9,13 @@
 		Plus,
 		CheckCircle,
 		Map,
-		MessageCircle
+		MessageCircle,
+		Music
 	} from 'lucide-svelte';
+
+	import heroHighlight from '$lib/assets/hero_highlight.jpg';
+	import symposiumBg from '$lib/assets/symposium_bg.png';
+	import culturalBg from '$lib/assets/cultural_bg.png';
 
 	let timeLeft = {
 		days: '00',
@@ -59,7 +64,7 @@
 </svelte:head>
 
 <div
-	class="relative flex h-auto min-h-screen w-full flex-col scroll-smooth bg-[#f7f6f8] font-['Lexend'] text-[#141118] pt-20"
+	class="relative flex h-auto min-h-screen w-full flex-col scroll-smooth bg-[#f7f6f8] pt-20 font-['Lexend'] text-[#141118]"
 >
 	<main class="flex-1 pb-20 md:pb-0">
 		<!-- Added padding bottom for mobile nav spacing -->
@@ -86,9 +91,9 @@
 						</p>
 						<div class="flex w-full flex-wrap justify-center gap-4 lg:justify-start">
 							<button
-							    onclick={() => {
-							        window.location.href = '/register';
-							    }}
+								onclick={() => {
+									window.location.href = '/register';
+								}}
 								class="h-12 w-full rounded-xl bg-[#8c2bee] px-8 text-base font-bold text-white shadow-xl shadow-[#8c2bee]/30 transition-all hover:bg-[#8c2bee]/90 sm:w-auto md:h-14 md:px-10 md:text-lg"
 							>
 								Get Your Passes
@@ -97,20 +102,41 @@
 					</div>
 					<div class="relative mt-8 lg:col-span-5 lg:mt-0">
 						<div
-							class="mx-auto aspect-square max-w-md rotate-3 overflow-hidden rounded-3xl shadow-2xl transition-transform duration-500 hover:rotate-0"
+							class="group mx-auto aspect-square max-w-md rotate-3 overflow-hidden rounded-3xl shadow-2xl transition-transform duration-500 hover:rotate-0"
 						>
-							<div class="hero-gradient flex h-full w-full flex-col justify-end p-6 md:p-8">
-								<div class="glass-card rounded-2xl p-6 text-white">
-									<p class="mb-1 text-sm font-medium opacity-80">Headline Act</p>
-									<h3 class="text-2xl font-bold">The Electric Symphony</h3>
-									<p class="mt-2 flex items-center gap-1 text-xs">
-										<MapPin size={12} /> Main Stadium, 6:00 PM
+							<!-- Image Background -->
+							<img
+								src={heroHighlight}
+								alt="Festival Highlights"
+								class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+							/>
+
+							<!-- Gradient Overlay for Text Readability -->
+							<div
+								class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
+							></div>
+
+							<!-- Floating Info Card -->
+							<div class="absolute right-0 bottom-0 left-0 p-6 md:p-8">
+								<div
+									class="glass-card rounded-2xl border border-white/20 p-6 text-white backdrop-blur-md"
+								>
+									<div class="flex items-start justify-between">
+										<div>
+											<p class="mb-1 text-sm font-medium tracking-wider text-[#8c2bee] uppercase">
+												Headline Act
+											</p>
+											<h3 class="text-2xl font-bold">The Electric Symphony</h3>
+										</div>
+										<div class="rounded-lg bg-white/10 p-2">
+											<Music size={24} />
+										</div>
+									</div>
+									<p class="mt-4 flex items-center gap-2 text-xs font-medium text-gray-200">
+										<MapPin size={14} /> Main Stadium • 6:00 PM
 									</p>
 								</div>
 							</div>
-							<div
-								class="hero-gradient absolute inset-0 z-[-1] scale-110 opacity-30 blur-3xl"
-							></div>
 						</div>
 					</div>
 				</div>
@@ -199,7 +225,7 @@
 						<div class="relative aspect-[16/10] overflow-hidden md:aspect-[16/9]">
 							<div
 								class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-								style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA66Iqws8H7dBN7Z92PTKEaOeC3UPNbvZWY_L4v71D7eX1GtHcA_y6wlpb5fzSqr_yjQlRtuKpVskmzmeiFmC7HLe4vejDWXVxaFFsLsakAtpxX7tIJ2aJUFgU6otUb_8eFRBqFjvjAc65UKZFclzOM4vpaTbmztbIles8fV_LRPwwByeT4W4YSA8_ZWvFImcKE9VjHm9Xq94RBZIhcCxMMAoASsJYeYABCNmVbOTtSnFmUsVYq1BhbVbGS6tFF2OwbiZvbCH6RvLw");'
+								style="background-image: url({symposiumBg});"
 							></div>
 							<div
 								class="absolute inset-0 bg-gradient-to-t from-[#8c2bee]/90 via-[#8c2bee]/40 to-transparent opacity-90 transition-opacity group-hover:opacity-100"
@@ -233,7 +259,7 @@
 						<div class="relative aspect-[16/10] overflow-hidden md:aspect-[16/9]">
 							<div
 								class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-								style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBjz1-9PkVhhhtoHstidqUbbrN8VI_gmiewcAHM-uUYE3JBqPkW80QjeWaFFoxu8T8qaHvpo3Py-fihPkVw8EL_UUKCm05ot6Ij0SqRkEIsD1MCyUfbfph6kcHkXyihZ3vNV4HPnPFUt_QX4lP-LZjjGBF46GyaTgdC_e7X190xLEjtQngk2dF-zBtEwvjw6HE6oReW_IUQmhhjvut5CeK-xPaiQJ9UD6kOwFmj0vLYkSgvmML8KBbLcWzsl_YCTldTzG3N2j8lkFc");'
+								style="background-image: url({culturalBg});"
 							></div>
 							<div
 								class="absolute inset-0 bg-gradient-to-t from-[#ee2b8c]/90 via-[#ee2b8c]/40 to-transparent opacity-90 transition-opacity group-hover:opacity-100"

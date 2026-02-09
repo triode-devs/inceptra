@@ -55,12 +55,12 @@
 				</div>
 			</div>
 
-			{#each ['Guests', 'Venue', 'About'] as item}
+			{#each [{ name: 'Venue', link: '/#venue' }, { name: 'About', link: '/about' }] as item}
 				<a
-					href="#{item.toLowerCase()}"
+					href={item.link}
 					class="rounded-full px-5 py-2 text-sm font-semibold text-[#756189] transition-all duration-300 hover:bg-white hover:text-[#141118] hover:shadow-sm"
 				>
-					{item}
+					{item.name}
 				</a>
 			{/each}
 		</div>
@@ -71,7 +71,7 @@
 			on:click={() => {
 				window.location.href = '/register';
 			}}
-			>
+		>
 			<span>Get Passes</span>
 			<Ticket size={16} />
 		</button>
@@ -124,9 +124,9 @@
 
 		<!-- Links -->
 		<nav class="flex flex-1 flex-col justify-center gap-6 px-8">
-			{#each ['Events', 'Guests', 'Venue', 'About'] as item, i}
+			{#each [{ name: 'Home', link: '/' }, { name: 'Symposium', link: '/symposium' }, { name: 'Cultural', link: '/cultural' }, { name: 'Venue', link: '/#venue' }, { name: 'About', link: '/about' }] as item, i}
 				<a
-					href="#{item.toLowerCase()}"
+					href={item.link}
 					on:click={toggleMenu}
 					class="group flex items-center gap-4 text-4xl font-black text-[#141118] transition-colors hover:text-[#8c2bee]"
 					in:fly={{ y: 20, duration: 400, delay: 100 + i * 50, easing: quintOut }}
@@ -134,7 +134,7 @@
 					<span
 						class="h-2 w-2 rounded-full bg-[#8c2bee] opacity-0 transition-opacity group-hover:opacity-100"
 					></span>
-					{item}
+					{item.name}
 				</a>
 			{/each}
 		</nav>
