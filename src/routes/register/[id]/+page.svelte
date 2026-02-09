@@ -1,4 +1,5 @@
 <script>
+	import { page } from '$app/stores';
 	import Register from '$lib/components/Register.svelte';
 </script>
 
@@ -6,4 +7,4 @@
 	<title>Event Registration | INCEPTRA '26</title>
 </svelte:head>
 
-<Register />
+<Register deptId={$page.params.id} />

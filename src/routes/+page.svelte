@@ -126,14 +126,14 @@
 											<p class="mb-1 text-sm font-medium tracking-wider text-[#8c2bee] uppercase">
 												Headline Act
 											</p>
-											<h3 class="text-2xl font-bold">The Electric Symphony</h3>
+											<h3 class="text-2xl font-bold">INCEPTRA '26</h3>
 										</div>
 										<div class="rounded-lg bg-white/10 p-2">
 											<Music size={24} />
 										</div>
 									</div>
 									<p class="mt-4 flex items-center gap-2 text-xs font-medium text-gray-200">
-										<MapPin size={14} /> Main Stadium • 6:00 PM
+										<MapPin size={14} /> Auditorium • 9:00 AM
 									</p>
 								</div>
 							</div>

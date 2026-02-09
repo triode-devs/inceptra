@@ -2,6 +2,7 @@
 	import { Sparkles, Menu, X, ArrowRight, Ticket, ChevronDown } from 'lucide-svelte';
 	import { fade, fly, slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import tecLogo from '$lib/assets/tec svg.svg';
 
 	let isMenuOpen = false;
 	let isEventsOpen = false;
@@ -18,6 +19,7 @@
 	>
 		<!-- Logo -->
 		<a href="/" class="group flex items-center gap-1.5 pr-6 pl-4 font-['Lexend']">
+			<img src={tecLogo} alt="TEC Logo" class="mr-2 h-10 w-auto object-contain" />
 			<span class="text-xl font-black tracking-tighter text-[#141118]">INCEPTRA</span>
 			<span class="text-xl font-black tracking-tighter text-[#8c2bee]">26</span>
 		</a>
@@ -86,6 +88,7 @@
 		href="/"
 		class="pointer-events-auto flex items-center gap-2 rounded-full border border-white/40 bg-white/80 px-4 py-2 shadow-lg shadow-black/5 backdrop-blur-lg"
 	>
+		<img src={tecLogo} alt="TEC Logo" class="h-6 w-auto object-contain" />
 		<div class="text-[#8c2bee]">
 			<Sparkles size={18} fill="currentColor" />
 		</div>
@@ -109,8 +112,8 @@
 		<!-- Header -->
 		<div class="flex items-center justify-between p-6">
 			<div class="flex items-center gap-2">
-				<div class="rounded-lg bg-[#8c2bee] p-2 text-white">
-					<Sparkles size={20} />
+				<div class="rounded-lg bg-white p-2 shadow-sm">
+					<img src={tecLogo} alt="TEC Logo" class="h-8 w-auto object-contain" />
 				</div>
 				<span class="text-xl font-black tracking-tight">MENU</span>
 			</div>
