@@ -362,11 +362,6 @@
 </div>
 
 <style>
-	/* Custom Utilities that can't be easily handled by Tailwind CDN classes alone */
-	.hero-gradient {
-		background: linear-gradient(135deg, #8c2bee 0%, #ee2b8c 50%, #2b8cee 100%);
-	}
-
 	.glass-card {
 		background: rgba(255, 255, 255, 0.1);
 		backdrop-filter: blur(10px);

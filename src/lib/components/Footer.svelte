@@ -78,7 +78,7 @@
 				<ul class="flex flex-col gap-4 text-gray-400">
 					{#each ['Home', 'Events', 'Schedule', 'Sponsors', 'Team'] as link}
 						<li>
-							<a href="#" class="transition-colors hover:text-[#ee2b8c]">{link}</a>
+							<a href="/" class="transition-colors hover:text-[#ee2b8c]">{link}</a>
 						</li>
 					{/each}
 				</ul>
@@ -131,9 +131,9 @@
 		>
 			<p>&copy; 2026 Inceptra Festival Committee. All Rights Reserved.</p>
 			<div class="flex items-center gap-6">
-				<a href="#" class="hover:text-white">Privacy Policy</a>
-				<a href="#" class="hover:text-white">Terms of Service</a>
-				<a href="#" class="hover:text-white">Cookies</a>
+				<a href="/" class="hover:text-white">Privacy Policy</a>
+				<a href="/" class="hover:text-white">Terms of Service</a>
+				<a href="/" class="hover:text-white">Cookies</a>
 			</div>
 			<div class="flex items-center gap-1">
 				<span>Made with</span>
