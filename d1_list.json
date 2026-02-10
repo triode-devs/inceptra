@@ -1,0 +1,74 @@
+﻿[
+  {
+    "uuid": "3b50bd54-9922-4391-b43c-53f169e3d3f0",
+    "name": "inceptra-db",
+    "created_at": "2026-02-10T15:12:41.052Z",
+    "version": "production",
+    "num_tables": 0,
+    "file_size": 12288,
+    "jurisdiction": null
+  },
+  {
+    "uuid": "855299cc-38d5-43f0-9043-edd2050a274f",
+    "name": "gridsence-sv",
+    "created_at": "2026-01-24T14:27:38.634Z",
+    "version": "production",
+    "num_tables": 0,
+    "file_size": 118784,
+    "jurisdiction": null
+  },
+  {
+    "uuid": "0e69b1aa-1e73-4f27-b921-1b6761acb6c0",
+    "name": "portfolio",
+    "created_at": "2025-10-14T12:57:23.286Z",
+    "version": "production",
+    "num_tables": 0,
+    "file_size": 593920,
+    "jurisdiction": null
+  },
+  {
+    "uuid": "4150470e-3ce8-4a20-8ffd-f3acd4f438cf",
+    "name": "gridsence",
+    "created_at": "2025-09-23T15:17:34.326Z",
+    "version": "production",
+    "num_tables": 0,
+    "file_size": 114688,
+    "jurisdiction": null
+  },
+  {
+    "uuid": "69f9f864-d817-4ea0-9105-1f12adb5b766",
+    "name": "blog",
+    "created_at": "2025-09-12T16:08:22.447Z",
+    "version": "production",
+    "num_tables": 0,
+    "file_size": 45056,
+    "jurisdiction": null
+  },
+  {
+    "uuid": "3d96dab3-2402-480e-99f3-1f0681887f51",
+    "name": "profile",
+    "created_at": "2025-09-09T12:18:50.869Z",
+    "version": "production",
+    "num_tables": 0,
+    "file_size": 122880,
+    "jurisdiction": null
+  },
+  {
+    "uuid": "8ac475f9-489f-4ffc-ab94-af78cc69112d",
+    "name": "eruthukattu",
+    "created_at": "2025-09-08T16:19:08.473Z",
+    "version": "production",
+    "num_tables": 0,
+    "file_size": 147456,
+    "jurisdiction": null
+  },
+  {
+    "uuid": "7d80a766-8164-432c-9be9-6a90d3900eb4",
+    "name": "attendance",
+    "created_at": "2025-07-02T05:04:09.053Z",
+    "version": "production",
+    "num_tables": 5,
+    "file_size": 61440,
+    "jurisdiction": null
+  }
+]
