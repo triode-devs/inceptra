@@ -76,8 +76,10 @@
 	function formatDate(dateStr) {
 		if (!dateStr) return 'N/A';
 		try {
+			// Ensure we have a string for .includes
+			const str = typeof dateStr === 'string' ? dateStr : String(dateStr);
 			// Handle SQLite space between date and time
-			const isoStr = dateStr.includes(' ') ? dateStr.replace(' ', 'T') : dateStr;
+			const isoStr = str.includes(' ') ? str.replace(' ', 'T') : str;
 			const date = new Date(isoStr);
 			if (isNaN(date.getTime())) return 'Invalid Date';
 			return date.toLocaleDateString('en-IN', {
@@ -88,6 +90,7 @@
 				minute: '2-digit'
 			});
 		} catch (e) {
+			console.error('Date parsing error:', e, dateStr);
 			return 'Invalid Date';
 		}
 	}
@@ -113,6 +116,22 @@
 				return Clock;
 		}
 	}
+
+	// Dashboard Stats
+	const stats = $derived({
+		total: Array.isArray(registrations) ? registrations.length : 0,
+		pending: Array.isArray(registrations)
+			? registrations.filter((r) => r && r.payment_status === 'pending').length
+			: 0,
+		approved: Array.isArray(registrations)
+			? registrations.filter((r) => r && r.payment_status === 'approved').length
+			: 0,
+		revenue: Array.isArray(registrations)
+			? registrations
+					.filter((r) => r && r.payment_status === 'approved')
+					.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0)
+			: 0
+	});
 </script>
 
 <svelte:head>
@@ -122,22 +141,31 @@
 <div class="min-h-screen bg-[#f7f6f8] pt-24 pb-12 font-['Lexend'] text-[#141118]">
 	<div class="mx-auto max-w-[1400px] px-6">
 		<!-- Header Section -->
-		<div class="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-			<div>
-				<h1 class="text-4xl font-black tracking-tight">Registration Dashboard</h1>
-				<div class="mt-4 flex flex-wrap items-center gap-6">
-					<p class="text-[#756189]">Manage and verify participant payments for Inceptra '26.</p>
+		<div class="mb-10">
+			<div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+				<div>
+					<h1 class="text-4xl font-black tracking-tight text-[#141118]">
+						Registration <span class="text-[#8c2bee]">Dashboard</span>
+					</h1>
+					<p class="mt-2 text-[#756189]">
+						Manage and verify participant payments for Inceptra '26.
+					</p>
+				</div>
 
+				<div class="flex items-center gap-4">
 					<!-- Offline Payment Toggle -->
 					<form
 						method="POST"
 						action="?/toggleOfflinePayment"
 						use:enhance
-						class="flex items-center gap-3 rounded-full border border-gray-100 bg-white px-4 py-2 shadow-sm"
+						class="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white px-5 py-3 shadow-sm transition-all hover:shadow-md"
 					>
-						<span class="text-xs font-bold tracking-wider text-gray-400 uppercase"
-							>Offline Payment</span
-						>
+						<div class="flex flex-col">
+							<span class="text-[10px] font-bold tracking-widest text-gray-400 uppercase"
+								>Payment Gateway</span
+							>
+							<span class="text-xs font-bold text-gray-700">Counter Payments</span>
+						</div>
 						<input type="hidden" name="enabled" value={isOfflineEnabled ? 'false' : 'true'} />
 						<button
 							type="submit"
@@ -146,68 +174,129 @@
 								: 'text-gray-300'}"
 						>
 							{#if isOfflineEnabled}
-								<ToggleRight size={28} />
-								<span class="text-[10px] font-black uppercase underline">Enabled</span>
+								<ToggleRight size={32} />
 							{:else}
-								<ToggleLeft size={28} />
-								<span class="text-[10px] font-black text-gray-400 uppercase">Disabled</span>
+								<ToggleLeft size={32} />
 							{/if}
 						</button>
 					</form>
 				</div>
 			</div>
 
-			<!-- Search and Filters -->
-			<div class="flex flex-wrap items-center gap-4">
-				<div class="relative min-w-[300px] flex-1">
-					<Search class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400" size={18} />
-					<input
-						type="text"
-						bind:value={searchQuery}
-						placeholder="Search by name, ID, or email..."
-						class="h-12 w-full rounded-xl border border-gray-200 bg-white pr-4 pl-12 outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
-					/>
+			<!-- Stats Grid -->
+			<div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+				<div
+					class="rounded-3xl border border-white bg-white p-6 shadow-sm transition-all hover:shadow-md"
+				>
+					<div class="flex items-center justify-between">
+						<div class="rounded-2xl bg-blue-50 p-3 text-blue-600">
+							<User size={24} />
+						</div>
+						<span class="text-xs font-bold text-gray-400 capitalize">Total Registrations</span>
+					</div>
+					<div class="mt-4">
+						<h3 class="text-3xl font-black">{stats.total}</h3>
+						<p class="text-xs font-medium text-gray-500">Participants registered</p>
+					</div>
 				</div>
 
-				<div class="flex flex-wrap items-center gap-2">
-					<select
-						bind:value={typeFilter}
-						class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
-					>
-						<option value="all">All Types</option>
-						<option value="symposium">Symposium</option>
-						<option value="cultural">Cultural</option>
-					</select>
-
-					<select
-						bind:value={deptFilter}
-						class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
-					>
-						<option value="all">All Departments</option>
-						{#each departments as dept}
-							<option value={dept.id}>{dept.name}</option>
-						{/each}
-					</select>
-
-					<select
-						bind:value={statusFilter}
-						class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
-					>
-						<option value="all">All Statuses</option>
-						<option value="pending">Pending</option>
-						<option value="approved">Approved</option>
-						<option value="rejected">Rejected</option>
-					</select>
-
-					<select
-						bind:value={paymentFilter}
-						class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
-					>
-						<option value="all">Payment Mode</option>
-						<option value="online">Online (UPI)</option>
-						<option value="offline">Offline (Counter)</option>
-					</select>
+				<div
+					class="rounded-3xl border border-white bg-white p-6 shadow-sm transition-all hover:shadow-md"
+				>
+					<div class="flex items-center justify-between">
+						<div class="rounded-2xl bg-yellow-50 p-3 text-yellow-600">
+							<Clock size={24} />
+						</div>
+						<span class="text-xs font-bold text-gray-400 capitalize">Pending Verification</span>
+					</div>
+					<div class="mt-4">
+						<h3 class="text-3xl font-black">{stats.pending}</h3>
+						<p class="text-xs font-medium text-gray-500">Awaiting your approval</p>
+					</div>
 				</div>
+
+				<div
+					class="rounded-3xl border border-white bg-white p-6 shadow-sm transition-all hover:shadow-md"
+				>
+					<div class="flex items-center justify-between">
+						<div class="rounded-2xl bg-green-50 p-3 text-green-600">
+							<CheckCircle2 size={24} />
+						</div>
+						<span class="text-xs font-bold text-gray-400 capitalize">Verified Payments</span>
+					</div>
+					<div class="mt-4">
+						<h3 class="text-3xl font-black">{stats.approved}</h3>
+						<p class="text-xs font-medium text-gray-500">Confirmed registrations</p>
+					</div>
+				</div>
+
+				<div
+					class="rounded-3xl border border-white bg-white p-6 shadow-sm transition-all hover:shadow-md"
+				>
+					<div class="flex items-center justify-between">
+						<div class="rounded-2xl bg-purple-50 p-3 text-purple-600">
+							<Building2 size={24} />
+						</div>
+						<span class="text-xs font-bold text-gray-400 capitalize">Total Revenue</span>
+					</div>
+					<div class="mt-4">
+						<h3 class="text-3xl font-black">₹{(stats?.revenue || 0).toLocaleString('en-IN')}</h3>
+						<p class="text-xs font-medium text-gray-500">From verified payments</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Search and Filters -->
+		<div class="mb-8 flex flex-wrap items-center gap-4">
+			<div class="relative min-w-[300px] flex-1">
+				<Search class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400" size={18} />
+				<input
+					type="text"
+					bind:value={searchQuery}
+					placeholder="Search by name, ID, or email..."
+					class="h-12 w-full rounded-xl border border-gray-200 bg-white pr-4 pl-12 outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
+				/>
+			</div>
+
+			<div class="flex flex-wrap items-center gap-2">
+				<select
+					bind:value={typeFilter}
+					class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
+				>
+					<option value="all">All Types</option>
+					<option value="symposium">Symposium</option>
+					<option value="cultural">Cultural</option>
+				</select>
+
+				<select
+					bind:value={deptFilter}
+					class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
+				>
+					<option value="all">All Departments</option>
+					{#each departments as dept}
+						<option value={dept.id}>{dept.name}</option>
+					{/each}
+				</select>
+
+				<select
+					bind:value={statusFilter}
+					class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
+				>
+					<option value="all">All Statuses</option>
+					<option value="pending">Pending</option>
+					<option value="approved">Approved</option>
+					<option value="rejected">Rejected</option>
+				</select>
+
+				<select
+					bind:value={paymentFilter}
+					class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
+				>
+					<option value="all">Payment Mode</option>
+					<option value="online">Online (UPI)</option>
+					<option value="offline">Offline (Counter)</option>
+				</select>
 			</div>
 		</div>
 

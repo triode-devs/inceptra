@@ -26,6 +26,8 @@
 		"wrangler": "^4.63.0"
 	},
 	"dependencies": {
+		"firebase": "^12.9.0",
+		"gsap": "^3.14.2",
 		"lucide-svelte": "^0.563.0"
 	}
 }

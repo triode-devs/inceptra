@@ -12,6 +12,7 @@
 		MessageCircle,
 		Music
 	} from 'lucide-svelte';
+	import DotGrid from '$lib/components/DotGrid.svelte';
 
 	import heroHighlight from '$lib/assets/hero_highlight.jpg';
 	import symposiumBg from '$lib/assets/symposium_bg.png';
@@ -56,17 +57,87 @@
 </script>
 
 <svelte:head>
-	<title>INCEPTRA '26 | College Symposium & Cultural Festival</title>
+	<title>INCEPTRA '26 | College Symposium & Cultural Festival | TEC</title>
+	<meta
+		name="description"
+		content="INCEPTRA '26 at Trichy Engineering College. A massive 2-day event featuring Technical Symposiums and Cultural Festivals on March 5 & 6, 2026."
+	/>
+	<meta
+		name="keywords"
+		content="Inceptra 2026, College Symposium, Cultural Festival, Trichy Engineering College, TEC, Engineering Events, College Fest"
+	/>
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://inceptra-tec.pages.dev/" />
+	<meta property="og:title" content="INCEPTRA '26 | Innovation Meets Art" />
+	<meta
+		property="og:description"
+		content="Join the ultimate college symposium and cultural festival. 2 days of tech, music, dance, and creativity."
+	/>
+	<meta property="og:image" content="/og-image.jpg" />
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:title" content="INCEPTRA '26 | College Symposium & Cultural Festival" />
+	<meta
+		property="twitter:description"
+		content="Register now for the biggest college fest in Trichy! Technical and Cultural events await."
+	/>
+
 	<link
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet"
 	/>
+
+	<!-- Structured Data -->
+	<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "Event",
+			"name": "INCEPTRA '26",
+			"startDate": "2026-03-05T09:00",
+			"endDate": "2026-03-06T18:00",
+			"eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+			"eventStatus": "https://schema.org/EventScheduled",
+			"location": {
+				"@type": "Place",
+				"name": "Trichy Engineering College",
+				"address": {
+					"@type": "PostalAddress",
+					"streetAddress": "Konalai",
+					"addressLocality": "Trichy",
+					"addressRegion": "TN",
+					"addressCountry": "IN"
+				}
+			},
+			"image": ["https://inceptra-tec.pages.dev/og-image.jpg"],
+			"description": "The ultimate college symposium and cultural festival. Two days of tech, music, dance, and creativity.",
+			"organizer": {
+				"@type": "Organization",
+				"name": "Trichy Engineering College",
+				"url": "https://trichyengg.ac.in"
+			}
+		}
+	</script>
 </svelte:head>
 
 <div
 	class="relative flex h-auto min-h-screen w-full flex-col scroll-smooth bg-[#f7f6f8] pt-20 font-['Lexend'] text-[#141118]"
 >
 	<main class="flex-1 pb-20 md:pb-0">
+		<!-- Global Interactive Background -->
+		<div class="pointer-events-none absolute inset-0 z-0">
+			<DotGrid
+				dotSize={6}
+				gap={48}
+				baseColor="#8c2bee"
+				activeColor="#ee2b8c"
+				proximity={200}
+				className="opacity-10"
+			/>
+		</div>
+
 		<!-- Added padding bottom for mobile nav spacing -->
 		<!-- Hero Section -->
 		<section class="relative overflow-hidden px-6 pt-12 pb-20 md:px-20">
@@ -82,6 +153,10 @@
 							<span class="text-xs font-bold tracking-widest uppercase">March 5 & 6, 2026</span>
 						</div>
 						<h1 class="text-4xl leading-[1.1] font-black tracking-tight sm:text-5xl md:text-7xl">
+							<span
+								class="mb-2 block text-2xl font-black tracking-[0.2em] text-[#8c2bee] uppercase sm:text-3xl"
+								>Inceptra '26</span
+							>
 							Where <span class="text-[#8c2bee] italic">Innovation</span> Meets
 							<span class="text-[#ee2b8c]">Art</span>.
 						</h1>
@@ -146,7 +221,9 @@
 		<!-- Countdown Timer -->
 		<section class="px-4 py-8 md:px-20 md:py-12">
 			<div class="mx-auto max-w-[1280px]">
-				<div class="rounded-[2rem] border border-[#f2f0f4] bg-white p-6 shadow-sm md:p-12">
+				<div
+					class="relative z-10 rounded-[2rem] border border-[#f2f0f4] bg-white p-6 shadow-sm md:p-12"
+				>
 					<div class="flex flex-col items-center justify-between gap-8 lg:flex-row">
 						<div class="text-center lg:text-left">
 							<h3 class="text-2xl font-bold">Starts In...</h3>
@@ -222,7 +299,7 @@
 						href="/symposium"
 						class="group relative overflow-hidden rounded-[2.5rem] bg-white transition-all hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#8c2bee]/20"
 					>
-						<div class="relative aspect-[16/10] overflow-hidden md:aspect-[16/9]">
+						<div class="relative aspect-[3/4] overflow-hidden sm:aspect-[16/10] md:aspect-[16/9]">
 							<div
 								class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
 								style="background-image: url({symposiumBg});"
@@ -231,19 +308,21 @@
 								class="absolute inset-0 bg-gradient-to-t from-[#8c2bee]/90 via-[#8c2bee]/40 to-transparent opacity-90 transition-opacity group-hover:opacity-100"
 							></div>
 							<div
-								class="absolute right-6 bottom-6 left-6 flex flex-col gap-2 text-white md:right-10 md:bottom-10 md:left-10"
+								class="absolute right-6 bottom-6 left-6 flex flex-col gap-2 text-white sm:right-8 sm:bottom-8 sm:left-8 md:right-10 md:bottom-10 md:left-10"
 							>
 								<div
-									class="w-fit rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase backdrop-blur-md"
+									class="w-fit rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
 								>
 									Technical & Non-Technical
 								</div>
-								<h3 class="text-3xl font-black md:text-5xl">Symposium</h3>
-								<p class="mt-2 max-w-md text-sm font-medium opacity-90 md:text-lg">
+								<h3 class="text-3xl font-black sm:text-4xl md:text-5xl">Symposium</h3>
+								<p
+									class="mt-1 max-w-md text-sm font-medium opacity-90 sm:mt-2 sm:text-base md:text-lg"
+								>
 									Workshops, Hackathons, Paper Presentations, and more technical marvels.
 								</p>
 								<div
-									class="mt-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#8c2bee] transition-transform group-hover:scale-110"
+									class="mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#8c2bee] transition-transform group-hover:scale-110 sm:h-12 sm:w-12"
 								>
 									<ArrowRight size={24} />
 								</div>
@@ -256,7 +335,7 @@
 						href="/cultural"
 						class="group relative overflow-hidden rounded-[2.5rem] bg-white transition-all hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#ee2b8c]/20"
 					>
-						<div class="relative aspect-[16/10] overflow-hidden md:aspect-[16/9]">
+						<div class="relative aspect-[3/4] overflow-hidden sm:aspect-[16/10] md:aspect-[16/9]">
 							<div
 								class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
 								style="background-image: url({culturalBg});"
@@ -265,19 +344,21 @@
 								class="absolute inset-0 bg-gradient-to-t from-[#ee2b8c]/90 via-[#ee2b8c]/40 to-transparent opacity-90 transition-opacity group-hover:opacity-100"
 							></div>
 							<div
-								class="absolute right-6 bottom-6 left-6 flex flex-col gap-2 text-white md:right-10 md:bottom-10 md:left-10"
+								class="absolute right-6 bottom-6 left-6 flex flex-col gap-2 text-white sm:right-8 sm:bottom-8 sm:left-8 md:right-10 md:bottom-10 md:left-10"
 							>
 								<div
-									class="w-fit rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold uppercase backdrop-blur-md"
+									class="w-fit rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
 								>
 									Non-Technical
 								</div>
-								<h3 class="text-3xl font-black md:text-5xl">Cultural</h3>
-								<p class="mt-2 max-w-md text-sm font-medium opacity-90 md:text-lg">
+								<h3 class="text-3xl font-black sm:text-4xl md:text-5xl">Cultural</h3>
+								<p
+									class="mt-1 max-w-md text-sm font-medium opacity-90 sm:mt-2 sm:text-base md:text-lg"
+								>
 									Music, Dance, Drama, Art Gallery, and spectacular performances.
 								</p>
 								<div
-									class="mt-4 flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#ee2b8c] transition-transform group-hover:scale-110"
+									class="mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#ee2b8c] transition-transform group-hover:scale-110 sm:h-12 sm:w-12"
 								>
 									<ArrowRight size={24} />
 								</div>

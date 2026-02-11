@@ -108,12 +108,19 @@
 </script>
 
 <svelte:head>
-	<title>Technical Symposium | INCEPTRA '26</title>
+	<title>Technical Symposium | INCEPTRA '26 | TEC</title>
+	<meta
+		name="description"
+		content="Explore Technical Symposium events at INCEPTRA '26. Paper presentations, coding challenges, project expos, and more across all engineering departments."
+	/>
+	<meta
+		name="keywords"
+		content="Technical Symposium, Engineering Events, CSE Events, EEE Events, ECE Events, Mechanical Events, Civil Events, Paper Presentation"
+	/>
 	<link
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet"
 	/>
-	<script src="https://cdn.tailwindcss.com"></script>
 </svelte:head>
 
 <div class="min-h-screen bg-[#f7f6f8] px-4 py-12 font-['Lexend'] text-[#141118] md:px-20">

@@ -3,12 +3,15 @@
 </script>
 
 <svelte:head>
-	<title>About Us | INCEPTRA '26</title>
+	<title>About INCEPTRA '26 | Our Mission & Vision | TEC</title>
+	<meta
+		name="description"
+		content="Learn more about INCEPTRA '26 at Trichy Engineering College. Discover our legacy, mission, and the team behind the biggest college fest in the region."
+	/>
 	<link
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet"
 	/>
-	<script src="https://cdn.tailwindcss.com"></script>
 </svelte:head>
 
 <div

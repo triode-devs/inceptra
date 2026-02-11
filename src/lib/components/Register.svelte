@@ -15,13 +15,19 @@
 		CreditCard,
 		Wallet,
 		QrCode,
-		Plus
+		Plus,
+		Download,
+		Phone
 	} from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
+	import symposiumQR from '../assets/qr/symposium.png';
+	import culturalsQR from '../assets/qr/culturals.png';
 
 	// Props: Accept deptId from parent (URL param)
 	export let deptId = null;
 	export let settings = {};
+	export let userEmail = null;
+	export let userId = null;
 
 	let registrationType = 'symposium'; // 'symposium' | 'cultural'
 	let submitted = false;
@@ -113,7 +119,7 @@
 	let formData = {
 		name: '',
 		id: '',
-		email: '',
+		email: userEmail || '',
 		phone: '',
 		year: '',
 		college: '',
@@ -126,6 +132,11 @@
 			cultural: []
 		}
 	};
+
+	// Sync email if userEmail changes
+	$: if (userEmail && !formData.email) {
+		formData.email = userEmail;
+	}
 
 	// --- Logic ---
 	let selectedDeptIndex = -1;
@@ -274,7 +285,8 @@
 						registrationType,
 						amount: 150 + formData.events.cultural.length * 100,
 						payment_screenshot_key: paymentMethod === 'offline' ? 'OFFLINE' : paymentScreenshotKey,
-						dept: selectedDept?.name || null
+						dept: selectedDept?.name || null,
+						user_id: userId
 					})
 				});
 
@@ -681,20 +693,22 @@
 											class="flex flex-col items-center gap-6 rounded-2xl bg-[#f8f6f7] p-8 text-center"
 										>
 											<div
-												class="relative h-48 w-48 overflow-hidden rounded-2xl bg-white p-2 shadow-inner"
+												class="relative h-64 w-64 overflow-hidden rounded-2xl bg-white p-2 shadow-inner sm:h-80 sm:w-80"
 											>
 												<img
-													src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=upi://pay?pa=7339247653@paytm%26pn=Inceptra%26am={150 +
-														formData.events.cultural.length * 100}%26cu=INR"
+													src={registrationType === 'symposium' ? symposiumQR : culturalsQR}
 													alt="UPI QR Code"
-													class="h-full w-full contrast-125 grayscale"
+													class="h-full w-full"
 												/>
 											</div>
-											<div class="flex flex-col gap-1">
-												<p class="text-xs font-bold tracking-widest text-gray-400 uppercase">
-													UPI ID
-												</p>
-												<p class="font-mono text-lg font-black text-[#181115]">7339247653@paytm</p>
+											<div class="flex flex-col gap-4">
+												<a
+													href={registrationType === 'symposium' ? symposiumQR : culturalsQR}
+													download="Inceptra_QR_{registrationType}.png"
+													class="flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-[#8c2bee] shadow-sm transition-all hover:bg-gray-50 active:scale-95"
+												>
+													<Download size={16} /> Download QR
+												</a>
 											</div>
 										</div>
 
@@ -767,6 +781,90 @@
 										</div>
 									</div>
 								{/if}
+
+								<!-- Contact Information for Payment Issues -->
+								<div
+									class="mt-4 rounded-3xl border border-white bg-[#f8f6f7] p-8 shadow-sm"
+									in:slide
+								>
+									<div class="mb-6 flex items-center gap-3">
+										<div
+											class="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#8c2bee] shadow-sm"
+										>
+											<Phone size={20} />
+										</div>
+										<div>
+											<h4
+												class="text-sm leading-none font-black tracking-widest text-gray-400 uppercase"
+											>
+												Payment Support
+											</h4>
+											<p class="mt-1 text-xs font-bold text-[#756189]">
+												Found an issue? We're here to help.
+											</p>
+										</div>
+									</div>
+
+									<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+										<div class="space-y-4">
+											<div>
+												<p
+													class="mb-2 text-[10px] font-black tracking-widest text-[#ee2b8c] uppercase opacity-70"
+												>
+													Cultural Coordinator
+												</p>
+												<div
+													class="rounded-2xl border border-pink-50 bg-white p-4 shadow-sm transition-all hover:scale-[1.02]"
+												>
+													<span class="block font-black text-gray-800">Mrs. M. Rajalakshimi</span>
+													<a
+														href="tel:+918682053074"
+														class="mt-2 inline-flex items-center gap-2 font-bold text-[#ee2b8c] hover:underline"
+													>
+														<Phone size={12} />
+														86820 53074
+													</a>
+												</div>
+											</div>
+										</div>
+
+										<div class="space-y-4">
+											<div>
+												<p
+													class="mb-2 text-[10px] font-black tracking-widest text-[#8c2bee] uppercase opacity-70"
+												>
+													Symposium Coordinators
+												</p>
+												<div class="flex flex-col gap-3">
+													<div
+														class="rounded-2xl border border-purple-50 bg-white p-4 shadow-sm transition-all hover:scale-[1.02]"
+													>
+														<span class="block font-black text-gray-800">Mr. K. Vijayakumar</span>
+														<a
+															href="tel:+919944103066"
+															class="mt-2 inline-flex items-center gap-2 font-bold text-[#8c2bee] hover:underline"
+														>
+															<Phone size={12} />
+															99441 03066
+														</a>
+													</div>
+													<div
+														class="rounded-2xl border border-purple-50 bg-white p-4 shadow-sm transition-all hover:scale-[1.02]"
+													>
+														<span class="block font-black text-gray-800">Mrs. L. Kokila</span>
+														<a
+															href="tel:+919566386316"
+															class="mt-2 inline-flex items-center gap-2 font-bold text-[#8c2bee] hover:underline"
+														>
+															<Phone size={12} />
+															95663 86316
+														</a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 							</div>
 						{/if}
 					</div>
@@ -1004,12 +1102,20 @@
 					</div>
 				</div>
 
-				<button
-					class="mt-10 inline-flex items-center gap-2 text-sm font-bold text-[#8c2bee] underline"
-					on:click={() => window.location.reload()}
-				>
-					New Registration
-				</button>
+				<div class="mt-10 flex flex-col items-center gap-4">
+					<button
+						class="flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-[#141118] text-lg font-black text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95 sm:w-auto sm:px-12"
+						on:click={() => window.location.reload()}
+					>
+						<Plus size={20} /> Register Another Participant
+					</button>
+					<button
+						class="text-sm font-bold text-[#896179] transition-colors hover:text-[#8c2bee]"
+						on:click={() => (window.location.href = '/')}
+					>
+						Back to Home
+					</button>
+				</div>
 			</div>
 		{/if}
 	</div>

@@ -81,11 +81,19 @@
 </script>
 
 <svelte:head>
-	<title>Cultural Fest | INCEPTRA '26</title>
+	<title>Cultural Fest | INCEPTRA '26 | Music, Dance & Drama</title>
+	<meta
+		name="description"
+		content="Get ready for the biggest Cultural Fest at INCEPTRA '26. Solo/Group Dance, Singing, Fashion Show, Short Film, and more."
+	/>
+	<meta
+		name="keywords"
+		content="Cultural Festival, College Dance Competition, Singing Competition, Fashion Show, Short Film Contest, MIME, College Fest Trichy"
+	/>
 </svelte:head>
 
 <div
-	class="min-h-screen bg-[#f7f6f8] px-4 pt-24 pb-12 font-['Lexend'] text-[#141118] md:px-20 md:pt-32 pt-20"
+	class="min-h-screen bg-[#f7f6f8] px-4 pt-20 pt-24 pb-12 font-['Lexend'] text-[#141118] md:px-20 md:pt-32"
 >
 	<div class="mx-auto max-w-[1280px]">
 		<!-- Header -->

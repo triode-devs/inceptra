@@ -1,5 +1,5 @@
 -- registrations table
-CREATE TABLE registrations (
+CREATE TABLE IF NOT EXISTS registrations (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     college_id TEXT NOT NULL,
@@ -17,5 +17,14 @@ CREATE TABLE registrations (
     amount INTEGER NOT NULL,
     payment_screenshot_key TEXT, -- R2 object key
     payment_status TEXT DEFAULT 'pending', -- 'pending' | 'approved' | 'rejected'
+    user_id TEXT, -- Firebase User UID
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
+-- settings table
+CREATE TABLE IF NOT EXISTS settings (
+    key TEXT PRIMARY KEY,
+    value TEXT NOT NULL
+);
+
+-- initial settings
+INSERT OR IGNORE INTO settings (key, value) VALUES ('offline_payment_enabled', 'false');
