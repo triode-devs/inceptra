@@ -12,6 +12,7 @@
 		MessageCircle,
 		Music
 	} from 'lucide-svelte';
+	import DotGrid from '$lib/components/DotGrid.svelte';
 
 	import heroHighlight from '$lib/assets/hero_highlight.jpg';
 	import symposiumBg from '$lib/assets/symposium_bg.png';
@@ -67,6 +68,18 @@
 	class="relative flex h-auto min-h-screen w-full flex-col scroll-smooth bg-[#f7f6f8] pt-20 font-['Lexend'] text-[#141118]"
 >
 	<main class="flex-1 pb-20 md:pb-0">
+		<!-- Global Interactive Background -->
+		<div class="pointer-events-none absolute inset-0 z-0">
+			<DotGrid
+				dotSize={6}
+				gap={48}
+				baseColor="#8c2bee"
+				activeColor="#ee2b8c"
+				proximity={200}
+				className="opacity-10"
+			/>
+		</div>
+
 		<!-- Added padding bottom for mobile nav spacing -->
 		<!-- Hero Section -->
 		<section class="relative overflow-hidden px-6 pt-12 pb-20 md:px-20">
@@ -146,7 +159,9 @@
 		<!-- Countdown Timer -->
 		<section class="px-4 py-8 md:px-20 md:py-12">
 			<div class="mx-auto max-w-[1280px]">
-				<div class="rounded-[2rem] border border-[#f2f0f4] bg-white p-6 shadow-sm md:p-12">
+				<div
+					class="relative z-10 rounded-[2rem] border border-[#f2f0f4] bg-white p-6 shadow-sm md:p-12"
+				>
 					<div class="flex flex-col items-center justify-between gap-8 lg:flex-row">
 						<div class="text-center lg:text-left">
 							<h3 class="text-2xl font-bold">Starts In...</h3>

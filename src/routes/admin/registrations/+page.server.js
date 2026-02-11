@@ -8,7 +8,7 @@ export async function load({ platform }) {
     try {
         // Fetch registrations
         const registrationsPromise = platform.env.DB.prepare(
-            'SELECT * FROM registrations ORDER BY created_at DESC'
+            'SELECT id, name, college_id, email, phone, year, college, address, food, registration_type, dept, technical_events, non_technical_events, cultural_events, amount, payment_screenshot_key, payment_status, user_id, created_at FROM registrations ORDER BY created_at DESC'
         ).all();
 
         // Fetch settings
@@ -17,8 +17,10 @@ export async function load({ platform }) {
         const [regRes, setRes] = await Promise.all([registrationsPromise, settingsPromise]);
 
         // Convert settings array to key-value object
-        const settings = (setRes.results || []).reduce((acc, curr) => {
-            acc[curr.key] = curr.value;
+        const settings = (setRes?.results || []).reduce((acc, curr) => {
+            if (curr && curr.key) {
+                acc[curr.key] = curr.value;
+            }
             return acc;
         }, {});
 

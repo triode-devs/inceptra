@@ -138,7 +138,14 @@
 			<div class="flex items-center gap-1">
 				<span>Made with</span>
 				<Heart size={14} class="fill-red-500 text-red-500" />
-				<span>in Trichy</span>
+				<span
+					>by <a
+						href="https://triode-portfolio.pages.dev/"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="font-bold text-[#8c2bee] hover:underline">Triode Devs</a
+					></span
+				>
 			</div>
 		</div>
 	</div>
