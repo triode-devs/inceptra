@@ -57,7 +57,7 @@
 				</div>
 			</div>
 
-			{#each [{ name: 'Venue', link: '/#venue' }, { name: 'About', link: '/about' }] as item}
+			{#each [{ name: 'Venue', link: '/#venue' }, { name: 'Gallery', link: '/gallery' }, { name: 'About', link: '/about' }] as item}
 				<a
 					href={item.link}
 					class="rounded-full px-5 py-2 text-sm font-semibold text-[#756189] transition-all duration-300 hover:bg-white hover:text-[#141118] hover:shadow-sm"
@@ -127,7 +127,7 @@
 
 		<!-- Links -->
 		<nav class="flex flex-1 flex-col justify-center gap-6 px-8">
-			{#each [{ name: 'Home', link: '/' }, { name: 'Symposium', link: '/symposium' }, { name: 'Cultural', link: '/cultural' }, { name: 'Venue', link: '/#venue' }, { name: 'About', link: '/about' }] as item, i}
+			{#each [{ name: 'Home', link: '/' }, { name: 'Symposium', link: '/symposium' }, { name: 'Cultural', link: '/cultural' }, { name: 'Gallery', link: '/gallery' }, { name: 'Venue', link: '/#venue' }, { name: 'About', link: '/about' }] as item, i}
 				<a
 					href={item.link}
 					on:click={toggleMenu}

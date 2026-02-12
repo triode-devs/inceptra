@@ -69,8 +69,8 @@
 				velocity: 1, // the higher the faster
 				density: 15000, // the lower the denser
 				netLineDistance: 200,
-				netLineColor: '#929292',
-				particleColors: ['#aaa'] // ['#6D4E5C', '#aaa', '#FFC458' ]
+				netLineColor: '#756189',
+				particleColors: ['#6a22b3', '#b3206a', '#4a3f57'] // Darker variants of the theme colors
 			};
 			this.canvas = parent.canvas;
 			this.ctx = parent.ctx;
@@ -371,23 +371,13 @@
 		left: 0;
 		right: 0;
 		height: 100vh;
-		background-color: #171717;
+		background-color: #fdfcfd;
 		z-index: -1;
 		pointer-events: none; /* Let clicks pass through, but we bind window events for interaction */
 	}
 
 	.particle-network-animation::before {
-		z-index: -2;
-		content: '';
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-		background-image: url(https://images.unsplash.com/photo-1450849608880-6f787542c88a?ixlib=rb-0.3.5&q=80&fm=jpg&crop=entropy&s=786a67dca1d8791d181bfd90b16240d9);
-		background-position: center center;
-		background-size: cover;
-		opacity: 0.2;
+		display: none;
 	}
 
 	.glow {
@@ -395,7 +385,7 @@
 		position: fixed;
 		top: 50%;
 		left: 50%;
-		background-image: radial-gradient(circle closest-side, rgba(255, 255, 255, 0.025), transparent);
+		background-image: radial-gradient(circle closest-side, rgba(140, 43, 238, 0.08), transparent);
 	}
 
 	.glow-1 {

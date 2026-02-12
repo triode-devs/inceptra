@@ -1,0 +1,55 @@
+{
+    "department": "Computer Science & Engineering",
+    "general_instructions": {
+        "id_card": "College ID is mandatory for all participants.",
+        "team_size_general": "Maximum 3 members per team.",
+        "punctuality": "Teams must report 15 minutes before the event starts.",
+        "decorum": "Judge's decisions are final. Malpractice leads to immediate disqualification."
+    },
+    "technical_events": [
+        {
+            "id": "cse-paper",
+            "event_name": "Paper Presentation",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "cse-quiz",
+            "event_name": "Technical Quiz",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "cse-blind-code",
+            "event_name": "Blind Code",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "cse-debugging",
+            "event_name": "Debugging",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        }
+    ],
+    "non_technical_events": [
+        {
+            "id": "cse-gaming",
+            "event_name": "Gaming",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "cse-connexion",
+            "event_name": "Connexion",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        }
+    ]
+}

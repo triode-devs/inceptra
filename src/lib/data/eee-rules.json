@@ -1,0 +1,48 @@
+{
+    "department": "Electrical & Electronics Engineering",
+    "general_instructions": {
+        "id_card": "College ID is mandatory for all participants.",
+        "team_size_general": "Maximum 3 members per team.",
+        "punctuality": "Teams must report 15 minutes before the event starts.",
+        "decorum": "Judge's decisions are final. Malpractice leads to immediate disqualification."
+    },
+    "technical_events": [
+        {
+            "id": "eee-paper",
+            "event_name": "Paperbestowment (Paper Presentation)",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "eee-quiz",
+            "event_name": "Technical Brain Blast (Quiz)",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "eee-debugging",
+            "event_name": "Circuit Debugging",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "eee-expo",
+            "event_name": "Trade Show (Project Expo)",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        }
+    ],
+    "non_technical_events": [
+        {
+            "id": "eee-recreation",
+            "event_name": "Recreational Events",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        }
+    ]
+}

@@ -1,0 +1,47 @@
+{
+    "department": "Civil Engineering",
+    "general_instructions": {
+        "id_card": "College ID is mandatory for all participants.",
+        "team_size_general": "Maximum 3 members per team.",
+        "punctuality": "Teams must report 15 minutes before the event starts.",
+        "decorum": "Judge's decisions are final. Malpractice leads to immediate disqualification."
+    },
+    "technical_events": [
+        {
+            "id": "civil-bridge",
+            "event_name": "Bridge",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "civil-model",
+            "event_name": "Model Making",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "civil-poster",
+            "event_name": "Poster",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "civil-cad",
+            "event_name": "CAD Quest",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        },
+        {
+            "id": "civil-quiz",
+            "event_name": "Quiz",
+            "rules": [
+                "Detailed rules will be updated soon."
+            ]
+        }
+    ],
+    "non_technical_events": []
+}

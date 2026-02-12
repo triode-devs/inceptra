@@ -18,6 +18,23 @@
 
 	import symposiumBg from '$lib/assets/symposium_bg.png';
 	import culturalBg from '$lib/assets/cultural_bg.png';
+	import InfiniteMenu from '$lib/components/InfiniteMenu.svelte';
+
+	// Import gallery images for the infinite menu
+	const imageFiles = import.meta.glob('$lib/assets/compressed_gallery/*.{webp,png,jpg,jpeg}', {
+		eager: true,
+		import: 'default'
+	});
+
+	const galleryItems = Object.entries(imageFiles)
+		.sort(() => Math.random() - 0.5)
+		.slice(0, 10)
+		.map(([path, url], index) => ({
+			image: url,
+			title: `MOMENT ${index + 1}`,
+			description: 'Capturing the essence of Inceptra 2026.',
+			link: '/gallery'
+		}));
 
 	let timeLeft = {
 		days: '00',
@@ -124,7 +141,7 @@
 </svelte:head>
 
 <div
-	class="relative flex h-auto min-h-screen w-full flex-col scroll-smooth pt-20 font-['Lexend'] text-white"
+	class="relative flex h-auto min-h-screen w-full flex-col scroll-smooth pt-20 font-['Lexend'] text-[#141118]"
 >
 	<main class="flex-1 pb-20 md:pb-0">
 		<ParticleNetwork />
@@ -138,12 +155,14 @@
 						class="flex flex-col items-center gap-6 text-center md:gap-8 lg:col-span-7 lg:items-start lg:text-left"
 					>
 						<div
-							class="inline-flex w-fit items-center gap-2 rounded-full bg-[#8c2bee]/10 px-4 py-2 text-[#8c2bee]"
+							class="inline-flex w-fit items-center gap-2 rounded-full border border-[#8c2bee]/10 bg-[#8c2bee]/5 px-4 py-2 text-[#8c2bee]"
 						>
 							<Calendar size={16} />
 							<span class="text-xs font-bold tracking-widest uppercase">March 5 & 6, 2026</span>
 						</div>
-						<h1 class="text-4xl leading-[1.1] font-black tracking-tight sm:text-5xl md:text-7xl">
+						<h1
+							class="text-4xl leading-[1.1] font-black tracking-tight text-[#141118] sm:text-5xl md:text-7xl"
+						>
 							<span
 								class="mb-2 block text-2xl font-black tracking-[0.2em] text-[#8c2bee] uppercase sm:text-3xl"
 								>Inceptra '26</span
@@ -151,7 +170,7 @@
 							Where <span class="text-[#8c2bee] italic">Innovation</span> Meets
 							<span class="text-[#ee2b8c]">Art</span>.
 						</h1>
-						<p class="max-w-xl text-base text-[#756189] md:text-xl">
+						<p class="max-w-xl text-base font-medium text-[#5a4d6b] md:text-xl">
 							Join us for INCEPTRA '26. The ultimate college symposium and cultural festival. Two
 							days of tech, music, dance, and creativity.
 						</p>
@@ -217,52 +236,56 @@
 				>
 					<div class="flex flex-col items-center justify-between gap-8 lg:flex-row">
 						<div class="text-center lg:text-left">
-							<h3 class="text-2xl font-bold">Starts In...</h3>
-							<p class="text-[#756189]">Mark your calendars for March 5, 2026</p>
+							<h3 class="text-3xl font-black text-[#141118]">Starts In...</h3>
+							<p class="mt-1 font-medium text-[#5a4d6b]">Mark your calendars for March 5, 2026</p>
 						</div>
 						<div class="flex flex-wrap justify-center gap-3 md:gap-8">
 							<div class="flex flex-col items-center gap-2">
 								<div
-									class="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#8c2bee]/20 bg-[#8c2bee]/10 md:h-24 md:w-24"
+									class="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#8c2bee]/10 bg-white shadow-sm md:h-24 md:w-24"
 								>
 									<span class="text-2xl font-black text-[#8c2bee] md:text-4xl">{timeLeft.days}</span
 									>
 								</div>
-								<span class="text-[10px] font-bold tracking-widest uppercase opacity-60 md:text-xs"
+								<span
+									class="text-[10px] font-bold tracking-widest text-[#141118] uppercase opacity-40 md:text-xs"
 									>Days</span
 								>
 							</div>
 							<div class="flex flex-col items-center gap-2">
 								<div
-									class="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#ee2b8c]/20 bg-[#ee2b8c]/10 md:h-24 md:w-24"
+									class="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#ee2b8c]/10 bg-white shadow-sm md:h-24 md:w-24"
 								>
 									<span class="text-2xl font-black text-[#ee2b8c] md:text-4xl"
 										>{timeLeft.hours}</span
 									>
 								</div>
-								<span class="text-[10px] font-bold tracking-widest uppercase opacity-60 md:text-xs"
+								<span
+									class="text-[10px] font-bold tracking-widest text-[#141118] uppercase opacity-40 md:text-xs"
 									>Hours</span
 								>
 							</div>
 							<div class="flex flex-col items-center gap-2">
 								<div
-									class="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#2b8cee]/20 bg-[#2b8cee]/10 md:h-24 md:w-24"
+									class="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#2b8cee]/10 bg-white shadow-sm md:h-24 md:w-24"
 								>
 									<span class="text-2xl font-black text-[#2b8cee] md:text-4xl">{timeLeft.mins}</span
 									>
 								</div>
-								<span class="text-[10px] font-bold tracking-widest uppercase opacity-60 md:text-xs"
+								<span
+									class="text-[10px] font-bold tracking-widest text-[#141118] uppercase opacity-40 md:text-xs"
 									>Mins</span
 								>
 							</div>
 							<div class="flex flex-col items-center gap-2">
 								<div
-									class="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#f1c40f]/20 bg-[#f1c40f]/10 md:h-24 md:w-24"
+									class="flex h-16 w-16 items-center justify-center rounded-2xl border border-[#f1c40f]/10 bg-white shadow-sm md:h-24 md:w-24"
 								>
 									<span class="text-2xl font-black text-[#f1c40f] md:text-4xl">{timeLeft.secs}</span
 									>
 								</div>
-								<span class="text-[10px] font-bold tracking-widest uppercase opacity-60 md:text-xs"
+								<span
+									class="text-[10px] font-bold tracking-widest text-[#141118] uppercase opacity-40 md:text-xs"
 									>Secs</span
 								>
 							</div>
@@ -278,8 +301,10 @@
 			<div class="mx-auto max-w-[1280px]">
 				<div class="mb-12 flex flex-col justify-between gap-6 md:flex-row md:items-end">
 					<div class="flex flex-col gap-2">
-						<h2 class="text-3xl font-black tracking-tight md:text-4xl">Explore Events</h2>
-						<p class="text-[#756189]">
+						<h2 class="text-3xl font-black tracking-tight text-[#141118] md:text-4xl">
+							Explore Events
+						</h2>
+						<p class="font-medium text-[#5a4d6b]">
 							Choose your vibe: Technical Innovation or Cultural Expression.
 						</p>
 					</div>
@@ -391,10 +416,10 @@
 						</div>
 					</div>
 					<div class="order-1 flex flex-col gap-6 lg:order-2">
-						<h2 class="text-3xl leading-tight font-black md:text-4xl">
+						<h2 class="text-3xl leading-tight font-black text-[#141118] md:text-4xl">
 							Join the Vibe at our Main Campus.
 						</h2>
-						<p class="leading-relaxed text-[#756189]">
+						<p class="leading-relaxed font-medium text-[#5a4d6b]">
 							Our campus is ready to host over 10,000 students this year. With state-of-the-art
 							labs, a massive open-air theater, and food stalls from the best vendors in the city.
 						</p>
@@ -424,6 +449,32 @@
 						</div>
 					</div>
 				</div>
+			</div>
+		</section>
+
+		<!-- Infinite Gallery Section -->
+		<section class="relative h-[80vh] w-full overflow-hidden py-20">
+			<div class="absolute top-10 left-1/2 z-20 -translate-x-1/2 text-center">
+				<h2 class="mb-2 text-3xl font-black tracking-tight text-[#141118] md:text-5xl">
+					GALLERY HIGHLIGHTS
+				</h2>
+				<p class="text-sm font-bold tracking-[0.3em] text-[#8c2bee] uppercase">
+					Experience the Energy
+				</p>
+			</div>
+
+			<div class="h-full w-full">
+				<InfiniteMenu items={galleryItems} scale={1.2} />
+			</div>
+
+			<div class="absolute bottom-10 left-1/2 z-20 -translate-x-1/2">
+				<a
+					href="/gallery"
+					class="group flex items-center gap-3 rounded-full border border-[#8c2bee]/20 bg-[#8c2bee]/5 px-8 py-4 font-bold text-[#8c2bee] backdrop-blur-md transition-all hover:bg-[#8c2bee]/10 hover:shadow-2xl hover:shadow-[#8c2bee]/20"
+				>
+					<span>View Full Gallery</span>
+					<ArrowRight size={20} class="transition-transform group-hover:translate-x-1" />
+				</a>
 			</div>
 		</section>
 	</main>
