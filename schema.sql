@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS registrations (
     payment_screenshot_key TEXT, -- R2 object key
     payment_status TEXT DEFAULT 'pending', -- 'pending' | 'approved' | 'rejected'
     user_id TEXT, -- Firebase User UID
+    paper_title TEXT, -- Paper presentation title
+    paper_file TEXT, -- R2 object key for paper file
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 -- settings table

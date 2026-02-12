@@ -1,5 +1,7 @@
 <script>
 	import { enhance } from '$app/forms';
+	import { page } from '$app/stores';
+
 	import {
 		Search,
 		Filter,
@@ -17,7 +19,8 @@
 		Zap,
 		Radio,
 		Building,
-		Sparkles
+		Sparkles,
+		ScanLine
 	} from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
 
@@ -33,7 +36,7 @@
 	let paymentFilter = $state('all');
 
 	let filteredRegistrations = $derived(
-		registrations.filter((r) => {
+		(registrations || []).filter((r) => {
 			if (!r) return false;
 			const name = r.name || '';
 			const collegeId = r.college_id || '';
@@ -104,10 +107,10 @@
 	}
 
 	const stats = $derived({
-		total: registrations.length,
-		pending: registrations.filter((r) => r.payment_status === 'pending').length,
-		approved: registrations.filter((r) => r.payment_status === 'approved').length,
-		revenue: registrations
+		total: (registrations || []).length,
+		pending: (registrations || []).filter((r) => r.payment_status === 'pending').length,
+		approved: (registrations || []).filter((r) => r.payment_status === 'approved').length,
+		revenue: (registrations || [])
 			.filter((r) => r.payment_status === 'approved')
 			.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0)
 	});
@@ -133,6 +136,14 @@
 					Viewing all registrations for the {deptFullName} department.
 				</p>
 			</div>
+			<a
+				href="/admin/{$page.params.dept}/scan"
+				data-sveltekit-reload
+				class="flex items-center gap-2 rounded-xl bg-[#141118] px-6 py-3 font-bold text-white shadow-xl shadow-purple-900/10 transition-all hover:scale-105 hover:shadow-2xl active:scale-95"
+			>
+				<ScanLine size={20} />
+				Scan QR
+			</a>
 		</div>
 
 		<!-- Stats Grid -->
@@ -232,6 +243,7 @@
 					>
 						<th class="px-6 py-4">Participant</th>
 						<th class="px-6 py-4">Events</th>
+						<th class="px-6 py-4">Paper Title</th>
 						<th class="px-6 py-4">Amount</th>
 						<th class="px-6 py-4">Status</th>
 						<th class="px-6 py-4">Date</th>
@@ -259,6 +271,25 @@
 										>
 									{/each}
 								</div>
+							</td>
+							<td class="px-6 py-4">
+								{#if reg.paper_title}
+									<div class="flex max-w-[200px] flex-col gap-1">
+										<span class="text-xs font-bold text-gray-700">{reg.paper_title}</span>
+										{#if reg.paper_file}
+											<a
+												href="/api/image/{reg.paper_file}"
+												download
+												class="flex items-center gap-1 text-[10px] font-bold text-[#8c2bee] hover:underline"
+												title="Download Paper"
+											>
+												<Download size={12} /> Download
+											</a>
+										{/if}
+									</div>
+								{:else}
+									<span class="text-xs text-gray-400">—</span>
+								{/if}
 							</td>
 							<td class="px-6 py-4 font-black">₹{reg.amount}</td>
 							<td class="px-6 py-4">
@@ -310,8 +341,13 @@
 <!-- Modal for Screenshot -->
 {#if viewImage}
 	<div
-		class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm"
+		class="fixed inset-0 z-[100] flex h-full w-full items-center justify-center bg-black/80 p-6 backdrop-blur-sm"
 		onclick={() => (viewImage = null)}
+		role="button"
+		tabindex="0"
+		onkeydown={(e) => {
+			if (e.key === 'Escape') viewImage = null;
+		}}
 		in:fade
 	>
 		<div

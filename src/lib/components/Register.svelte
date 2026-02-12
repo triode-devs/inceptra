@@ -22,6 +22,7 @@
 	import { fade, slide } from 'svelte/transition';
 	import symposiumQR from '../assets/qr/symposium.png';
 	import culturalsQR from '../assets/qr/culturals.png';
+	import QRCode from 'qrcode';
 
 	// Props: Accept deptId from parent (URL param)
 	export let deptId = null;
@@ -37,8 +38,42 @@
 	let paymentScreenshotKey = null;
 	let uploadingScreenshot = false;
 	let paymentMethod = 'online'; // 'online' | 'offline'
+	let qrCodeDataUrl = '';
 
 	$: isOfflineEnabled = settings['offline_payment_enabled'] === 'true';
+
+	const generatePassQR = async () => {
+		const qrData = {
+			id: formData.id,
+			name: formData.name,
+			college: formData.college,
+			phone: formData.phone,
+			email: formData.email,
+			year: formData.year,
+			dept: selectedDept?.name || 'N/A',
+			events: [
+				...formData.events.technical,
+				...formData.events.nonTechnical,
+				...formData.events.cultural
+			],
+			amount: 150 + formData.events.cultural.length * 100,
+			paymentStatus: paymentMethod === 'offline' ? 'Pending (Offline)' : 'Pending Verification',
+			timestamp: new Date().toISOString()
+		};
+
+		try {
+			qrCodeDataUrl = await QRCode.toDataURL(JSON.stringify(qrData), {
+				width: 300,
+				margin: 2,
+				color: {
+					dark: '#000000',
+					light: '#ffffff'
+				}
+			});
+		} catch (err) {
+			console.error('Error generating QR code', err);
+		}
+	};
 
 	// --- Data ---
 	const symposiumData = [
@@ -130,7 +165,9 @@
 			technical: [],
 			nonTechnical: [],
 			cultural: []
-		}
+		},
+		paperTitle: '',
+		paperFile: null
 	};
 
 	// Sync email if userEmail changes
@@ -217,26 +254,54 @@
 		}
 	}
 
+	let uploadingPaper = false;
+	let paperUploadError = null;
+
+	async function handlePaperUpload(e) {
+		const file = e.target.files[0];
+		if (!file) return;
+
+		uploadingPaper = true;
+		paperUploadError = null;
+
+		const uploadFormData = new FormData();
+		uploadFormData.append('file', file);
+
+		try {
+			const res = await fetch('/api/upload', {
+				method: 'POST',
+				body: uploadFormData
+			});
+			const result = await res.json();
+			if (res.ok) {
+				formData.paperFile = result.key;
+			} else {
+				paperUploadError = result.error || 'Upload failed';
+			}
+		} catch (err) {
+			paperUploadError = 'Failed to upload paper';
+			console.error(err);
+		} finally {
+			uploadingPaper = false;
+		}
+	}
+
 	function toggleTechEvent(event) {
 		if (formData.events.technical.includes(event)) {
 			formData.events.technical = formData.events.technical.filter((e) => e !== event);
 		} else {
-			if (selectedDept.id === 'civil') {
-				if (formData.events.technical.length < 3)
-					formData.events.technical = [...formData.events.technical, event];
-			} else {
-				if (formData.events.technical.length < 2)
-					formData.events.technical = [...formData.events.technical, event];
-			}
+			// Allow selecting any number of events, or at least no upper limit blocking
+			formData.events.technical = [...formData.events.technical, event];
 		}
 	}
 
 	function toggleNonTechEvent(event) {
 		if (formData.events.nonTechnical.includes(event)) {
+			// Deselect if already selected
 			formData.events.nonTechnical = formData.events.nonTechnical.filter((e) => e !== event);
 		} else {
-			if (formData.events.nonTechnical.length < 1)
-				formData.events.nonTechnical = [...formData.events.nonTechnical, event];
+			// Limit to exactly 1: Replace existing selection with the new one
+			formData.events.nonTechnical = [event];
 		}
 	}
 
@@ -251,10 +316,8 @@
 	// --- Validation ---
 	$: isSymposiumValid = (() => {
 		if (!selectedDept) return false;
-		if (selectedDept.id === 'civil') {
-			return formData.events.technical.length === 3;
-		}
-		return formData.events.technical.length === 2 && formData.events.nonTechnical.length === 1;
+		// Check if AT LEAST one event is selected overall (tech or non-tech)
+		return formData.events.technical.length > 0 || formData.events.nonTechnical.length > 0;
 	})();
 
 	$: isCulturalValid = formData.events.cultural.length > 0;
@@ -294,6 +357,7 @@
 
 				if (response.ok) {
 					submitted = true;
+					await generatePassQR();
 					window.scrollTo({ top: 0, behavior: 'smooth' });
 				} else {
 					error = result.error || 'Failed to submit registration';
@@ -510,14 +574,14 @@
 												<span
 													class="rounded-full bg-[#8c2bee]/10 px-3 py-1 text-xs font-bold text-[#8c2bee]"
 												>
-													{selectedDept.id === 'civil' ? 'Select Any 3' : '2 Tech + 1 Non-Tech'}
+													Max 1 Non-Technical Event
 												</span>
 											</div>
 
 											<!-- Tech Events -->
 											<div class="mb-6">
 												<p class="mb-3 text-xs font-bold tracking-widest text-[#896179] uppercase">
-													Technical Events
+													Technical Events (Unlimited)
 												</p>
 												<div class="grid grid-cols-1 gap-3">
 													{#each selectedDept.events.technical as event}
@@ -546,6 +610,86 @@
 														</label>
 													{/each}
 												</div>
+
+												<!-- Paper Presentation Additional Fields -->
+												{#if formData.events.technical.some((e) => e
+														.toLowerCase()
+														.includes('paper'))}
+													<div class="mt-6 border-t border-[#f4f0f3] pt-6" transition:slide>
+														<h4 class="mb-4 text-sm font-bold text-[#8c2bee]">
+															📄 Paper Presentation Details
+														</h4>
+														<div class="flex flex-col gap-4">
+															<div class="flex flex-col gap-2">
+																<label class="text-sm font-bold" for="paperTitle">
+																	Paper Title <span class="text-red-500">*</span>
+																</label>
+																<input
+																	id="paperTitle"
+																	bind:value={formData.paperTitle}
+																	class="h-12 rounded-xl border-none bg-[#f8f6f7] px-4 font-medium focus:ring-2 focus:ring-[#8c2bee]/20"
+																	placeholder="Enter your paper title"
+																	required={formData.events.technical.some((e) =>
+																		e.toLowerCase().includes('paper')
+																	)}
+																/>
+															</div>
+															<div class="flex flex-col gap-2">
+																<label class="text-sm font-bold" for="paperFile">
+																	Upload Paper (Optional)
+																</label>
+																<div
+																	class="relative flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-[#e6dbe1] p-6 transition-all hover:border-[#8c2bee]/50"
+																>
+																	{#if formData.paperFile}
+																		<div class="flex flex-col items-center gap-3 text-green-600">
+																			<CheckCircle2 size={32} />
+																			<span class="text-sm font-bold">Paper Uploaded!</span>
+																			<button
+																				class="text-xs font-bold text-[#8c2bee] underline"
+																				on:click={() => (formData.paperFile = null)}
+																			>
+																				Change File
+																			</button>
+																		</div>
+																	{:else if uploadingPaper}
+																		<div class="flex flex-col items-center gap-3">
+																			<div
+																				class="h-8 w-8 animate-spin rounded-full border-4 border-[#8c2bee] border-t-transparent"
+																			></div>
+																			<span class="animate-pulse text-sm font-bold"
+																				>Uploading...</span
+																			>
+																		</div>
+																	{:else}
+																		<input
+																			id="paperFile"
+																			type="file"
+																			accept=".pdf,.doc,.docx"
+																			class="absolute inset-0 cursor-pointer opacity-0"
+																			on:change={handlePaperUpload}
+																		/>
+																		<div class="flex flex-col items-center gap-2 opacity-60">
+																			<Plus size={24} />
+																			<span class="text-sm font-bold">Click to upload paper</span>
+																			<span class="text-xs text-gray-500"
+																				>PDF, DOC, DOCX (Optional)</span
+																			>
+																		</div>
+																	{/if}
+																</div>
+																{#if paperUploadError}
+																	<div
+																		class="rounded-lg bg-red-50 p-3 text-xs font-bold text-red-600"
+																		in:slide
+																	>
+																		{paperUploadError}
+																	</div>
+																{/if}
+															</div>
+														</div>
+													</div>
+												{/if}
 											</div>
 
 											<!-- Non-Tech Events -->
@@ -586,22 +730,9 @@
 												</div>
 											{/if}
 
-											<!-- Validation Warning -->
-											{#if !isSymposiumValid && (formData.events.technical.length > 0 || formData.events.nonTechnical.length > 0)}
-												<div
-													class="mt-6 flex items-start gap-3 rounded-xl border border-orange-100 bg-orange-50 p-4 text-sm font-medium text-orange-700"
-												>
-													<AlertCircle size={18} class="mt-0.5 shrink-0" />
-													<span>
-														{#if selectedDept.id === 'civil'}
-															Please select exactly 3 events.
-														{:else}
-															Requirements not met. You need exactly <strong>2 Technical</strong>
-															and
-															<strong>1 Non-Technical</strong> event.
-														{/if}
-													</span>
-												</div>
+											<!-- Validation Warning - Hidden as we allow single selection now -->
+											{#if !isSymposiumValid && selectedDept && formData.events.technical.length === 0 && formData.events.nonTechnical.length === 0}
+												<!-- Optional: Add a subtle hint if needed, or leave empty if button disabled is enough -->
 											{/if}
 										</div>
 									{/if}
@@ -1015,78 +1146,89 @@
 				</div>
 			</div>
 		{:else}
-			<!-- SUCCESS STATE -->
-			<div class="mx-auto max-w-xl pt-10 text-center" in:fade>
-				<div
-					class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-green-100 text-green-600 shadow-xl shadow-green-100"
-				>
-					<CheckCircle2 size={40} />
+			<!-- SUCCESS STATE: EVENT PASS UI -->
+			<div class="mx-auto max-w-md pt-6" in:fade>
+				<div class="mb-8 text-center">
+					<div
+						class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600 shadow-lg"
+					>
+						<CheckCircle2 size={32} />
+					</div>
+					<h1 class="text-3xl font-black text-[#141118]">Registration Successful!</h1>
+					<p class="text-sm font-medium text-[#896179]">Here is your event pass. Please save it.</p>
 				</div>
-				<h1 class="mb-2 text-4xl font-black tracking-tight">Registration Submitted!</h1>
-				<p class="mb-10 text-lg text-[#896179]">
-					Your registration and payment verification is pending. We will notify you once approved.
-				</p>
 
-				<div class="relative overflow-hidden rounded-xl border border-[#f4f0f3] bg-white shadow-lg">
-					<!-- Ticket Header -->
-					<div class="bg-yellow-500 p-6 text-left text-white">
-						<div class="flex items-start justify-between">
-							<div>
-								<span
-									class="mb-2 inline-block rounded bg-white/20 px-2 py-1 text-xs font-bold tracking-wider uppercase"
-									>Pending Approval</span
-								>
-								<h2 class="text-2xl font-black tracking-tight uppercase">{formData.name}</h2>
-								<p class="text-xs font-bold opacity-70">{formData.college_id || formData.id}</p>
-							</div>
-							<div class="text-right">
-								<span class="block text-[10px] font-bold uppercase opacity-50">Amount</span>
-								<span class="text-xl font-black"
-									>₹{150 + formData.events.cultural.length * 100}</span
-								>
-							</div>
-						</div>
+				<!-- THE PASS -->
+				<div
+					class="relative overflow-hidden rounded-3xl bg-[#1a1a1a] text-white shadow-2xl transition-transform hover:scale-[1.01]"
+				>
+					<!-- Pass Header -->
+					<div class="bg-gradient-to-r from-[#8c2bee] to-[#ee2b8c] p-6 text-center">
+						<h2 class="text-2xl font-black tracking-tighter uppercase italic">INCEPTRA '26</h2>
+						<p class="text-[10px] font-bold tracking-[0.2em] text-white/80 uppercase">
+							Official Entry Pass
+						</p>
 					</div>
 
-					<!-- Ticket Body -->
-					<div class="p-6 text-left">
-						<div class="grid grid-cols-2 gap-6">
-							<div>
-								<span class="block text-[10px] font-bold tracking-widest text-[#896179] uppercase"
-									>Event Type</span
-								>
-								<span class="font-bold text-[#181115] capitalize">{registrationType}</span>
-							</div>
-							<div>
-								<span class="block text-[10px] font-bold tracking-widest text-[#896179] uppercase"
-									>Department</span
-								>
-								<span class="font-bold text-[#181115] capitalize"
-									>{selectedDept?.name || 'All Events'}</span
-								>
+					<!-- Pass Body -->
+					<div class="flex flex-col items-center p-8">
+						<!-- User Info -->
+						<div class="mb-6 text-center">
+							<h3 class="text-2xl font-bold text-white">{formData.name}</h3>
+							<p class="font-mono text-sm font-medium text-gray-400">
+								{formData.college_id || formData.id}
+							</p>
+							<p class="mt-1 text-xs text-gray-500">{formData.college}</p>
+						</div>
+
+						<!-- QR Code Section -->
+						<div class="relative mb-6 rounded-2xl bg-white p-3 shadow-lg">
+							{#if qrCodeDataUrl}
+								<img src={qrCodeDataUrl} alt="Event Pass QR" class="h-48 w-48 rounded-lg" />
+							{:else}
+								<div class="flex h-48 w-48 items-center justify-center bg-gray-100 text-gray-400">
+									<span class="text-xs">Generating QR...</span>
+								</div>
+							{/if}
+							<!-- Status Badge Override -->
+							<div
+								class="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full px-4 py-1 text-xs font-black whitespace-nowrap uppercase shadow-md
+                {paymentMethod === 'offline'
+									? 'bg-yellow-400 text-yellow-900'
+									: 'bg-blue-500 text-white'}"
+							>
+								{paymentMethod === 'offline' ? 'Payment Pending' : 'Pending Verification'}
 							</div>
 						</div>
 
-						<div class="mt-6 border-t border-dashed border-[#e6dbe1] pt-6">
-							<span
-								class="mb-2 block text-[10px] font-bold tracking-widest text-[#896179] uppercase"
-								>Selected Events</span
+						<!-- Details Grid -->
+						<div class="mb-6 grid w-full grid-cols-2 gap-x-2 gap-y-4 text-center text-sm">
+							<div>
+								<span class="block text-[10px] font-bold text-gray-500 uppercase">Department</span>
+								<span class="font-bold">{selectedDept?.name || 'N/A'}</span>
+							</div>
+							<div>
+								<span class="block text-[10px] font-bold text-gray-500 uppercase">Total Amount</span
+								>
+								<span class="font-bold">₹{150 + formData.events.cultural.length * 100}</span>
+							</div>
+						</div>
+
+						<!-- Events -->
+						<div class="w-full text-center">
+							<span class="mb-2 block text-[10px] font-bold text-gray-500 uppercase"
+								>Access Allowed For</span
 							>
-							<div class="flex flex-wrap gap-2">
-								{#each formData.events.technical as e}
+							<div class="flex flex-wrap justify-center gap-2">
+								{#each [...formData.events.technical, ...formData.events.nonTechnical] as e}
 									<span
-										class="rounded bg-[#8c2bee]/5 px-2 py-1 text-[10px] font-bold text-[#8c2bee]"
-										>{e}</span
-									>
-								{/each}
-								{#each formData.events.nonTechnical as e}
-									<span
-										class="rounded bg-[#ee2b8c]/5 px-2 py-1 text-[10px] font-bold text-[#ee2b8c]"
+										class="rounded-md border border-white/10 bg-white/5 px-2 py-1 text-[10px] font-bold text-gray-300"
 										>{e}</span
 									>
 								{/each}
 								{#each formData.events.cultural as e}
-									<span class="rounded bg-pink-50 px-2 py-1 text-[10px] font-bold text-pink-600"
+									<span
+										class="rounded-md border border-[#ee2b8c]/30 bg-[#ee2b8c]/10 px-2 py-1 text-[10px] font-bold text-[#ee2b8c]"
 										>{e}</span
 									>
 								{/each}
@@ -1094,27 +1236,29 @@
 						</div>
 					</div>
 
-					<!-- Ticket Footer -->
-					<div class="border-t border-gray-100 bg-gray-50 px-6 py-4">
-						<p class="text-[10px] font-bold text-gray-400">
-							Show this ticket screen at the event desk for verification.
-						</p>
+					<!-- Pass Footer -->
+					<div
+						class="flex flex-col items-center gap-2 bg-[#252525] px-6 py-4 text-center text-[10px] text-gray-500"
+					>
+						<p>Present this QR code at the registration desk for scanning.</p>
+						<p class="font-mono">{new Date().toLocaleDateString()}</p>
 					</div>
 				</div>
 
-				<div class="mt-10 flex flex-col items-center gap-4">
+				<!-- Actions -->
+				<div class="mt-8 flex flex-col gap-3">
 					<button
-						class="flex h-14 w-full items-center justify-center gap-3 rounded-2xl bg-[#141118] text-lg font-black text-white shadow-xl transition-all hover:scale-[1.02] active:scale-95 sm:w-auto sm:px-12"
+						class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#8c2bee] font-bold text-white shadow-lg transition-transform active:scale-95"
 						on:click={() => window.location.reload()}
 					>
-						<Plus size={20} /> Register Another Participant
+						<Plus size={18} /> Register Another
 					</button>
-					<button
-						class="text-sm font-bold text-[#896179] transition-colors hover:text-[#8c2bee]"
-						on:click={() => (window.location.href = '/')}
+					<a
+						href="/"
+						class="block text-center text-sm font-bold text-[#896179] hover:text-[#141118]"
 					>
 						Back to Home
-					</button>
+					</a>
 				</div>
 			</div>
 		{/if}

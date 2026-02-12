@@ -76,9 +76,9 @@
 			<div>
 				<h3 class="mb-6 text-lg font-bold">Quick Links</h3>
 				<ul class="flex flex-col gap-4 text-gray-400">
-					{#each ['Home', 'Events', 'Schedule', 'Sponsors', 'Team'] as link}
+					{#each [{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }, { name: 'Symposium', url: '/symposium' }, { name: 'Cultural', url: '/cultural' }, { name: 'Register', url: '/register' }] as link}
 						<li>
-							<a href="/" class="transition-colors hover:text-[#ee2b8c]">{link}</a>
+							<a href={link.url} class="transition-colors hover:text-[#ee2b8c]">{link.name}</a>
 						</li>
 					{/each}
 				</ul>

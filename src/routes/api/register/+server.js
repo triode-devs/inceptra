@@ -18,7 +18,9 @@ export async function POST({ request, platform }) {
 			events,
 			amount,
 			payment_screenshot_key,
-			user_id
+			user_id,
+			paperTitle,
+			paperFile
 		} = data;
 
 		if (!platform?.env?.DB) {
@@ -36,8 +38,8 @@ export async function POST({ request, platform }) {
 				`INSERT INTO registrations (
                 name, college_id, email, phone, year, college, address, food, 
                 registration_type, dept, technical_events, non_technical_events, cultural_events, amount,
-                payment_screenshot_key, payment_status, user_id
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+                payment_screenshot_key, payment_status, user_id, paper_title, paper_file
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
 			)
 			.bind(
 				name,
@@ -56,7 +58,9 @@ export async function POST({ request, platform }) {
 				amount,
 				payment_screenshot_key || null,
 				'pending',
-				user_id || null
+				user_id || null,
+				paperTitle || null,
+				paperFile || null
 			)
 			.run();
 

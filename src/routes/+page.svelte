@@ -413,11 +413,14 @@
 							</li>
 						</ul>
 						<div class="pt-4">
-							<button
-								class="h-12 rounded-xl bg-[#f2f0f4] px-8 font-bold transition-all hover:bg-gray-200"
+							<a
+								href="https://www.google.com/maps/dir/?api=1&destination=Trichy+Engineering+College,+Konalai,+Trichy"
+								target="_blank"
+								rel="noopener noreferrer"
+								class="inline-flex h-12 items-center justify-center rounded-xl bg-[#f2f0f4] px-8 font-bold text-[#141118] transition-all hover:bg-gray-200"
 							>
 								Get Directions
-							</button>
+							</a>
 						</div>
 					</div>
 				</div>

@@ -81,7 +81,9 @@ export function getDashboardUrl(user) {
     };
 
     const slug = idMap[user.department];
-    return slug ? `/admin/${slug}` : '/admin/registrations';
+    // If the user has a department but we explicitly don't have a mapping, fall back safely or log error. 
+    // For now assuming valid department means valid slug, but let's be safe.
+    return slug ? `/admin/${slug}` : '/admin';
 }
 
 export function loginAdmin(id, password) {
