@@ -12,9 +12,10 @@
 		MessageCircle,
 		Music
 	} from 'lucide-svelte';
-	import DotGrid from '$lib/components/DotGrid.svelte';
+	import ParticleNetwork from '$lib/components/ParticleNetwork.svelte';
 
 	import heroHighlight from '$lib/assets/hero_highlight.jpg';
+
 	import symposiumBg from '$lib/assets/symposium_bg.png';
 	import culturalBg from '$lib/assets/cultural_bg.png';
 
@@ -123,20 +124,10 @@
 </svelte:head>
 
 <div
-	class="relative flex h-auto min-h-screen w-full flex-col scroll-smooth bg-[#f7f6f8] pt-20 font-['Lexend'] text-[#141118]"
+	class="relative flex h-auto min-h-screen w-full flex-col scroll-smooth pt-20 font-['Lexend'] text-white"
 >
 	<main class="flex-1 pb-20 md:pb-0">
-		<!-- Global Interactive Background -->
-		<div class="pointer-events-none absolute inset-0 z-0">
-			<DotGrid
-				dotSize={6}
-				gap={48}
-				baseColor="#8c2bee"
-				activeColor="#ee2b8c"
-				proximity={200}
-				className="opacity-10"
-			/>
-		</div>
+		<ParticleNetwork />
 
 		<!-- Added padding bottom for mobile nav spacing -->
 		<!-- Hero Section -->
