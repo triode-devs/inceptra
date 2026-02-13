@@ -221,7 +221,7 @@
 	{/if}
 
 	<!-- Payment Support Contacts -->
-	<div class="mt-8 rounded-[2rem] bg-white p-8 shadow-sm">
+	<!-- <div class="mt-8 rounded-[2rem] bg-white p-8 shadow-sm">
 		<div class="mb-6 flex items-center gap-3">
 			<div
 				class="flex h-10 w-10 items-center justify-center rounded-xl bg-[#8c2bee]/10 text-[#8c2bee]"
@@ -273,5 +273,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> -->
 </div>
