@@ -3,11 +3,37 @@
 </script>
 
 <svelte:head>
-	<title>About INCEPTRA '26 | Our Mission & Vision | TEC</title>
+	<title>About INCEPTRA '26 | Our Mission & Vision | Trichy Engineering College</title>
 	<meta
 		name="description"
-		content="Learn more about INCEPTRA '26 at Trichy Engineering College. Discover our legacy, mission, and the team behind the biggest college fest in the region."
+		content="Learn more about INCEPTRA '26 at Trichy Engineering College. Discover our legacy since 2010, mission to ignite minds, and the passionate team behind the biggest college fest in the region."
 	/>
+	<meta
+		name="keywords"
+		content="About Inceptra, TEC Fest History, College Fest Mission, Engineering Symposium Vision, Cultural Festival, Trichy Engineering College"
+	/>
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://inceptra.pages.dev/about" />
+	<meta property="og:title" content="About INCEPTRA '26 | Our Mission & Vision" />
+	<meta
+		property="og:description"
+		content="Learn about INCEPTRA '26 at Trichy Engineering College. Our legacy, mission to ignite minds, and the team behind the biggest college fest in the region."
+	/>
+	<meta property="og:image" content="https://inceptra.pages.dev/og-image.jpg" />
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content="https://inceptra.pages.dev/about" />
+	<meta property="twitter:title" content="About INCEPTRA '26 | Our Mission & Vision" />
+	<meta
+		property="twitter:description"
+		content="Learn about INCEPTRA '26 - our legacy, mission, and the team behind TEC's biggest college fest."
+	/>
+	<meta property="twitter:image" content="https://inceptra.pages.dev/og-image.jpg" />
+
+	<link rel="canonical" href="https://inceptra.pages.dev/about" />
 	<link
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet"

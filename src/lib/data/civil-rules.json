@@ -1,45 +1,77 @@
 {
     "department": "Civil Engineering",
-    "general_instructions": {
-        "id_card": "College ID is mandatory for all participants.",
-        "team_size_general": "Maximum 3 members per team.",
-        "punctuality": "Teams must report 15 minutes before the event starts.",
-        "decorum": "Judge's decisions are final. Malpractice leads to immediate disqualification."
-    },
+    "general_instructions": [
+        "College ID is mandatory for all participants",
+        "Teams must report 15 minutes before the event starts",
+        "Judge's decisions are final",
+        "Malpractice leads to immediate disqualification"
+    ],
     "technical_events": [
         {
             "id": "civil-bridge",
             "event_name": "Bridge",
+            "event_subtitle": "Techno Bridge - Technical Presentation",
             "rules": [
-                "Detailed rules will be updated soon."
+                "Students can present technical paper or project work",
+                "Individual or maximum 2 members per team",
+                "Technical paper should not exceed 8 pages",
+                "Present through PowerPoint (Max 15 slides)",
+                "Presentation should be submitted before deadline",
+                "Time limit for presentation will be announced",
+                "Topics should be in specific area of Civil Engineering"
             ]
         },
         {
             "id": "civil-model",
             "event_name": "Model Making",
+            "event_subtitle": "Model Expo - Creative Model Building",
             "rules": [
-                "Detailed rules will be updated soon."
+                "Materials will be provided by organizing committee",
+                "Students must create model using given materials only",
+                "Bring knowledge and creative thinking in model making",
+                "Time limit will be announced on event day",
+                "Models will be judged on creativity, stability, and presentation",
+                "No external materials allowed"
             ]
         },
         {
             "id": "civil-poster",
             "event_name": "Poster",
+            "event_subtitle": "Builder - Creative Poster Making",
             "rules": [
-                "Detailed rules will be updated soon."
+                "Showcase understanding and creativity through posters",
+                "Theme-based poster creation",
+                "Demonstrate knowledge and performance ability",
+                "Materials may be provided or bring your own (confirm with organizers)",
+                "Poster size and theme will be announced",
+                "Time limit will be specified on event day"
             ]
         },
         {
             "id": "civil-cad",
             "event_name": "CAD Quest",
+            "event_subtitle": "Empowering Design Knowledge",
             "rules": [
-                "Detailed rules will be updated soon."
+                "Drawing understanding and creation test",
+                "Line plan of building will be provided",
+                "Students must draw: Plan, Elevation, and Sectional view",
+                "Time limit will be given",
+                "Software/tools will be specified on event day",
+                "Focus on accuracy and presentation quality"
             ]
         },
         {
             "id": "civil-quiz",
             "event_name": "Quiz",
+            "event_subtitle": "Fall Out - Technical Problem Solving",
             "rules": [
-                "Detailed rules will be updated soon."
+                "Participants will be given structural engineering issues",
+                "Provide solution/remedy to the problem",
+                "Enhances problem-solving ability",
+                "Improves technical knowledge in Civil Engineering",
+                "Time limit per question will be specified",
+                "Individual or team participation (to be confirmed)",
+                "Judges' decision will be final"
             ]
         }
     ],

@@ -889,13 +889,13 @@
 	></canvas>
 
 	{#if activeItem}
-		<h2
+		<!-- <h2
 			class="pointer-events-none absolute top-[15%] left-1/2 -translate-x-1/2 text-center text-4xl font-black tracking-tighter text-[#141118] transition-all duration-500 ease-out select-none md:top-1/2 md:left-[10%] md:-translate-x-0 md:-translate-y-1/2 md:text-8xl {isMoving
 				? 'translate-y-[-20%] opacity-0 md:translate-x-[-20%] md:translate-y-[-50%]'
 				: 'translate-y-0 opacity-100 md:translate-x-0 md:translate-y-[-50%]'}"
 		>
 			{activeItem.title || ''}
-		</h2>
+		</h2> -->
 
 		<p
 			class="pointer-events-none absolute bottom-[30%] left-1/2 w-full max-w-[25ch] -translate-x-1/2 text-center text-sm font-medium text-[#5a4d6b] transition-all duration-500 ease-out select-none md:top-1/2 md:right-[10%] md:left-auto md:w-auto md:max-w-[15ch] md:-translate-x-0 md:-translate-y-1/2 md:text-2xl {isMoving

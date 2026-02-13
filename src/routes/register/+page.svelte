@@ -15,11 +15,41 @@
 </script>
 
 <svelte:head>
-	<title>Register for INCEPTRA '26 | College Events</title>
+	<title>Register for INCEPTRA '26 | Symposium & Cultural Events | Trichy Engineering College</title
+	>
 	<meta
 		name="description"
-		content="Register for technical and cultural events at Inceptra '26. Secure your spot at Trichy Engineering College's premier festival."
+		content="Register now for technical symposium and cultural events at INCEPTRA '26 - March 5 & 6, 2026. Join 10,000+ students at Trichy Engineering College's premier festival. Secure your spot today!"
 	/>
+	<meta
+		name="keywords"
+		content="Inceptra Registration, College Event Registration, Technical Symposium Registration, Cultural Fest Registration, TEC Events 2026, Online Registration"
+	/>
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://inceptra.pages.dev/register" />
+	<meta property="og:title" content="Register for INCEPTRA '26 | Symposium & Cultural Events" />
+	<meta
+		property="og:description"
+		content="Register now for INCEPTRA '26 - March 5 & 6, 2026. Join 10,000+ students at Trichy Engineering College's premier festival. Secure your spot!"
+	/>
+	<meta property="og:image" content="https://inceptra.pages.dev/og-image.jpg" />
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content="https://inceptra.pages.dev/register" />
+	<meta
+		property="twitter:title"
+		content="Register for INCEPTRA '26 | Symposium & Cultural Events"
+	/>
+	<meta
+		property="twitter:description"
+		content="Register now for INCEPTRA '26 - March 5 & 6. Join 10,000+ students at TEC's premier festival!"
+	/>
+	<meta property="twitter:image" content="https://inceptra.pages.dev/og-image.jpg" />
+
+	<link rel="canonical" href="https://inceptra.pages.dev/register" />
 </svelte:head>
 
 <div class="min-h-screen bg-[#f7f6f8] pt-24 pb-12">

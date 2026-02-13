@@ -1,5 +1,6 @@
 <script>
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 	import {
 		Cpu,
 		Zap,
@@ -39,6 +40,7 @@
 	let uploadingScreenshot = false;
 	let paymentMethod = 'online'; // 'online' | 'offline'
 	let qrCodeDataUrl = '';
+	let showRestoredNotification = false;
 
 	$: isOfflineEnabled = settings['offline_payment_enabled'] === 'true';
 
@@ -191,7 +193,100 @@
 		}
 	}
 
+	// LocalStorage key for form data
+	const STORAGE_KEY = 'inceptra_registration_draft';
+	let saveTimeout = null;
+
+	// Save form data to localStorage
+	function saveFormToLocalStorage() {
+		if (!browser) return;
+		try {
+			const dataToSave = {
+				formData,
+				registrationType,
+				selectedDeptIndex,
+				currentStep,
+				paymentMethod,
+				timestamp: Date.now()
+			};
+			localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
+			console.log('Form data saved to localStorage');
+		} catch (e) {
+			console.error('Failed to save form data:', e);
+		}
+	}
+
+	// Debounced auto-save function
+	function autoSave() {
+		if (saveTimeout) clearTimeout(saveTimeout);
+		saveTimeout = setTimeout(() => {
+			saveFormToLocalStorage();
+		}, 1000); // Save after 1 second of inactivity
+	}
+
+	// Restore form data from localStorage
+	function restoreFormFromLocalStorage() {
+		if (!browser) return false;
+		try {
+			const saved = localStorage.getItem(STORAGE_KEY);
+			if (!saved) return false;
+
+			const parsed = JSON.parse(saved);
+			// Check if saved data is less than 24 hours old
+			const age = Date.now() - (parsed.timestamp || 0);
+			if (age > 24 * 60 * 60 * 1000) {
+				// Data too old, clear it
+				localStorage.removeItem(STORAGE_KEY);
+				return false;
+			}
+
+			// Restore data
+			if (parsed.formData) formData = parsed.formData;
+			if (parsed.registrationType) registrationType = parsed.registrationType;
+			if (parsed.selectedDeptIndex !== undefined) selectedDeptIndex = parsed.selectedDeptIndex;
+			if (parsed.currentStep) currentStep = parsed.currentStep;
+			if (parsed.paymentMethod) paymentMethod = parsed.paymentMethod;
+
+			console.log('Form data restored from localStorage');
+			return true;
+		} catch (e) {
+			console.error('Failed to restore form data:', e);
+			return false;
+		}
+	}
+
+	// Clear saved form data
+	function clearSavedForm() {
+		if (!browser) return;
+		try {
+			localStorage.removeItem(STORAGE_KEY);
+			console.log('Saved form data cleared');
+		} catch (e) {
+			console.error('Failed to clear saved form data:', e);
+		}
+	}
+
+	// Watch for form changes and auto-save
+	$: if (browser && !submitted) {
+		formData;
+		registrationType;
+		selectedDeptIndex;
+		currentStep;
+		paymentMethod;
+		autoSave();
+	}
+
 	onMount(() => {
+		// Restore saved form data
+		const restored = restoreFormFromLocalStorage();
+		if (restored) {
+			// Show notification that data was restored
+			showRestoredNotification = true;
+			setTimeout(() => {
+				showRestoredNotification = false;
+			}, 5000); // Hide after 5 seconds
+		}
+
 		// If a department is pre-selected via prop, scroll to the section
 		if (deptId) {
 			setTimeout(() => {
@@ -200,6 +295,10 @@
 					?.scrollIntoView({ behavior: 'smooth', block: 'center' });
 			}, 500);
 		}
+	});
+
+	onDestroy(() => {
+		if (saveTimeout) clearTimeout(saveTimeout);
 	});
 
 	// Calculate Progress
@@ -357,6 +456,8 @@
 
 				if (response.ok) {
 					submitted = true;
+					// Clear saved form data on successful submission
+					clearSavedForm();
 					await generatePassQR();
 					window.scrollTo({ top: 0, behavior: 'smooth' });
 				} else {
@@ -390,6 +491,34 @@
 					style="width: {progress}%"
 				></div>
 			</div>
+
+			<!-- Restored Data Notification -->
+			{#if showRestoredNotification}
+				<div
+					class="mb-8 flex items-center justify-between gap-4 rounded-2xl border-2 border-green-200 bg-green-50 p-4 shadow-sm"
+					transition:slide
+				>
+					<div class="flex items-center gap-3">
+						<div
+							class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600"
+						>
+							<Info size={20} />
+						</div>
+						<div>
+							<h4 class="text-sm font-bold text-green-900">Form Data Restored</h4>
+							<p class="text-xs font-medium text-green-700">
+								Your previous registration progress has been restored. Continue where you left off!
+							</p>
+						</div>
+					</div>
+					<button
+						on:click={() => (showRestoredNotification = false)}
+						class="shrink-0 text-green-600 transition-colors hover:text-green-700"
+					>
+						<XCircle size={20} />
+					</button>
+				</div>
+			{/if}
 
 			<div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
 				<!-- LEFT COLUMN: FORM -->

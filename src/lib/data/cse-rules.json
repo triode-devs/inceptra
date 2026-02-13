@@ -1,38 +1,58 @@
 {
     "department": "Computer Science & Engineering",
-    "general_instructions": {
-        "id_card": "College ID is mandatory for all participants.",
-        "team_size_general": "Maximum 3 members per team.",
-        "punctuality": "Teams must report 15 minutes before the event starts.",
-        "decorum": "Judge's decisions are final. Malpractice leads to immediate disqualification."
-    },
+    "general_instructions": [
+        "Participants must carry valid College ID Card",
+        "Reporting time must be strictly followed",
+        "Maintain discipline throughout the event",
+        "Organizing committee decision will be final"
+    ],
     "technical_events": [
         {
             "id": "cse-paper",
             "event_name": "Paper Presentation",
             "rules": [
-                "Detailed rules will be updated soon."
-            ]
-        },
-        {
-            "id": "cse-quiz",
-            "event_name": "Technical Quiz",
-            "rules": [
-                "Detailed rules will be updated soon."
+                "Team Size: 2–3 Members",
+                "Time Limit: 5 Minutes Only (Strictly Followed)",
+                "Topics must be related to AI, Machine Learning, Deep Learning, Generative AI, or Recent Trends in AI",
+                "Maximum 10 PPT Slides",
+                "Abstract must be submitted before deadline",
+                "Bring PPT in Pen Drive & Mail Copy",
+                "Judges' decision will be final"
             ]
         },
         {
             "id": "cse-blind-code",
             "event_name": "Blind Code",
             "rules": [
-                "Detailed rules will be updated soon."
+                "Individual Participation Only",
+                "Time Limit: 30 Minutes",
+                "Only Python Programming Language Allowed",
+                "Screen will be turned OFF after question explanation",
+                "No Internet / Mobile Phones Allowed",
+                "Code must execute successfully after screen is turned ON",
+                "Malpractice leads to disqualification"
             ]
         },
         {
             "id": "cse-debugging",
             "event_name": "Debugging",
             "rules": [
-                "Detailed rules will be updated soon."
+                "Individual Participation",
+                "Time Limit: 30 Minutes",
+                "Identify and correct errors in given program",
+                "No external help allowed",
+                "Winner based on errors fixed, correct output, and time taken"
+            ]
+        },
+        {
+            "id": "cse-quiz",
+            "event_name": "Technical Quiz",
+            "rules": [
+                "Individual Participation (1 Member Only)",
+                "Rounds: MCQ, Rapid Fire, Visual, Buzzer",
+                "Time per Question: 30–60 Seconds",
+                "No Mobile Phones Allowed",
+                "Judges' decision will be final"
             ]
         }
     ],
@@ -40,15 +60,31 @@
         {
             "id": "cse-gaming",
             "event_name": "Gaming",
+            "event_subtitle": "Free Fire Tournament",
             "rules": [
-                "Detailed rules will be updated soon."
+                "Team Size: 4 Members (Squad Only)",
+                "Mode: Custom Room – Classic / Clash Squad",
+                "Only registered players are allowed to participate",
+                "No hacks, cheats, or unfair tools (Immediate disqualification)",
+                "Players must bring their own mobile device and ensure proper charging",
+                "Stable internet connection required",
+                "Points will be calculated based on Kill Points and Placement Points",
+                "Organizing committee decision will be final"
             ]
         },
         {
             "id": "cse-connexion",
             "event_name": "Connexion",
+            "event_subtitle": "Connection Game",
             "rules": [
-                "Detailed rules will be updated soon."
+                "Team Size: 2–3 Members",
+                "Four images/words will be displayed per question",
+                "Participants must identify the common connection",
+                "Time Limit: 1–2 Minutes per question",
+                "No mobile phones allowed",
+                "If one team fails, next team will get the opportunity",
+                "Maximum points scored will determine the winner",
+                "Judges' decision will be final"
             ]
         }
     ]
