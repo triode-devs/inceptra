@@ -18,6 +18,14 @@
 	import { quintOut } from 'svelte/easing';
 	import { X, ClipboardList } from 'lucide-svelte';
 
+	// Import local WebP images
+	import grpDanceImg from '$lib/assets/events/grp-dance.webp';
+	import soloDanceImg from '$lib/assets/events/solo-dance.webp';
+	import singingImg from '$lib/assets/events/singing.webp';
+	import mimeImg from '$lib/assets/events/mime.webp';
+	import fashionImg from '$lib/assets/events/fashion.webp';
+	import mimixImg from '$lib/assets/events/mimix.webp';
+
 	const culturalEvents = [
 		{
 			id: 'danzera',
@@ -25,8 +33,7 @@
 			type: 'Group Dance',
 			icon: Users,
 			color: 'from-pink-500 to-rose-500',
-			image:
-				'https://images.unsplash.com/photo-1545959554-6b912e92a818?q=80&w=2000&auto=format&fit=crop'
+			image: grpDanceImg
 		},
 		{
 			id: 'sizzle-shake',
@@ -34,8 +41,7 @@
 			type: 'Solo Dance',
 			icon: User,
 			color: 'from-violet-500 to-purple-500',
-			image:
-				'https://images.unsplash.com/photo-1508700929628-666bc8bd84ea?q=80&w=2000&auto=format&fit=crop'
+			image: soloDanceImg
 		},
 		{
 			id: 'voice-vibes',
@@ -43,8 +49,7 @@
 			type: 'Singing',
 			icon: Mic,
 			color: 'from-blue-500 to-cyan-500',
-			image:
-				'https://images.unsplash.com/photo-1516280440614-6697288d5d38?q=80&w=2000&auto=format&fit=crop'
+			image: singingImg
 		},
 		{
 			id: 'rhythm-strings',
@@ -61,8 +66,7 @@
 			type: 'MIME',
 			icon: Smile,
 			color: 'from-teal-400 to-emerald-500',
-			image:
-				'https://images.unsplash.com/photo-1621360841013-c76bb87d81a9?q=80&w=2000&auto=format&fit=crop'
+			image: mimeImg
 		},
 		{
 			id: 'fashion-fiesta',
@@ -70,8 +74,7 @@
 			type: 'Fashion Show',
 			icon: Shirt,
 			color: 'from-fuchsia-500 to-pink-500',
-			image:
-				'https://images.unsplash.com/photo-1509631179647-0177331693ae?q=80&w=2000&auto=format&fit=crop'
+			image: fashionImg
 		},
 		{
 			id: 'mimix',
@@ -79,8 +82,7 @@
 			type: 'Mimicry',
 			icon: MessageSquare,
 			color: 'from-indigo-500 to-blue-600',
-			image:
-				'https://images.unsplash.com/photo-1527236438218-d82077ae1f85?q=80&w=2000&auto=format&fit=crop'
+			image: mimixImg
 		},
 		{
 			id: 'cinebuzz',
