@@ -9,7 +9,6 @@
 		Plus,
 		CheckCircle,
 		Map,
-		MessageCircle,
 		Music
 	} from 'lucide-svelte';
 	import ParticleNetwork from '$lib/components/ParticleNetwork.svelte';
@@ -479,12 +478,7 @@
 		</section>
 	</main>
 
-	<!-- Floating Action Button - Adjusted to be above mobile nav -->
-	<button
-		class="fixed right-8 bottom-24 z-[100] flex h-14 w-14 items-center justify-center rounded-full bg-[#8c2bee] text-white shadow-2xl transition-transform hover:scale-110 active:scale-95 md:bottom-8"
-	>
-		<MessageCircle size={24} />
-	</button>
+	
 </div>
 
 <style>

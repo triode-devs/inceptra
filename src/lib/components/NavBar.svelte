@@ -89,10 +89,9 @@
 		class="pointer-events-auto flex items-center gap-2 rounded-full border border-white/40 bg-white/80 px-4 py-2 shadow-lg shadow-black/5 backdrop-blur-lg"
 	>
 		<img src={tecLogo} alt="TEC Logo" class="h-6 w-auto object-contain" />
-		<div class="text-[#8c2bee]">
-			<Sparkles size={18} fill="currentColor" />
-		</div>
-		<span class="text-sm font-bold tracking-wide">INCEPTRA</span>
+		
+		<span class="text-sm font-bold tracking-wide">INCEPTRA </span>
+		<span class="text-sm font-bold tracking-wide text-[#8c2bee]">26</span>
 	</a>
 
 	<button
