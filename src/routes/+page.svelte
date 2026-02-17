@@ -44,7 +44,7 @@
 
 	onMount(() => {
 		// Timer Logic
-		const countDownDate = new Date('March 5, 2026 09:00:00').getTime();
+		const countDownDate = new Date('March 17, 2026 09:00:00').getTime();
 
 		const interval = setInterval(() => {
 			const now = new Date().getTime();
