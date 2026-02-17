@@ -223,16 +223,12 @@
 					year.
 				</p>
 				<div class="flex flex-col justify-center gap-4 sm:flex-row">
-					<button
+					<a
+						href="/register"
 						class="flex items-center justify-center gap-2 rounded-xl bg-[#8c2bee] px-8 py-4 text-lg font-bold text-white transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-[#8c2bee]/30"
 					>
 						Register Now <ArrowRight size={20} />
-					</button>
-					<button
-						class="flex items-center justify-center gap-2 rounded-xl bg-gray-100 px-8 py-4 text-lg font-bold text-gray-700 transition-all hover:bg-gray-200"
-					>
-						View Schedule
-					</button>
+					</a>
 				</div>
 			</div>
 		</div>

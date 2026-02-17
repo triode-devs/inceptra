@@ -20,15 +20,75 @@
 		};
 	});
 
-	// Randomize order
-	items = items.sort(() => Math.random() - 0.5);
+	// Identify special images
+	const top3Files = ['DSC03734', 'DSC04834 - Copy'];
+	const top5Files = ['1O5A8950'];
 
-	// Move specific image to front
-	const featuredIndex = items.findIndex((item) => item.fileName === '1O5A8950');
-	if (featuredIndex !== -1) {
-		const [featuredItem] = items.splice(featuredIndex, 1);
-		items = [featuredItem, ...items];
+	let top3Items = [];
+	let top5Items = [];
+	let regularItems = [];
+
+	items.forEach((item) => {
+		if (top3Files.includes(item.fileName)) {
+			top3Items.push(item);
+		} else if (top5Files.includes(item.fileName)) {
+			top5Items.push(item);
+		} else {
+			regularItems.push(item);
+		}
+	});
+
+	// Shuffle regular items
+	regularItems = regularItems.sort(() => Math.random() - 0.5);
+
+	// Shuffle special items groups
+	top3Items = top3Items.sort(() => Math.random() - 0.5);
+	top5Items = top5Items.sort(() => Math.random() - 0.5);
+
+	// Create a temporary array for the final result
+	let finalItems = new Array(items.length).fill(null);
+
+	// 1. Place Top 3 Items (must be in indices 0, 1, or 2)
+	// Get available indices for top 3 [0, 1, 2]
+	let availableTop3Indices = [0, 1, 2].sort(() => Math.random() - 0.5);
+
+	top3Items.forEach((item) => {
+		if (availableTop3Indices.length > 0) {
+			const index = availableTop3Indices.pop();
+			finalItems[index] = item;
+		} else {
+			// Fallback if something goes wrong, though logic guarantees space if count <= 3
+			regularItems.unshift(item);
+		}
+	});
+
+	// 2. Place Top 5 Items (must be in indices 0-4, but not overwriting existing ones)
+	// Indices 0-4
+	// Filter indices 0-4 that are still null
+	let availableTop5Indices = [0, 1, 2, 3, 4].filter((i) => finalItems[i] === null);
+	availableTop5Indices = availableTop5Indices.sort(() => Math.random() - 0.5);
+
+	top5Items.forEach((item) => {
+		if (availableTop5Indices.length > 0) {
+			const index = availableTop5Indices.pop();
+			finalItems[index] = item;
+		} else {
+			regularItems.unshift(item);
+		}
+	});
+
+	// 3. Fill the rest with regular items
+	for (let i = 0; i < finalItems.length; i++) {
+		if (finalItems[i] === null) {
+			if (regularItems.length > 0) {
+				finalItems[i] = regularItems.pop();
+			}
+		}
 	}
+	// If regularItems has more items than null slots (impossible if math is right), they would be lost.
+	// Let's just filter nulls and concat any remainders to be safe.
+
+	items = finalItems.filter((i) => i !== null).concat(regularItems);
 </script>
 
 <svelte:head>
