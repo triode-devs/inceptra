@@ -9,15 +9,34 @@
 		Plus,
 		CheckCircle,
 		Map,
-		Music
+		Music,
+		X,
+		Download
 	} from 'lucide-svelte';
+	import { fade, scale, fly } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import ParticleNetwork from '$lib/components/ParticleNetwork.svelte';
 
 	import heroHighlight from '$lib/assets/hero_highlight.jpg';
 
 	import symposiumBg from '$lib/assets/symposium_bg.png';
 	import culturalBg from '$lib/assets/cultural_bg.png';
+	import hackathonBg from '$lib/assets/hackathon_bg.jpg';
 	import InfiniteMenu from '$lib/components/InfiniteMenu.svelte';
+
+	let selectedImage = $state(null);
+	let showPopup = $state(false);
+
+	function openImagePopup(item) {
+		selectedImage = item;
+		showPopup = true;
+		document.body.style.overflow = 'hidden';
+	}
+
+	function closeImagePopup() {
+		showPopup = false;
+		document.body.style.overflow = 'auto';
+	}
 
 	// Import gallery images for the infinite menu
 	const imageFiles = import.meta.glob('$lib/assets/compressed_gallery/*.{webp,png,jpg,jpeg}', {
@@ -31,16 +50,16 @@
 		.map(([path, url], index) => ({
 			image: url,
 			title: `MOMENT ${index + 1}`,
-			description: 'Capturing the essence of Inceptra 2026.',
+			description: 'Capturing the essence of Inceptra 2025.',
 			link: '/gallery'
 		}));
 
-	let timeLeft = {
+	let timeLeft = $state({
 		days: '00',
 		hours: '00',
 		mins: '00',
 		secs: '00'
-	};
+	});
 
 	onMount(() => {
 		// Timer Logic
@@ -77,7 +96,7 @@
 	<title>INCEPTRA '26 | College Symposium & Cultural Festival | TEC</title>
 	<meta
 		name="description"
-		content="INCEPTRA '26 at Trichy Engineering College. A massive 2-day event featuring Technical Symposiums and Cultural Festivals on March 5 & 6, 2026."
+		content="INCEPTRA '26 at Trichy Engineering College. A massive 2-day event featuring Technical Symposiums and Cultural Festivals on March 17 & 18, 2026."
 	/>
 	<meta
 		name="keywords"
@@ -113,8 +132,8 @@
 			"@context": "https://schema.org",
 			"@type": "Event",
 			"name": "INCEPTRA '26",
-			"startDate": "2026-03-05T09:00",
-			"endDate": "2026-03-06T18:00",
+			"startDate": "2026-03-17T09:00",
+			"endDate": "2026-03-18T18:00",
 			"eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
 			"eventStatus": "https://schema.org/EventScheduled",
 			"location": {
@@ -139,6 +158,8 @@
 	</script>
 </svelte:head>
 
+<svelte:window onkeydown={(e) => e.key === 'Escape' && showPopup && closeImagePopup()} />
+
 <div
 	class="relative flex h-auto min-h-screen w-full flex-col scroll-smooth pt-20 font-['Lexend'] text-[#141118]"
 >
@@ -157,11 +178,15 @@
 							class="inline-flex w-fit items-center gap-2 rounded-full border border-[#8c2bee]/10 bg-[#8c2bee]/5 px-4 py-2 text-[#8c2bee]"
 						>
 							<Calendar size={16} />
-							<span class="text-xs font-bold tracking-widest uppercase">March 5 & 6, 2026</span>
+							<span class="text-xs font-bold tracking-widest uppercase">March 17 & 18, 2026</span>
 						</div>
 						<h1
 							class="text-4xl leading-[1.1] font-black tracking-tight text-[#141118] sm:text-5xl md:text-7xl"
 						>
+							<span
+								class="mb-1 block text-sm font-bold tracking-[0.3em] text-[#5a4d6b] uppercase opacity-60 md:text-base"
+								>Trichy Engineering College</span
+							>
 							<span
 								class="mb-2 block text-2xl font-black tracking-[0.2em] text-[#8c2bee] uppercase sm:text-3xl"
 								>Inceptra '26</span
@@ -186,13 +211,13 @@
 					</div>
 					<div class="relative mt-8 lg:col-span-5 lg:mt-0">
 						<div
-							class="group mx-auto aspect-square max-w-md rotate-3 overflow-hidden rounded-3xl shadow-2xl transition-transform duration-500 hover:rotate-0"
+							class="group mx-auto aspect-square max-w-md rotate-3 overflow-hidden rounded-3xl shadow-2xl transition-transform duration-500"
 						>
 							<!-- Image Background -->
 							<img
 								src={heroHighlight}
 								alt="Festival Highlights"
-								class="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+								class="h-full w-full object-cover transition-transform duration-700"
 							/>
 
 							<!-- Gradient Overlay for Text Readability -->
@@ -217,7 +242,7 @@
 										</div>
 									</div>
 									<p class="mt-4 flex items-center gap-2 text-xs font-medium text-gray-200">
-										<MapPin size={14} /> Auditorium • 9:00 AM
+										<MapPin size={14} /> TEC, Auditorium • 9:00 AM
 									</p>
 								</div>
 							</div>
@@ -236,7 +261,7 @@
 					<div class="flex flex-col items-center justify-between gap-8 lg:flex-row">
 						<div class="text-center lg:text-left">
 							<h3 class="text-3xl font-black text-[#141118]">Starts In...</h3>
-							<p class="mt-1 font-medium text-[#5a4d6b]">Mark your calendars for March 5, 2026</p>
+							<p class="mt-1 font-medium text-[#5a4d6b]">Mark your calendars for March 17, 2026</p>
 						</div>
 						<div class="flex flex-wrap justify-center gap-3 md:gap-8">
 							<div class="flex flex-col items-center gap-2">
@@ -325,10 +350,18 @@
 							<div
 								class="absolute right-6 bottom-6 left-6 flex flex-col gap-2 text-white sm:right-8 sm:bottom-8 sm:left-8 md:right-10 md:bottom-10 md:left-10"
 							>
-								<div
-									class="w-fit rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
-								>
-									Technical & Non-Technical
+								<div class="flex items-center gap-2">
+									<div
+										class="w-fit rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
+									>
+										Technical & Non-Technical
+									</div>
+									<div
+										class="flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
+									>
+										<Calendar size={14} />
+										March 17
+									</div>
 								</div>
 								<h3 class="text-3xl font-black sm:text-4xl md:text-5xl">Symposium</h3>
 								<p
@@ -361,10 +394,18 @@
 							<div
 								class="absolute right-6 bottom-6 left-6 flex flex-col gap-2 text-white sm:right-8 sm:bottom-8 sm:left-8 md:right-10 md:bottom-10 md:left-10"
 							>
-								<div
-									class="w-fit rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
-								>
-									Non-Technical
+								<div class="flex items-center gap-2">
+									<div
+										class="w-fit rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
+									>
+										Non-Technical
+									</div>
+									<div
+										class="flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
+									>
+										<Calendar size={14} />
+										March 18
+									</div>
 								</div>
 								<h3 class="text-3xl font-black sm:text-4xl md:text-5xl">Cultural</h3>
 								<p
@@ -376,6 +417,63 @@
 									class="mt-4 flex h-10 w-10 items-center justify-center rounded-full bg-white text-[#ee2b8c] transition-transform group-hover:scale-110 sm:h-12 sm:w-12"
 								>
 									<ArrowRight size={24} />
+								</div>
+							</div>
+						</div>
+					</a>
+				</div>
+
+				<!-- Hackathon Card (Standalone Event) -->
+				<div class="mt-8">
+					<div class="mb-6 text-center">
+						<h2 class="text-2xl font-black tracking-tight text-[#141118] md:text-3xl">
+							Special Event
+						</h2>
+						<p class="mt-2 font-medium text-[#5a4d6b]">
+							Join our flagship hackathon on March 18, 2026
+						</p>
+					</div>
+					<a
+						href="/hackathon"
+						class="group relative block overflow-hidden rounded-[2.5rem] bg-white transition-all hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#10b981]/20"
+					>
+						<div class="relative aspect-[16/10] overflow-hidden md:aspect-[21/9]">
+							<div
+								class="h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+								style="background-image: url({hackathonBg});"
+							></div>
+							<div
+								class="absolute inset-0 bg-gradient-to-t from-emerald-900/90 via-emerald-900/40 to-transparent opacity-90 transition-opacity group-hover:opacity-100"
+							></div>
+							<div
+								class="absolute right-6 bottom-6 left-6 flex flex-col gap-3 text-white sm:right-8 sm:bottom-8 sm:left-8 md:right-10 md:bottom-10 md:left-10"
+							>
+								<div class="flex flex-wrap items-center gap-2">
+									<div
+										class="w-fit rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
+									>
+										Hackathon
+									</div>
+									<div
+										class="flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
+									>
+										<Calendar size={14} />
+										March 18, 2026
+									</div>
+								</div>
+								<h3 class="text-3xl font-black sm:text-4xl md:text-5xl">Project Tech Feast</h3>
+								<p
+									class="mt-1 max-w-2xl text-sm font-medium opacity-90 sm:mt-2 sm:text-base md:text-lg"
+								>
+									Sustainable Tech (Green Energy) - 24-hour innovation challenge to build solutions
+									for a sustainable future.
+								</p>
+								<div class="mt-4 flex items-center gap-4">
+									<div
+										class="flex h-10 w-10 items-center justify-center rounded-full bg-white text-emerald-600 transition-transform group-hover:scale-110 sm:h-12 sm:w-12"
+									>
+										<ArrowRight size={24} />
+									</div>
 								</div>
 							</div>
 						</div>
@@ -463,7 +561,7 @@
 			</div>
 
 			<div class="h-full w-full">
-				<InfiniteMenu items={galleryItems} scale={1.2} />
+				<InfiniteMenu items={galleryItems} scale={1.2} onImageClick={openImagePopup} />
 			</div>
 
 			<div class="absolute bottom-10 left-1/2 z-20 -translate-x-1/2">
@@ -476,9 +574,70 @@
 				</a>
 			</div>
 		</section>
-	</main>
 
-	
+		<!-- Image Popup Modal -->
+		{#if showPopup && selectedImage}
+			<div
+				class="fixed inset-0 z-200 flex items-center justify-center p-4 md:p-8"
+				transition:fade={{ duration: 200 }}
+			>
+				<!-- Backdrop -->
+				<div
+					class="absolute inset-0 bg-black/95 backdrop-blur-xl"
+					onclick={closeImagePopup}
+					role="button"
+					tabindex="0"
+					aria-label="Close popup"
+				></div>
+
+				<!-- Close Button (Top Right) -->
+				<button
+					onclick={(e) => {
+						e.stopPropagation();
+						closeImagePopup();
+					}}
+					class="absolute top-6 right-6 z-50 rounded-full bg-white/10 p-4 text-white backdrop-blur-md transition-all hover:rotate-90 hover:bg-white/20 active:scale-90"
+					aria-label="Close"
+				>
+					<X size={24} />
+				</button>
+
+				<!-- Modal Content -->
+				<div
+					class="relative z-10 flex max-h-full w-full max-w-5xl flex-col items-center justify-center gap-6"
+					transition:scale={{ duration: 400, start: 0.9, easing: quintOut }}
+				>
+					<div class="relative overflow-hidden rounded-3xl shadow-2xl">
+						<img
+							src={selectedImage.image}
+							alt={selectedImage.title}
+							class="max-h-[70vh] w-auto object-contain"
+						/>
+
+						<!-- Bottom Info Bar -->
+						<div
+							class="absolute right-0 bottom-0 left-0 bg-linear-to-t from-black/80 to-transparent p-6 text-white md:p-8"
+						>
+							<div class="flex items-end justify-between gap-4">
+								<div>
+									<h3 class="text-2xl font-black">{selectedImage.title}</h3>
+									<p class="mt-1 text-sm font-medium opacity-70">{selectedImage.description}</p>
+								</div>
+								<a
+									href={selectedImage.image}
+									download="inceptra-gallery.jpg"
+									class="flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-black transition-all hover:-translate-y-1 active:scale-95"
+								>
+									<Download size={18} />
+									<span>Download</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		{/if}
+	</main>
 </div>
 
 <style>

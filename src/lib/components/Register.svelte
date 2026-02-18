@@ -18,12 +18,18 @@
 		QrCode,
 		Plus,
 		Download,
-		Phone
+		Phone,
+		XCircle,
+		User,
+		History,
+		UserCheck
 	} from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
 	import symposiumQR from '../assets/qr/symposium.png';
 	import culturalsQR from '../assets/qr/culturals.png';
+	import { symposiumData, culturalEvents } from '$lib/data/data';
 	import QRCode from 'qrcode';
+	import { API_BASE_URL } from '$lib';
 
 	// Props: Accept deptId from parent (URL param)
 	export let deptId = null;
@@ -31,7 +37,7 @@
 	export let userEmail = null;
 	export let userId = null;
 
-	let registrationType = 'symposium'; // 'symposium' | 'cultural'
+	let registrationType = 'hackathon'; // 'symposium' | 'cultural' | 'hackathon'
 	let submitted = false;
 	let loading = false;
 	let error = null;
@@ -40,9 +46,8 @@
 	let uploadingScreenshot = false;
 	let paymentMethod = 'online'; // 'online' | 'offline'
 	let qrCodeDataUrl = '';
-	let showRestoredNotification = false;
 
-	$: isOfflineEnabled = settings['offline_payment_enabled'] === 'true';
+	$: isOfflineEnabled = true;
 
 	const generatePassQR = async () => {
 		const qrData = {
@@ -58,7 +63,7 @@
 				...formData.events.nonTechnical,
 				...formData.events.cultural
 			],
-			amount: 150 + formData.events.cultural.length * 100,
+			amount: totalAmount,
 			paymentStatus: paymentMethod === 'offline' ? 'Pending (Offline)' : 'Pending Verification',
 			timestamp: new Date().toISOString()
 		};
@@ -77,80 +82,7 @@
 		}
 	};
 
-	// --- Data ---
-	const symposiumData = [
-		{
-			id: 'cse',
-			name: 'Computer Science',
-			fullName: 'Computer Science & Engineering',
-			icon: Cpu,
-			color: 'text-blue-600',
-			bg: 'bg-blue-50',
-			events: {
-				technical: ['Paper Presentation', 'Technical Quiz', 'Blind Code', 'Debugging'],
-				nonTechnical: ['Gaming', 'Connexion']
-			}
-		},
-		{
-			id: 'eee',
-			name: 'Electrical & Electronics',
-			fullName: 'Electrical & Electronics Engineering',
-			icon: Zap,
-			color: 'text-yellow-600',
-			bg: 'bg-yellow-50',
-			events: {
-				technical: ['Paperbestowment', 'Technical Brain Blast', 'Circuit Debugging', 'Trade Show'],
-				nonTechnical: ['Recreational Events']
-			}
-		},
-		{
-			id: 'ece',
-			name: 'Electronics & Comm',
-			fullName: 'Electronics & Communication',
-			icon: Radio,
-			color: 'text-purple-600',
-			bg: 'bg-purple-50',
-			events: {
-				technical: ['Paper Tract', 'Flyer / Buzzcard', 'Fine Tune', 'Innovation Expo'],
-				nonTechnical: ['Connection', 'Free Fire']
-			}
-		},
-		{
-			id: 'mech',
-			name: 'Mech & Mechatronics',
-			fullName: 'Mechanical & Mechatronics',
-			icon: Settings,
-			color: 'text-orange-600',
-			bg: 'bg-orange-50',
-			events: {
-				technical: ['Paper Presentation', 'CAD Modeling', 'Calibre', 'Technical Quiz'],
-				nonTechnical: ['Paper Events', 'Brushless Painting']
-			}
-		},
-		{
-			id: 'civil',
-			name: 'Civil Engineering',
-			fullName: 'Civil Engineering',
-			icon: Building,
-			color: 'text-emerald-600',
-			bg: 'bg-emerald-50',
-			events: {
-				technical: ['Bridge', 'Model Making', 'Poster', 'CAD Quest', 'Quiz'],
-				nonTechnical: []
-			}
-		}
-	];
-
-	const culturalEvents = [
-		'Danzera (Group Dance)',
-		'Sizzle and Shake (Solo Dance)',
-		'Voice Vibes (Singing)',
-		'Rhythm Strings (Instrumental)',
-		'Silent Symphony (MIME)',
-		'Fashion Fiesta',
-		'Mimix (Mimicry)',
-		'Cinebuzz (Short Film)'
-	];
+	// --- Data loaded from data.js ---
 
 	// --- Form State ---
 	let formData = {
@@ -162,14 +94,17 @@
 		college: '',
 		address: '',
 		food: '',
-		dept: '', // For Symposium
+		studentDept: '', // Participant's Department
 		events: {
 			technical: [],
 			nonTechnical: [],
 			cultural: []
 		},
 		paperTitle: '',
-		paperFile: null
+		paperFile: null,
+		hackathonTopic: 'Sustainable Tech (Green Energy)',
+		hackathonType: 'software',
+		transactionId: ''
 	};
 
 	// Sync email if userEmail changes
@@ -179,6 +114,8 @@
 
 	// --- Logic ---
 	let selectedDeptIndex = -1;
+	let otherDeptName = '';
+	const KNOWN_DEPTS = ['CSE', 'ECE', 'EEE', 'MECH', 'CIVIL', 'IT', 'AIDS'];
 	$: selectedDept = selectedDeptIndex !== -1 ? symposiumData[selectedDeptIndex] : null;
 
 	// Determine if we are in a "Locked Department" mode based on prop
@@ -197,7 +134,97 @@
 	const STORAGE_KEY = 'inceptra_registration_draft';
 	let saveTimeout = null;
 
-	// Save form data to localStorage
+	// --- Profile Suggestions ---
+	let suggestedProfiles = [];
+	let loadingProfiles = false;
+	let showProfileDropdown = false;
+
+	async function loadProfileSuggestions() {
+		if (!userId || !browser) return;
+		loadingProfiles = true;
+		try {
+			// 1. Fetch from API
+			const res = await fetch(`${API_BASE_URL}/api/user/registrations?userId=${userId}`);
+			const data = await res.json();
+			let profiles = [];
+
+			if (res.ok && data.registrations) {
+				profiles = data.registrations.map((r) => ({
+					name: r.name,
+					id: r.college_id,
+					email: r.email,
+					phone: r.phone,
+					year: r.year,
+					college: r.college,
+					address: r.address,
+					food: r.food,
+					studentDept: r.student_dept || r.dept,
+					type: 'Previous Entry'
+				}));
+			}
+
+			// 2. Fetch from LocalStorage (Draft)
+			const saved = localStorage.getItem(STORAGE_KEY);
+			if (saved) {
+				const parsed = JSON.parse(saved);
+				if (parsed.formData && parsed.formData.name) {
+					profiles.push({
+						...parsed.formData,
+						type: 'Unfinished Draft'
+					});
+				}
+			}
+
+			// Deduplicate by Name + ID
+			const unique = [];
+			const seen = new Set();
+			for (const p of profiles) {
+				const key = `${p.name}-${p.id}`;
+				if (!seen.has(key)) {
+					unique.push(p);
+					seen.add(key);
+				}
+			}
+			suggestedProfiles = unique;
+		} catch (e) {
+			console.error('Failed to load suggested profiles', e);
+		} finally {
+			loadingProfiles = false;
+		}
+	}
+
+	function applyProfile(profile) {
+		formData = {
+			...formData,
+			name: profile.name || '',
+			id: profile.id || '',
+			email: profile.email || '',
+			phone: profile.phone || '',
+			year: profile.year || '',
+			college: profile.college || '',
+			address: profile.address || '',
+			food: profile.food || '',
+			studentDept: profile.studentDept || profile.dept || ''
+		};
+
+		// Handle "Other" department in restoration
+		if (formData.studentDept && !KNOWN_DEPTS.includes(formData.studentDept)) {
+			otherDeptName = formData.studentDept;
+			formData.studentDept = 'Other';
+		} else {
+			otherDeptName = '';
+		}
+
+		// If dept matches an organizing dept, update selectedDeptIndex
+		const deptToMatch = profile.targetDept || profile.dept;
+		if (deptToMatch) {
+			const index = symposiumData.findIndex((d) => d.name === deptToMatch);
+			if (index !== -1) selectedDeptIndex = index;
+		}
+		showProfileDropdown = false;
+	}
+
+	// Save form data to localStorage (Keep as draft but don't auto-fill)
 	function saveFormToLocalStorage() {
 		if (!browser) return;
 		try {
@@ -210,7 +237,6 @@
 				timestamp: Date.now()
 			};
 			localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
-			console.log('Form data saved to localStorage');
 		} catch (e) {
 			console.error('Failed to save form data:', e);
 		}
@@ -221,38 +247,7 @@
 		if (saveTimeout) clearTimeout(saveTimeout);
 		saveTimeout = setTimeout(() => {
 			saveFormToLocalStorage();
-		}, 1000); // Save after 1 second of inactivity
-	}
-
-	// Restore form data from localStorage
-	function restoreFormFromLocalStorage() {
-		if (!browser) return false;
-		try {
-			const saved = localStorage.getItem(STORAGE_KEY);
-			if (!saved) return false;
-
-			const parsed = JSON.parse(saved);
-			// Check if saved data is less than 24 hours old
-			const age = Date.now() - (parsed.timestamp || 0);
-			if (age > 24 * 60 * 60 * 1000) {
-				// Data too old, clear it
-				localStorage.removeItem(STORAGE_KEY);
-				return false;
-			}
-
-			// Restore data
-			if (parsed.formData) formData = parsed.formData;
-			if (parsed.registrationType) registrationType = parsed.registrationType;
-			if (parsed.selectedDeptIndex !== undefined) selectedDeptIndex = parsed.selectedDeptIndex;
-			if (parsed.currentStep) currentStep = parsed.currentStep;
-			if (parsed.paymentMethod) paymentMethod = parsed.paymentMethod;
-
-			console.log('Form data restored from localStorage');
-			return true;
-		} catch (e) {
-			console.error('Failed to restore form data:', e);
-			return false;
-		}
+		}, 1000);
 	}
 
 	// Clear saved form data
@@ -277,15 +272,7 @@
 	}
 
 	onMount(() => {
-		// Restore saved form data
-		const restored = restoreFormFromLocalStorage();
-		if (restored) {
-			// Show notification that data was restored
-			showRestoredNotification = true;
-			setTimeout(() => {
-				showRestoredNotification = false;
-			}, 5000); // Hide after 5 seconds
-		}
+		loadProfileSuggestions();
 
 		// If a department is pre-selected via prop, scroll to the section
 		if (deptId) {
@@ -300,6 +287,9 @@
 	onDestroy(() => {
 		if (saveTimeout) clearTimeout(saveTimeout);
 	});
+
+	// Calculate Amount
+	$: totalAmount = 300;
 
 	// Calculate Progress
 	$: progress = (() => {
@@ -335,7 +325,7 @@
 		uploadFormData.append('file', file);
 
 		try {
-			const res = await fetch('/api/upload', {
+			const res = await fetch(`${API_BASE_URL}/api/upload`, {
 				method: 'POST',
 				body: uploadFormData
 			});
@@ -367,7 +357,7 @@
 		uploadFormData.append('file', file);
 
 		try {
-			const res = await fetch('/api/upload', {
+			const res = await fetch(`${API_BASE_URL}/api/upload`, {
 				method: 'POST',
 				body: uploadFormData
 			});
@@ -389,18 +379,25 @@
 		if (formData.events.technical.includes(event)) {
 			formData.events.technical = formData.events.technical.filter((e) => e !== event);
 		} else {
-			// Allow selecting any number of events, or at least no upper limit blocking
-			formData.events.technical = [...formData.events.technical, event];
+			if (formData.events.technical.length < 2) {
+				formData.events.technical = [...formData.events.technical, event];
+			} else {
+				error = 'Maximum 2 Technical events allowed.';
+				setTimeout(() => (error = null), 3000);
+			}
 		}
 	}
 
 	function toggleNonTechEvent(event) {
 		if (formData.events.nonTechnical.includes(event)) {
-			// Deselect if already selected
 			formData.events.nonTechnical = formData.events.nonTechnical.filter((e) => e !== event);
 		} else {
-			// Limit to exactly 1: Replace existing selection with the new one
-			formData.events.nonTechnical = [event];
+			if (formData.events.nonTechnical.length < 1) {
+				formData.events.nonTechnical = [event];
+			} else {
+				error = 'Maximum 1 Non-Technical event allowed.';
+				setTimeout(() => (error = null), 3000);
+			}
 		}
 	}
 
@@ -408,21 +405,45 @@
 		if (formData.events.cultural.includes(event)) {
 			formData.events.cultural = formData.events.cultural.filter((e) => e !== event);
 		} else {
-			formData.events.cultural = [...formData.events.cultural, event];
+			if (formData.events.cultural.length < 2) {
+				formData.events.cultural = [...formData.events.cultural, event];
+			} else {
+				error = 'Maximum 2 Cultural events allowed.';
+				setTimeout(() => (error = null), 3000);
+			}
 		}
 	}
 
 	// --- Validation ---
+	$: isHackathonValid = formData.hackathonTopic && formData.hackathonType;
+
+	$: isCulturalValid = formData.events.cultural.length > 0 && formData.events.cultural.length <= 2;
+
+	// Defensive reactive check to enforce limits if data is restored from old drafts
+	$: if (formData.events.technical.length > 2) {
+		formData.events.technical = formData.events.technical.slice(0, 2);
+	}
+	$: if (formData.events.nonTechnical.length > 1) {
+		formData.events.nonTechnical = formData.events.nonTechnical.slice(0, 1);
+	}
+	$: if (formData.events.cultural.length > 2) {
+		formData.events.cultural = formData.events.cultural.slice(0, 2);
+	}
+
 	$: isSymposiumValid = (() => {
 		if (!selectedDept) return false;
-		// Check if AT LEAST one event is selected overall (tech or non-tech)
-		return formData.events.technical.length > 0 || formData.events.nonTechnical.length > 0;
+		const techCount = formData.events.technical.length;
+		const nonTechCount = formData.events.nonTechnical.length;
+		// At least one event, and within limits
+		return (techCount > 0 || nonTechCount > 0) && techCount <= 2 && nonTechCount <= 1;
 	})();
 
-	$: isCulturalValid = formData.events.cultural.length > 0;
-
 	$: isFormValid =
-		(registrationType === 'symposium' ? isSymposiumValid : isCulturalValid) &&
+		(registrationType === 'symposium'
+			? isSymposiumValid
+			: registrationType === 'hackathon'
+				? isHackathonValid
+				: isCulturalValid) &&
 		formData.name &&
 		formData.id &&
 		formData.email &&
@@ -430,14 +451,18 @@
 		formData.year &&
 		formData.college &&
 		formData.address &&
-		formData.food;
+		formData.food &&
+		(formData.studentDept === 'Other' ? otherDeptName : formData.studentDept) &&
+		(currentStep === 2 && paymentMethod === 'online'
+			? paymentScreenshotKey && formData.transactionId
+			: true);
 
 	async function handleSubmit() {
 		if (isFormValid && (paymentScreenshotKey || paymentMethod === 'offline')) {
 			loading = true;
 			error = null;
 			try {
-				const response = await fetch('/api/register', {
+				const response = await fetch(`${API_BASE_URL}/api/register`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
@@ -445,9 +470,12 @@
 					body: JSON.stringify({
 						...formData,
 						registrationType,
-						amount: 150 + formData.events.cultural.length * 100,
+						amount: totalAmount,
+						paymentMode: paymentMethod,
+						transactionId: paymentMethod === 'offline' ? 'OFFLINE' : formData.transactionId,
 						payment_screenshot_key: paymentMethod === 'offline' ? 'OFFLINE' : paymentScreenshotKey,
-						dept: selectedDept?.name || null,
+						studentDept: formData.studentDept === 'Other' ? otherDeptName : formData.studentDept,
+						targetDept: selectedDept?.name || null,
 						user_id: userId
 					})
 				});
@@ -458,6 +486,7 @@
 					submitted = true;
 					// Clear saved form data on successful submission
 					clearSavedForm();
+					loadProfileSuggestions(); // Refresh suggestions with the new entry
 					await generatePassQR();
 					window.scrollTo({ top: 0, behavior: 'smooth' });
 				} else {
@@ -492,34 +521,6 @@
 				></div>
 			</div>
 
-			<!-- Restored Data Notification -->
-			{#if showRestoredNotification}
-				<div
-					class="mb-8 flex items-center justify-between gap-4 rounded-2xl border-2 border-green-200 bg-green-50 p-4 shadow-sm"
-					transition:slide
-				>
-					<div class="flex items-center gap-3">
-						<div
-							class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600"
-						>
-							<Info size={20} />
-						</div>
-						<div>
-							<h4 class="text-sm font-bold text-green-900">Form Data Restored</h4>
-							<p class="text-xs font-medium text-green-700">
-								Your previous registration progress has been restored. Continue where you left off!
-							</p>
-						</div>
-					</div>
-					<button
-						on:click={() => (showRestoredNotification = false)}
-						class="shrink-0 text-green-600 transition-colors hover:text-green-700"
-					>
-						<XCircle size={20} />
-					</button>
-				</div>
-			{/if}
-
 			<div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
 				<!-- LEFT COLUMN: FORM -->
 				<div class="flex flex-col gap-10 lg:col-span-8">
@@ -541,13 +542,14 @@
 									<label class="mb-3 block text-sm font-bold" for="type"
 										>What are you registering for?</label
 									>
-									<div class="grid grid-cols-2 gap-4">
+									<div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
 										<button
+											type="button"
 											class="flex flex-col items-center gap-3 rounded-2xl border-2 p-6 transition-all
                       {registrationType === 'symposium'
 												? 'border-[#8c2bee] bg-[#8c2bee]/5 text-[#8c2bee]'
 												: 'border-transparent bg-[#f8f6f7] hover:border-[#8c2bee]/30'}"
-											on:click={() => {
+											onclick={() => {
 												registrationType = 'symposium';
 												resetSelection();
 											}}
@@ -556,11 +558,12 @@
 											<span class="font-bold">Symposium</span>
 										</button>
 										<button
+											type="button"
 											class="flex flex-col items-center gap-3 rounded-2xl border-2 p-6 transition-all
                       {registrationType === 'cultural'
 												? 'border-[#ee2b8c] bg-[#ee2b8c]/5 text-[#ee2b8c]'
 												: 'border-transparent bg-[#f8f6f7] hover:border-[#ee2b8c]/30'}"
-											on:click={() => {
+											onclick={() => {
 												registrationType = 'cultural';
 												resetSelection();
 											}}
@@ -568,8 +571,90 @@
 											<Sparkles size={32} />
 											<span class="font-bold">Culturals</span>
 										</button>
+										<button
+											type="button"
+											class="flex flex-col items-center gap-3 rounded-2xl border-2 p-6 transition-all
+                      {registrationType === 'hackathon'
+												? 'border-emerald-600 bg-emerald-600/5 text-emerald-600'
+												: 'border-transparent bg-[#f8f6f7] hover:border-emerald-600/30'}"
+											onclick={() => {
+												registrationType = 'hackathon';
+												resetSelection();
+											}}
+										>
+											<Zap size={32} />
+											<span class="font-bold">Hackathon</span>
+										</button>
 									</div>
 								</div>
+
+								<!-- Quick Fill Dropdown -->
+								{#if suggestedProfiles.length > 0}
+									<div class="mb-4 md:col-span-2">
+										<label
+											class="mb-3 block text-sm font-bold tracking-widest text-gray-500 uppercase"
+										>
+											Quick Fill Details
+										</label>
+										<div class="relative">
+											<button
+												type="button"
+												onclick={() => (showProfileDropdown = !showProfileDropdown)}
+												class="flex h-14 w-full items-center justify-between rounded-xl border-2 border-dashed border-[#8c2bee]/20 bg-white px-6 font-bold text-[#8c2bee] transition-all hover:border-[#8c2bee]/50"
+											>
+												<div class="flex items-center gap-3">
+													<History size={18} />
+													<span>Select from previous or drafts</span>
+												</div>
+												<ChevronRight
+													size={18}
+													class="transition-transform {showProfileDropdown ? 'rotate-90' : ''}"
+												/>
+											</button>
+
+											{#if showProfileDropdown}
+												<div
+													class="absolute top-full right-0 left-0 z-50 mt-2 max-h-60 overflow-y-auto rounded-2xl border border-gray-100 bg-white p-2 shadow-2xl"
+													transition:slide
+												>
+													{#each suggestedProfiles as profile}
+														<button
+															type="button"
+															onclick={() => applyProfile(profile)}
+															class="flex w-full items-center justify-between rounded-xl p-4 text-left transition-all hover:bg-gray-50"
+														>
+															<div class="flex items-center gap-3">
+																<div
+																	class="flex h-10 w-10 items-center justify-center rounded-full bg-[#8c2bee]/10 text-[#8c2bee]"
+																>
+																	<User size={18} />
+																</div>
+																<div>
+																	{#if profile.type === 'Unfinished Draft'}
+																		<p
+																			class="mb-0.5 text-xs font-bold tracking-tighter text-[#8c2bee] uppercase"
+																		>
+																			Resume Draft
+																		</p>
+																	{/if}
+																	<p class="text-sm font-black">{profile.name}</p>
+																	<p class="text-[10px] font-bold text-gray-400 uppercase">
+																		{profile.id} • {profile.college}
+																	</p>
+																</div>
+															</div>
+															<span
+																class="rounded-full bg-gray-100 px-2.5 py-1 text-[8px] font-black tracking-widest text-gray-500 uppercase"
+															>
+																{profile.type}
+															</span>
+														</button>
+													{/each}
+												</div>
+											{/if}
+										</div>
+									</div>
+								{/if}
 
 								<!-- Personal Info -->
 								<div class="flex flex-col gap-4">
@@ -654,6 +739,37 @@
 										<option value="non-veg">Non-Vegetarian</option>
 									</select>
 								</div>
+								<div class="flex flex-col gap-4">
+									<label class="text-sm font-bold" for="studentDept">Your Department</label>
+									<select
+										id="studentDept"
+										bind:value={formData.studentDept}
+										class="h-14 rounded-xl border-none bg-[#f8f6f7] px-6 font-medium focus:ring-2 focus:ring-[#8c2bee]/20
+										{!formData.studentDept && error?.includes('department') ? 'ring-2 ring-red-500' : ''}"
+									>
+										<option value="">Select Dept</option>
+										<option value="CSE">CSE</option>
+										<option value="ECE">ECE</option>
+										<option value="EEE">EEE</option>
+										<option value="MECH">MECH</option>
+										<option value="CIVIL">CIVIL</option>
+										<option value="IT">IT</option>
+										<option value="AIDS">AI & DS</option>
+										<option value="Other">Other</option>
+									</select>
+								</div>
+
+								{#if formData.studentDept === 'Other'}
+									<div class="flex flex-col gap-4" transition:slide>
+										<label class="text-sm font-bold" for="otherDept">Specify Department</label>
+										<input
+											id="otherDept"
+											bind:value={otherDeptName}
+											placeholder="Your Department Name"
+											class="h-14 rounded-xl border-none bg-[#f8f6f7] px-6 font-medium focus:ring-2 focus:ring-[#8c2bee]/20"
+										/>
+									</div>
+								{/if}
 							</div>
 
 							<!-- DEPARTMENT SELECTION -->
@@ -672,7 +788,7 @@
 														? 'border-[#8c2bee] bg-[#8c2bee]/5 text-[#8c2bee]'
 														: 'border-transparent bg-[#f8f6f7] hover:border-[#8c2bee]/30'}
                           {isDeptLocked ? 'cursor-default ring-2 ring-[#8c2bee]/20' : ''}"
-													on:click={() => !isDeptLocked && (selectedDeptIndex = idx)}
+													onclick={() => !isDeptLocked && (selectedDeptIndex = idx)}
 												>
 													<div
 														class="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm"
@@ -714,18 +830,22 @@
 												</p>
 												<div class="grid grid-cols-1 gap-3">
 													{#each selectedDept.events.technical as event}
+														{@const isSelected = formData.events.technical.includes(event)}
+														{@const isLimitReached = formData.events.technical.length >= 2}
 														<label
-															class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 bg-[#f8f6f7] p-4 transition-all
-                            {formData.events.technical.includes(event)
+															class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 transition-all
+                            {isSelected
 																? 'border-[#8c2bee] bg-white'
-																: 'border-transparent hover:border-[#8c2bee]/30'}
+																: 'border-transparent bg-[#f8f6f7] hover:border-[#8c2bee]/30'}
+                            {!isSelected && isLimitReached ? 'cursor-not-allowed opacity-50' : ''}
                           "
 														>
 															<input
 																type="checkbox"
 																class="h-5 w-5 rounded border-gray-300 text-[#8c2bee] focus:ring-[#8c2bee]"
-																checked={formData.events.technical.includes(event)}
-																on:change={() => toggleTechEvent(event)}
+																checked={isSelected}
+																disabled={!isSelected && isLimitReached}
+																onchange={() => toggleTechEvent(event)}
 															/>
 															<div class="flex-1">
 																<div class="flex items-center gap-2">
@@ -776,7 +896,7 @@
 																			<span class="text-sm font-bold">Paper Uploaded!</span>
 																			<button
 																				class="text-xs font-bold text-[#8c2bee] underline"
-																				on:click={() => (formData.paperFile = null)}
+																				onclick={() => (formData.paperFile = null)}
 																			>
 																				Change File
 																			</button>
@@ -796,7 +916,7 @@
 																			type="file"
 																			accept=".pdf,.doc,.docx"
 																			class="absolute inset-0 cursor-pointer opacity-0"
-																			on:change={handlePaperUpload}
+																			onchange={handlePaperUpload}
 																		/>
 																		<div class="flex flex-col items-center gap-2 opacity-60">
 																			<Plus size={24} />
@@ -831,24 +951,30 @@
 													</p>
 													<div class="grid grid-cols-1 gap-3">
 														{#each selectedDept.events.nonTechnical as event}
+															{@const isSelected = formData.events.nonTechnical.includes(event)}
+															{@const isLimitReached = formData.events.nonTechnical.length >= 1}
 															<label
-																class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 bg-[#f8f6f7] p-4 transition-all
-                               {formData.events.nonTechnical.includes(event)
-																	? 'border-[#ee2b8c] bg-white'
-																	: 'border-transparent hover:border-[#ee2b8c]/30'}
+																class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 transition-all
+                               {isSelected
+																	? 'border-[#8c2bee] bg-white'
+																	: 'border-transparent bg-[#f8f6f7] hover:border-[#8c2bee]/30'}
+                               {!isSelected && isLimitReached
+																	? 'cursor-not-allowed opacity-50'
+																	: ''}
                              "
 															>
 																<input
 																	type="checkbox"
-																	class="h-5 w-5 rounded border-gray-300 text-[#ee2b8c] focus:ring-[#ee2b8c]"
-																	checked={formData.events.nonTechnical.includes(event)}
-																	on:change={() => toggleNonTechEvent(event)}
+																	class="h-5 w-5 rounded border-gray-300 text-[#8c2bee] focus:ring-[#8c2bee]"
+																	checked={isSelected}
+																	disabled={!isSelected && isLimitReached}
+																	onchange={() => toggleNonTechEvent(event)}
 																/>
 																<div class="flex-1">
 																	<div class="flex items-center gap-2">
 																		<span class="text-sm font-extrabold">{event}</span>
 																		<span
-																			class="rounded-full bg-[#ee2b8c]/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#ee2b8c] uppercase"
+																			class="rounded-full bg-[#8c2bee]/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#8c2bee] uppercase"
 																			>Non-Tech</span
 																		>
 																	</div>
@@ -871,24 +997,27 @@
 							<!-- CULTURAL SELECTION -->
 							{#if registrationType === 'cultural' && currentStep === 1}
 								<div in:fade>
-									<h3 class="mb-4 flex items-center gap-2 text-lg font-bold">
-										<Sparkles size={20} class="text-[#ee2b8c]" />
-										Select Events
-									</h3>
+									<div class="mb-4 rounded-lg bg-[#ee2b8c]/5 p-3 text-xs font-bold text-[#ee2b8c]">
+										Note: You can participate in a maximum of 2 cultural events.
+									</div>
 									<div class="grid grid-cols-1 gap-3">
 										{#each culturalEvents as event}
+											{@const isSelected = formData.events.cultural.includes(event)}
+											{@const isLimitReached = formData.events.cultural.length >= 2}
 											<label
-												class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 bg-[#f8f6f7] p-4 transition-all
-                      {formData.events.cultural.includes(event)
+												class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 transition-all
+                      {isSelected
 													? 'border-[#ee2b8c] bg-white'
-													: 'border-transparent hover:border-[#ee2b8c]/30'}
+													: 'border-transparent bg-[#f8f6f7] hover:border-[#ee2b8c]/30'}
+                      {!isSelected && isLimitReached ? 'cursor-not-allowed opacity-50' : ''}
                     "
 											>
 												<input
 													type="checkbox"
 													class="h-5 w-5 rounded border-gray-300 text-[#ee2b8c] focus:ring-[#ee2b8c]"
-													checked={formData.events.cultural.includes(event)}
-													on:change={() => toggleCulturalEvent(event)}
+													checked={isSelected}
+													disabled={!isSelected && isLimitReached}
+													onchange={() => toggleCulturalEvent(event)}
 												/>
 												<div class="flex-1">
 													<div class="flex items-center gap-2">
@@ -901,6 +1030,56 @@
 												</div>
 											</label>
 										{/each}
+									</div>
+								</div>
+							{/if}
+
+							<!-- HACKATHON SELECTION -->
+							{#if registrationType === 'hackathon' && currentStep === 1}
+								<div in:fade class="flex flex-col gap-8">
+									<h3 class="flex items-center gap-2 text-lg font-bold">
+										<Zap size={20} class="text-emerald-600" />
+										Hackathon Details
+									</h3>
+
+									<div class="flex flex-col gap-6">
+										<div class="flex flex-col gap-3">
+											<label class="text-sm font-bold" for="hackathonTopic"
+												>Project / Topic Name</label
+											>
+											<input
+												id="hackathonTopic"
+												bind:value={formData.hackathonTopic}
+												class="h-14 cursor-not-allowed rounded-xl border-none bg-[#f8f6f7] px-6 font-medium text-gray-400"
+												readonly
+											/>
+										</div>
+
+										<div class="flex flex-col gap-3">
+											<label class="text-sm font-bold" for="hackathonType">Select Category</label>
+											<div class="grid grid-cols-2 gap-4">
+												<button
+													type="button"
+													class="flex items-center justify-center gap-2 rounded-xl border-2 py-4 font-bold transition-all
+                          {formData.hackathonType === 'software'
+														? 'border-emerald-600 bg-emerald-600/5 text-emerald-600'
+														: 'border-transparent bg-[#f8f6f7] hover:border-emerald-600/30'}"
+													onclick={() => (formData.hackathonType = 'software')}
+												>
+													Software
+												</button>
+												<button
+													type="button"
+													class="flex items-center justify-center gap-2 rounded-xl border-2 py-4 font-bold transition-all
+                          {formData.hackathonType === 'hardware'
+														? 'border-emerald-600 bg-emerald-600/5 text-emerald-600'
+														: 'border-transparent bg-[#f8f6f7] hover:border-emerald-600/30'}"
+													onclick={() => (formData.hackathonType = 'hardware')}
+												>
+													Hardware
+												</button>
+											</div>
+										</div>
 									</div>
 								</div>
 							{/if}
@@ -921,7 +1100,7 @@
 												{paymentMethod === 'online'
 													? 'border-[#8c2bee] bg-[#8c2bee]/5 text-[#8c2bee]'
 													: 'border-transparent bg-[#f8f6f7] opacity-60'}"
-												on:click={() => (paymentMethod = 'online')}
+												onclick={() => (paymentMethod = 'online')}
 											>
 												<QrCode size={24} />
 												<span class="text-sm font-bold">Scan & Pay</span>
@@ -931,7 +1110,7 @@
 												{paymentMethod === 'offline'
 													? 'border-[#8c2bee] bg-[#8c2bee]/5 text-[#8c2bee]'
 													: 'border-transparent bg-[#f8f6f7] opacity-60'}"
-												on:click={() => (paymentMethod = 'offline')}
+												onclick={() => (paymentMethod = 'offline')}
 											>
 												<Building size={24} />
 												<span class="text-sm font-bold">At Counter</span>
@@ -972,6 +1151,19 @@
 											</div>
 										</div>
 
+										<!-- Transaction ID Field -->
+										<div class="flex flex-col gap-4">
+											<label class="text-sm font-bold" for="transactionId"
+												>Transaction ID (UTR)</label
+											>
+											<input
+												id="transactionId"
+												bind:value={formData.transactionId}
+												class="h-14 rounded-xl border-none bg-[#f8f6f7] px-6 font-medium focus:ring-2 focus:ring-[#8c2bee]/20"
+												placeholder="Enter UPI Transaction ID"
+											/>
+										</div>
+
 										<!-- Upload Field -->
 										<div class="flex flex-col gap-4">
 											<label class="text-sm font-bold" for="payment-screenshot"
@@ -986,7 +1178,7 @@
 														<span class="text-sm font-bold">Screenshot Uploaded!</span>
 														<button
 															class="text-xs font-bold text-[#8c2bee] underline"
-															on:click={() => (paymentScreenshotKey = null)}
+															onclick={() => (paymentScreenshotKey = null)}
 														>
 															Change File
 														</button>
@@ -1004,7 +1196,7 @@
 														type="file"
 														accept="image/*"
 														class="absolute inset-0 cursor-pointer opacity-0"
-														on:change={handleScreenshotUpload}
+														onchange={handleScreenshotUpload}
 													/>
 													<div class="flex flex-col items-center gap-3 opacity-60">
 														<Plus size={32} />
@@ -1168,61 +1360,86 @@
 							<div class="mb-6 flex flex-col gap-4 border-b border-[#f4f0f3] pb-6">
 								<div class="flex items-start justify-between">
 									<div>
-										<p class="text-sm font-bold">Base Registration</p>
-										<p class="text-xs text-[#896179]">Mandatory Entry Fee</p>
+										<p class="text-sm font-bold">Category</p>
+										<p class="text-xs text-[#896179]">
+											{registrationType.charAt(0).toUpperCase() + registrationType.slice(1)}
+										</p>
 									</div>
-									<span class="font-bold">₹150</span>
+									<span class="font-bold">₹{totalAmount}</span>
 								</div>
 
-								{#if selectedDept}
+								{#if registrationType === 'symposium' && (formData.events.technical.length > 0 || formData.events.nonTechnical.length > 0)}
 									<div class="flex items-start justify-between">
 										<div>
-											<p class="text-sm font-bold">Symposium Events</p>
+											<p class="text-sm font-bold">Selected Events</p>
 											<p class="max-w-[150px] truncate text-xs text-[#896179]">
-												{formData.events.technical.length + formData.events.nonTechnical.length} Selected
+												{formData.events.technical.length} Tech, {formData.events.nonTechnical
+													.length} Non-Tech
 											</p>
 										</div>
-										<span class="font-bold">Included</span>
+										<span class="text-xs font-bold text-green-600">Included</span>
 									</div>
-								{/if}
-
-								{#if formData.events.cultural.length > 0}
+								{:else if registrationType === 'cultural' && formData.events.cultural.length > 0}
 									<div class="flex items-start justify-between">
 										<div>
-											<p class="text-sm font-bold">Cultural Add-ons</p>
-											<p class="text-xs text-[#896179]">{formData.events.cultural.length} Events</p>
+											<p class="text-sm font-bold">Selected Events</p>
+											<p class="max-w-[150px] truncate text-xs text-[#896179]">
+												{formData.events.cultural.length} Events
+											</p>
 										</div>
-										<span class="font-bold">₹{formData.events.cultural.length * 100}</span>
+										<span class="text-xs font-bold text-green-600">Included</span>
 									</div>
 								{/if}
 							</div>
 
 							<div class="mb-8 flex flex-col gap-2">
-								<div class="flex items-center justify-between">
-									<span class="text-sm text-[#896179]">Subtotal</span>
-									<span class="text-sm font-semibold"
-										>₹{150 + formData.events.cultural.length * 100}</span
-									>
-								</div>
 								<div
 									class="mt-2 flex items-center justify-between border-t border-dashed border-[#e6dbe1] pt-4"
 								>
 									<span class="text-lg font-bold">Total Amount</span>
-									<span class="text-2xl font-black text-[#8c2bee]"
-										>₹{150 + formData.events.cultural.length * 100}</span
-									>
+									<span class="text-2xl font-black text-[#8c2bee]">₹{totalAmount}</span>
 								</div>
 							</div>
 
 							<button
-								disabled={(!isFormValid && currentStep === 1) ||
-									(currentStep === 2 && paymentMethod === 'online' && !paymentScreenshotKey) ||
-									loading}
-								on:click={() => {
+								disabled={loading}
+								onclick={() => {
 									if (currentStep === 1) {
+										if (
+											!formData.studentDept ||
+											(formData.studentDept === 'Other' && !otherDeptName)
+										) {
+											error = 'Please select your department before proceeding.';
+											setTimeout(() => (error = null), 3000);
+											// Scroll to department selection
+											document
+												.getElementById('studentDept')
+												?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+											return;
+										}
+
+										if (totalAmount === 0 && registrationType !== 'hackathon') {
+											error = 'Please select at least one event before proceeding.';
+											setTimeout(() => (error = null), 3000);
+											return;
+										}
+
+										if (!isFormValid) {
+											error = 'Please fill all required fields before proceeding.';
+											setTimeout(() => (error = null), 3000);
+											return;
+										}
 										currentStep = 2;
 										window.scrollTo({ top: 0, behavior: 'smooth' });
 									} else {
+										if (
+											paymentMethod === 'online' &&
+											(!paymentScreenshotKey || !formData.transactionId)
+										) {
+											error = 'Please upload payment screenshot and enters transaction ID.';
+											setTimeout(() => (error = null), 3000);
+											return;
+										}
 										handleSubmit();
 									}
 								}}
@@ -1245,7 +1462,7 @@
 							{#if currentStep === 2}
 								<button
 									class="mt-4 w-full text-center text-sm font-bold text-[#896179] hover:text-[#181115]"
-									on:click={() => (currentStep = 1)}
+									onclick={() => (currentStep = 1)}
 								>
 									← Back to Selection
 								</button>
@@ -1339,7 +1556,7 @@
 							<div>
 								<span class="block text-[10px] font-bold text-gray-500 uppercase">Total Amount</span
 								>
-								<span class="font-bold">₹{150 + formData.events.cultural.length * 100}</span>
+								<span class="font-bold">₹{totalAmount}</span>
 							</div>
 						</div>
 
@@ -1378,7 +1595,7 @@
 				<div class="mt-8 flex flex-col gap-3">
 					<button
 						class="flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#8c2bee] font-bold text-white shadow-lg transition-transform active:scale-95"
-						on:click={() => window.location.reload()}
+						onclick={() => window.location.reload()}
 					>
 						<Plus size={18} /> Register Another
 					</button>

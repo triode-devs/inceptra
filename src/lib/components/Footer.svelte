@@ -78,7 +78,7 @@
 			<div>
 				<h3 class="mb-6 text-lg font-bold">Quick Links</h3>
 				<ul class="flex flex-col items-center gap-4 text-gray-400 lg:items-start">
-					{#each [{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }, { name: 'Symposium', url: '/symposium' }, { name: 'Cultural', url: '/cultural' }, { name: 'Register', url: '/register' }] as link}
+					{#each [{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }, { name: 'Symposium', url: '/symposium' }, { name: 'Cultural', url: '/cultural' }] as link}
 						<li>
 							<a href={link.url} class="transition-colors hover:text-[#ee2b8c]">{link.name}</a>
 						</li>
@@ -138,7 +138,7 @@
 				<ul class="flex flex-col items-center gap-6 text-gray-400 lg:items-start">
 					<li class="flex items-start justify-center gap-4 lg:justify-start">
 						<MapPin size={20} class="mt-1 shrink-0 text-[#8c2bee]" />
-						<span>Trichy Engineering College,<br />Konali, Trichy,<br />Tamil Nadu</span>
+						<span>Trichy Engineering College,<br />Konalai, Trichy,<br />Tamil Nadu</span>
 					</li>
 					<li class="flex items-center justify-center gap-4 lg:justify-start">
 						<Mail size={20} class="shrink-0 text-[#8c2bee]" />
@@ -158,19 +158,12 @@
 			class="flex flex-col items-center justify-between gap-6 pt-10 text-sm text-gray-500 md:flex-row"
 		>
 			<p>&copy; 2026 Inceptra Festival Committee. All Rights Reserved.</p>
-			<div class="flex items-center gap-6">
-				<a href="/" class="hover:text-white">Privacy Policy</a>
-				<a href="/" class="hover:text-white">Terms of Service</a>
-				<a href="/" class="hover:text-white">Cookies</a>
-			</div>
-			<div class="flex items-center gap-1">
+			<div class=" items-center gap-1 flex">
 				<span>Made with</span>
 				<Heart size={14} class="fill-red-500 text-red-500" />
 				<span
 					>by <a
-						href="https://triode-portfolio.pages.dev/"
-						target="_blank"
-						rel="noopener noreferrer"
+						href="/devs"
 						class="font-bold text-[#8c2bee] hover:underline">Triode Devs</a
 					></span
 				>

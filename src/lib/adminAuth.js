@@ -6,40 +6,52 @@ import { browser } from '$app/environment';
 // If department is null, it's a super admin
 export const ADMIN_CREDENTIALS = {
     'admin': {
-        password: 'inceptra26_core',
+        password: 'inceptra@admin',
         department: null,
         role: 'superadmin',
         name: 'Super Admin'
     },
-    'cse_admin': {
-        password: 'tec_cse_26',
+    'cse': {
+        password: 'inceptra@cse',
         department: 'Computer Science',
         role: 'deptadmin',
         name: 'CSE Admin'
     },
-    'ece_admin': {
-        password: 'tec_ece_26',
+    'ece': {
+        password: 'inceptra@ece',
         department: 'Electronics & Comm',
         role: 'deptadmin',
         name: 'ECE Admin'
     },
-    'eee_admin': {
-        password: 'tec_eee_26',
+    'eee': {
+        password: 'inceptra@eee',
         department: 'Electrical & Electronics',
         role: 'deptadmin',
         name: 'EEE Admin'
     },
-    'mech_admin': {
-        password: 'tec_mech_26',
+    'mech': {
+        password: 'inceptra@mech',
         department: 'Mech & Mechatronics',
         role: 'deptadmin',
         name: 'MECH Admin'
     },
-    'civil_admin': {
-        password: 'tec_civil_26',
+    'civil': {
+        password: 'inceptra@civil',
         department: 'Civil Engineering',
         role: 'deptadmin',
         name: 'CIVIL Admin'
+    },
+    'cultural': {
+        password: 'inceptra@cultural',
+        department: 'Cultural',
+        role: 'deptadmin',
+        name: 'Cultural Admin'
+    },
+    'hackathon': {
+        password: 'inceptra@hackathon',
+        department: 'Hackathon',
+        role: 'deptadmin',
+        name: 'Hackathon Admin'
     }
 };
 
@@ -69,21 +81,8 @@ if (browser) {
 }
 
 export function getDashboardUrl(user) {
-    if (!user) return '/admin';
-    if (user.role === 'superadmin') return '/admin/registrations';
-
-    const idMap = {
-        'Computer Science': 'cse',
-        'Electronics & Comm': 'ece',
-        'Electrical & Electronics': 'eee',
-        'Mech & Mechatronics': 'mech',
-        'Civil Engineering': 'civil'
-    };
-
-    const slug = idMap[user.department];
-    // If the user has a department but we explicitly don't have a mapping, fall back safely or log error. 
-    // For now assuming valid department means valid slug, but let's be safe.
-    return slug ? `/admin/${slug}` : '/admin';
+    // Consolidating all dashboards to /admin/registrations with dynamic filtering
+    return '/admin/registrations';
 }
 
 export function loginAdmin(id, password) {

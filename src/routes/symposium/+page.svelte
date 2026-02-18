@@ -1,131 +1,13 @@
 <script>
-	import { Cpu, Zap, Building, Radio, Settings, ArrowRight, ClipboardList, X } from 'lucide-svelte';
-	import { fade, fly, scale } from 'svelte/transition';
+	import { ArrowRight, ClipboardList, X, Cpu, Radio, Settings } from 'lucide-svelte';
+	import { fade, scale } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import eceRules from '$lib/data/ece-rules.json';
-	import cseRules from '$lib/data/cse-rules.json';
-	import eeeRules from '$lib/data/eee-rules.json';
-	import mechRules from '$lib/data/mech-rules.json';
-	import civilRules from '$lib/data/civil-rules.json';
-
-	import cseBg from '$lib/assets/cse_bg.jpg';
-	import eeeBg from '$lib/assets/eee_bg.jpg';
-	import eceBg from '$lib/assets/ece_bg.jpg';
-	import mechBg from '$lib/assets/mech_bg.jpg';
-	import civilBg from '$lib/assets/civil_bg.jpg';
+	import { symposiumData } from '$lib/data/data';
 
 	let selectedDeptRules = $state(null);
 	let isModalOpen = $state(false);
 
-	const symposiumEvents = [
-		{
-			id: 'cse',
-			dept: 'Computer Science & Engineering',
-			icon: Cpu,
-			color: 'text-blue-500',
-			bg: 'bg-blue-50',
-			image: cseBg,
-			hasRules: true,
-			rulesData: cseRules,
-			categories: [
-				{
-					title: 'Technical',
-					items: ['Paper Presentation', 'Technical Quiz', 'Blind Code', 'Debugging']
-				},
-				{
-					title: 'Non-Technical',
-					items: ['Gaming', 'Connexion']
-				}
-			]
-		},
-		{
-			id: 'eee',
-			dept: 'Electrical & Electronics Engineering',
-			icon: Zap,
-			color: 'text-yellow-500',
-			bg: 'bg-yellow-50',
-			image: eeeBg,
-			hasRules: true,
-			rulesData: eeeRules,
-			categories: [
-				{
-					title: 'Technical Symposium',
-					items: [
-						'Paperbestowment (Paper Presentation)',
-						'Technical Brain Blast (Quiz)',
-						'Circuit Debugging',
-						'Trade Show (Project Expo)'
-					]
-				},
-				{
-					title: 'Non-Technical',
-					items: ['Recreational Events']
-				}
-			],
-			staff: ['Mr. M. Prasath, AP', 'Mr. C. Karthick, AP']
-		},
-		{
-			id: 'ece',
-			dept: 'Electronics & Communication',
-			icon: Radio,
-			color: 'text-purple-500',
-			bg: 'bg-purple-50',
-			image: eceBg,
-			hasRules: true,
-			rulesData: eceRules,
-			categories: [
-				{
-					title: 'Technical',
-					items: ['Paper Tract', 'Flyer / Buzzcard', 'Fine Tune', 'Innovation Expo']
-				},
-				{
-					title: 'Non-Technical',
-					items: ['Connection', 'Free Fire']
-				}
-			]
-		},
-		{
-			id: 'mech',
-			dept: 'Mechanical & Mechatronics',
-			icon: Settings,
-			color: 'text-orange-500',
-			bg: 'bg-orange-50',
-			image: mechBg,
-			hasRules: true,
-			rulesData: mechRules,
-			categories: [
-				{
-					title: 'Technical',
-					items: [
-						'Paper Presentation (3D Printing, Robotics, AI, Drones)',
-						'CAD Modeling',
-						'Calibre',
-						'Technical Quiz'
-					]
-				},
-				{
-					title: 'Non-Technical',
-					items: ['Paper Events', 'Brushless Painting']
-				}
-			]
-		},
-		{
-			id: 'civil',
-			dept: 'Civil Engineering',
-			icon: Building,
-			color: 'text-emerald-500',
-			bg: 'bg-emerald-50',
-			image: civilBg,
-			hasRules: true,
-			rulesData: civilRules,
-			categories: [
-				{
-					title: 'Events',
-					items: ['Bridge', 'Model Making', 'Poster', 'CAD Quest', 'Quiz']
-				}
-			]
-		}
-	];
+	const symposiumEvents = symposiumData;
 
 	function openRules(dept) {
 		if (dept.hasRules) {

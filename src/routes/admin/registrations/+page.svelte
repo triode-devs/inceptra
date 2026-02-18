@@ -20,6 +20,10 @@
 	} from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
 
+	import { adminUser } from '$lib/adminAuth';
+	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
+
 	let { data } = $props();
 
 	// Safe data access with defaults
@@ -33,13 +37,46 @@
 	let typeFilter = $state('all');
 	let paymentFilter = $state('all');
 
+	let isSuperAdmin = $state(false);
+
 	const departments = [
 		{ id: 'cse', name: 'Computer Science' },
 		{ id: 'eee', name: 'Electrical & Electronics' },
 		{ id: 'ece', name: 'Electronics & Comm' },
 		{ id: 'mech', name: 'Mech & Mechatronics' },
-		{ id: 'civil', name: 'Civil Engineering' }
+		{ id: 'civil', name: 'Civil Engineering' },
+		{ id: 'cultural', name: 'Cultural' },
+		{ id: 'hackathon', name: 'Hackathon' }
 	];
+
+	onMount(() => {
+		const unsubscribe = adminUser.subscribe((u) => {
+			if (!u) {
+				// Not logged in, redirect to login
+				goto('/admin');
+				return;
+			}
+
+			if (u.role === 'superadmin') {
+				isSuperAdmin = true;
+				// Keep default 'all'
+			} else {
+				isSuperAdmin = false;
+				// Find the department ID for this user
+				// The user object has 'department' name like "Computer Science"
+				const mapped = departments.find((d) => d.name === u.department);
+				if (mapped) {
+					deptFilter = mapped.id;
+				} else if (u.normalizedId) {
+					// Fallback to normalized ID if it matches (e.g. 'cultural', 'hackathon')
+					// departments have 'id'
+					const directMatch = departments.find((d) => d.id === u.normalizedId);
+					if (directMatch) deptFilter = directMatch.id;
+				}
+			}
+		});
+		return unsubscribe;
+	});
 
 	let filteredRegistrations = $derived(
 		registrations.filter((r) => {
@@ -47,20 +84,25 @@
 			const name = r.name || '';
 			const collegeId = r.college_id || '';
 			const email = r.email || '';
-			const dept = r.dept || '';
+			const dept = r.target_dept || r.dept || '';
 			const regType = r.registration_type || '';
 
 			const matchesSearch =
 				name.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				collegeId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				email.toLowerCase().includes(searchQuery.toLowerCase());
+				email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				(r.transaction_id || '').toLowerCase().includes(searchQuery.toLowerCase());
 
 			const matchesStatus = statusFilter === 'all' || r.payment_status === statusFilter;
-			const matchesDept = deptFilter === 'all' || dept.toLowerCase() === deptFilter.toLowerCase();
+			const matchesDept =
+				deptFilter === 'all' ||
+				dept.toLowerCase().includes(deptFilter.toLowerCase()) ||
+				(deptFilter === 'cultural' && regType === 'cultural') ||
+				(deptFilter === 'hackathon' && regType === 'hackathon');
 			const matchesType =
 				typeFilter === 'all' || regType.toLowerCase() === typeFilter.toLowerCase();
 
-			const isOffline = r.payment_screenshot_key === 'OFFLINE';
+			const isOffline = r.payment_mode === 'offline' || r.payment_screenshot_key === 'OFFLINE';
 			const matchesPayment =
 				paymentFilter === 'all' ||
 				(paymentFilter === 'online' && !isOffline) ||
@@ -267,17 +309,22 @@
 					<option value="all">All Types</option>
 					<option value="symposium">Symposium</option>
 					<option value="cultural">Cultural</option>
+					<option value="hackathon">Hackathon</option>
 				</select>
 
 				<select
 					bind:value={deptFilter}
-					class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
+					disabled={!isSuperAdmin}
+					class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20 disabled:cursor-not-allowed disabled:opacity-50"
 				>
 					<option value="all">All Departments</option>
 					{#each departments as dept}
 						<option value={dept.id}>{dept.name}</option>
 					{/each}
 				</select>
+				{#if !isSuperAdmin}
+					<!-- Overlay or disabled state logic could be here, but 'disabled' attribute works too -->
+				{/if}
 
 				<select
 					bind:value={statusFilter}
@@ -316,8 +363,8 @@
 						>
 							<th class="px-6 py-4">Participant</th>
 							<th class="px-6 py-4">Department / Type</th>
-							<th class="px-6 py-4">Events</th>
-							<th class="px-6 py-4">Amount</th>
+							<th class="px-6 py-4">Events / Topic</th>
+							<th class="px-6 py-4">Payment</th>
 							<th class="px-6 py-4">Status</th>
 							<th class="px-6 py-4">Date</th>
 							<th class="px-6 py-4 text-center">Actions</th>
@@ -340,7 +387,9 @@
 										<span class="text-sm font-semibold capitalize"
 											>{reg.registration_type || 'N/A'}</span
 										>
-										<span class="text-xs text-[#8c2bee]">{reg.dept || 'N/A'}</span>
+										<span class="text-xs text-[#8c2bee]"
+											>{reg.target_dept || reg.dept || 'N/A'}</span
+										>
 									</div>
 								</td>
 								<td class="px-6 py-4">
@@ -364,6 +413,14 @@
 													</span>
 												{/if}
 											{/each}
+										{:else if reg.registration_type === 'hackathon'}
+											<div class="flex flex-col gap-1">
+												<span class="text-xs font-bold text-emerald-600">{reg.hackathon_topic}</span
+												>
+												<span class="text-[10px] font-medium text-gray-500 uppercase"
+													>{reg.hackathon_type}</span
+												>
+											</div>
 										{:else}
 											{#each reg.cultural_events || [] as e}
 												{#if e}
@@ -377,7 +434,16 @@
 										{/if}
 									</div>
 								</td>
-								<td class="px-6 py-4 font-bold text-gray-900">₹{reg.amount || 0}</td>
+								<td class="px-6 py-4">
+									<div class="flex flex-col">
+										<span class="font-bold text-gray-900">₹{reg.amount || 0}</span>
+										{#if reg.transaction_id}
+											<span class="text-[9px] font-medium text-gray-400"
+												>ID: {reg.transaction_id}</span
+											>
+										{/if}
+									</div>
+								</td>
 								<td class="px-6 py-4">
 									<div
 										class="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-bold capitalize {getStatusColor(

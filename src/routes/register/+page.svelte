@@ -19,7 +19,7 @@
 	>
 	<meta
 		name="description"
-		content="Register now for technical symposium and cultural events at INCEPTRA '26 - March 5 & 6, 2026. Join 10,000+ students at Trichy Engineering College's premier festival. Secure your spot today!"
+		content="Register now for technical symposium and cultural events at INCEPTRA '26 - March 17 & 18, 2026. Join 10,000+ students at Trichy Engineering College's premier festival. Secure your spot today!"
 	/>
 	<meta
 		name="keywords"
@@ -32,7 +32,7 @@
 	<meta property="og:title" content="Register for INCEPTRA '26 | Symposium & Cultural Events" />
 	<meta
 		property="og:description"
-		content="Register now for INCEPTRA '26 - March 5 & 6, 2026. Join 10,000+ students at Trichy Engineering College's premier festival. Secure your spot!"
+		content="Register now for INCEPTRA '26 - March 17 & 18, 2026. Join 10,000+ students at Trichy Engineering College's premier festival. Secure your spot!"
 	/>
 	<meta property="og:image" content="https://inceptra.pages.dev/og-image.jpg" />
 
@@ -45,7 +45,7 @@
 	/>
 	<meta
 		property="twitter:description"
-		content="Register now for INCEPTRA '26 - March 5 & 6. Join 10,000+ students at TEC's premier festival!"
+		content="Register now for INCEPTRA '26 - March 17 & 18, 2026. Join 10,000+ students at TEC's premier festival!"
 	/>
 	<meta property="twitter:image" content="https://inceptra.pages.dev/og-image.jpg" />
 

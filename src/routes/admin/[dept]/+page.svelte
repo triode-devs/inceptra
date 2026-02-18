@@ -52,7 +52,7 @@
 			const matchesType =
 				typeFilter === 'all' || regType.toLowerCase() === typeFilter.toLowerCase();
 
-			const isOffline = r.payment_screenshot_key === 'OFFLINE';
+			const isOffline = r.payment_mode === 'offline' || r.payment_screenshot_key === 'OFFLINE';
 			const matchesPayment =
 				paymentFilter === 'all' ||
 				(paymentFilter === 'online' && !isOffline) ||
@@ -242,8 +242,8 @@
 						class="border-b border-gray-50 bg-gray-50/50 text-xs font-black tracking-widest text-gray-400 uppercase"
 					>
 						<th class="px-6 py-4">Participant</th>
-						<th class="px-6 py-4">Events</th>
-						<th class="px-6 py-4">Paper Title</th>
+						<th class="px-6 py-4">Events / Topic</th>
+						<th class="px-6 py-4">Paper / Details</th>
 						<th class="px-6 py-4">Amount</th>
 						<th class="px-6 py-4">Status</th>
 						<th class="px-6 py-4">Date</th>
@@ -264,34 +264,60 @@
 							</td>
 							<td class="px-6 py-4">
 								<div class="flex max-w-[200px] flex-wrap gap-1">
-									{#each [...(reg.technical_events || []), ...(reg.non_technical_events || [])] as e}
-										<span
-											class="rounded bg-purple-50 px-1.5 py-0.5 text-[10px] font-bold text-[#8c2bee]"
-											>{e}</span
-										>
-									{/each}
+									{#if reg.registration_type === 'hackathon'}
+										<span class="text-xs font-bold text-emerald-600">{reg.hackathon_topic}</span>
+									{:else if reg.registration_type === 'cultural'}
+										{#each reg.cultural_events || [] as e}
+											<span
+												class="rounded bg-pink-50 px-1.5 py-0.5 text-[10px] font-bold text-pink-600"
+												>{e}</span
+											>
+										{/each}
+									{:else}
+										{#each [...(reg.technical_events || []), ...(reg.non_technical_events || [])] as e}
+											<span
+												class="rounded bg-purple-50 px-1.5 py-0.5 text-[10px] font-bold text-[#8c2bee]"
+												>{e}</span
+											>
+										{/each}
+									{/if}
 								</div>
 							</td>
 							<td class="px-6 py-4">
-								{#if reg.paper_title}
-									<div class="flex max-w-[200px] flex-col gap-1">
-										<span class="text-xs font-bold text-gray-700">{reg.paper_title}</span>
-										{#if reg.paper_file}
-											<a
-												href="/api/image/{reg.paper_file}"
-												download
-												class="flex items-center gap-1 text-[10px] font-bold text-[#8c2bee] hover:underline"
-												title="Download Paper"
-											>
-												<Download size={12} /> Download
-											</a>
-										{/if}
-									</div>
-								{:else}
-									<span class="text-xs text-gray-400">—</span>
-								{/if}
+								<div class="flex flex-col gap-1">
+									{#if reg.paper_title}
+										<div class="flex max-w-[200px] flex-col gap-1">
+											<span class="text-xs font-bold text-gray-700">{reg.paper_title}</span>
+											{#if reg.paper_file}
+												<a
+													href="/api/image/{reg.paper_file}"
+													download
+													class="flex items-center gap-1 text-[10px] font-bold text-[#8c2bee] hover:underline"
+													title="Download Paper"
+												>
+													<Download size={12} /> Download
+												</a>
+											{/if}
+										</div>
+									{:else if reg.registration_type === 'hackathon'}
+										<span class="text-[10px] font-bold text-gray-400 uppercase"
+											>{reg.hackathon_type}</span
+										>
+									{:else}
+										<span class="text-xs text-gray-400">—</span>
+									{/if}
+								</div>
 							</td>
-							<td class="px-6 py-4 font-black">₹{reg.amount}</td>
+							<td class="px-6 py-4">
+								<div class="flex flex-col">
+									<span class="font-black text-gray-900">₹{reg.amount}</span>
+									{#if reg.transaction_id}
+										<span class="text-[9px] font-medium text-gray-400"
+											>UTR: {reg.transaction_id}</span
+										>
+									{/if}
+								</div>
+							</td>
 							<td class="px-6 py-4">
 								<div
 									class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-extrabold uppercase {getStatusColor(

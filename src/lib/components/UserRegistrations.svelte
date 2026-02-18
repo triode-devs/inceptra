@@ -12,6 +12,7 @@
 	} from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
 	import QRCode from 'qrcode';
+	import { API_BASE_URL } from '$lib';
 	import { tick } from 'svelte';
 
 	export let userId = null;
@@ -24,16 +25,18 @@
 		if (!userId) return;
 		loading = true;
 		try {
-			const res = await fetch(`/api/user/registrations?userId=${userId}`);
+			const res = await fetch(`${API_BASE_URL}/api/user/registrations?userId=${userId}`);
 			const data = await res.json();
 			if (res.ok) {
 				registrations = data.registrations || [];
 				await generateQRs();
 			} else {
-				error = data.error || 'Failed to fetch registrations';
+				error = data.error || `Server Error: ${res.status}`;
+				console.error('Registration fetch failed:', data);
 			}
 		} catch (err) {
-			error = 'Connection error. Please try again.';
+			error = 'Connection error. The API might be offline.';
+			console.error('Fetch error:', err);
 		} finally {
 			loading = false;
 		}
@@ -121,7 +124,7 @@
 			My <span class="text-[#8c2bee]">Registrations</span>
 		</h2>
 		<button
-			on:click={fetchRegistrations}
+			onclick={fetchRegistrations}
 			class="text-xs font-bold tracking-widest text-[#8c2bee] uppercase hover:underline"
 		>
 			Refresh

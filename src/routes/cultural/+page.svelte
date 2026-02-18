@@ -1,105 +1,16 @@
 <script>
-	import {
-		Music,
-		Mic,
-		Video,
-		Users,
-		User,
-		Smile,
-		Shirt,
-		MessageSquare,
-		ArrowRight,
-		Ticket
-	} from 'lucide-svelte';
-
-	import culturalRulesData from '$lib/data/cultural-rules.json';
-	import { onMount } from 'svelte';
+	import { ArrowRight, Ticket, X, ClipboardList, Music } from 'lucide-svelte';
 	import { fade, fly, scale } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { X, ClipboardList } from 'lucide-svelte';
+	import { culturalData } from '$lib/data/data';
 
-	// Import local WebP images
-	import grpDanceImg from '$lib/assets/events/grp-dance.webp';
-	import soloDanceImg from '$lib/assets/events/solo-dance.webp';
-	import singingImg from '$lib/assets/events/singing.webp';
-	import mimeImg from '$lib/assets/events/mime.webp';
-	import fashionImg from '$lib/assets/events/fashion.webp';
-	import mimixImg from '$lib/assets/events/mimix.webp';
-
-	const culturalEvents = [
-		{
-			id: 'danzera',
-			name: 'Danzera',
-			type: 'Group Dance',
-			icon: Users,
-			color: 'from-pink-500 to-rose-500',
-			image: grpDanceImg
-		},
-		{
-			id: 'sizzle-shake',
-			name: 'Sizzle and Shake',
-			type: 'Solo Dance',
-			icon: User,
-			color: 'from-violet-500 to-purple-500',
-			image: soloDanceImg
-		},
-		{
-			id: 'voice-vibes',
-			name: 'Voice Vibes',
-			type: 'Singing',
-			icon: Mic,
-			color: 'from-blue-500 to-cyan-500',
-			image: singingImg
-		},
-		{
-			id: 'rhythm-strings',
-			name: 'Rhythm Strings',
-			type: 'Instrumental Music',
-			icon: Music,
-			color: 'from-amber-400 to-orange-500',
-			image:
-				'https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2000&auto=format&fit=crop'
-		},
-		{
-			id: 'silent-symphony',
-			name: 'Silent Symphony',
-			type: 'MIME',
-			icon: Smile,
-			color: 'from-teal-400 to-emerald-500',
-			image: mimeImg
-		},
-		{
-			id: 'fashion-fiesta',
-			name: 'Fashion Fiesta',
-			type: 'Fashion Show',
-			icon: Shirt,
-			color: 'from-fuchsia-500 to-pink-500',
-			image: fashionImg
-		},
-		{
-			id: 'mimix',
-			name: 'Mimix',
-			type: 'Mimicry',
-			icon: MessageSquare,
-			color: 'from-indigo-500 to-blue-600',
-			image: mimixImg
-		},
-		{
-			id: 'cinebuzz',
-			name: 'Cinebuzz',
-			type: 'Short Film',
-			icon: Video,
-			color: 'from-red-500 to-orange-600',
-			image:
-				'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2000&auto=format&fit=crop'
-		}
-	];
+	const culturalEvents = culturalData;
 
 	let selectedEventRules = $state(null);
 	let isModalOpen = $state(false);
 
 	function openRules(eventId) {
-		const eventData = culturalRulesData.find((e) => e.id === eventId);
+		const eventData = culturalData.find((e) => e.id === eventId);
 		if (eventData) {
 			selectedEventRules = eventData;
 			isModalOpen = true;

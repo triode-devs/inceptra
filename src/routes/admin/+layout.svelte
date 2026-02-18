@@ -30,7 +30,12 @@
 			return user.department === idMap[currentDeptId] || user.department === currentDeptId;
 		}
 
-		// Department admins cannot view the main 'registrations' (Super Admin) page
+		// Allow all authenticated admins to view the consolidated dashboard
+		if (currentDeptId === 'registrations') {
+			return true;
+		}
+
+		// Department admins cannot view other departments
 		return false;
 	}
 

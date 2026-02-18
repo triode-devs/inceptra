@@ -5,7 +5,7 @@ OG Image Design Specifications for INCEPTRA '26:
 - Background: Dark gradient from #141118 to #1a1a1a
 - Main Title: "INCEPTRA '26" in bold white text (80px font)
 - Subtitle: "Where Innovation Meets Art" (36px, purple gradient)
-- Event Dates: "March 5 & 6, 2026" (28px, white)
+- Event Dates: "March 17 & 18, 2026" (28px, white)
 - Organization: "Trichy Engineering College" (24px, gray)
 - Include purple (#8c2bee) and pink (#ee2b8c) accent elements
 - Add subtle tech/cultural icons in background

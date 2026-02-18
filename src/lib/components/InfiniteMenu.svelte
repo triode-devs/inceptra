@@ -2,7 +2,7 @@
 	import { onMount, onDestroy } from 'svelte';
 	import { mat4, quat, vec2, vec3 } from 'gl-matrix';
 
-	let { items = [], scale = 1.0 } = $props();
+	let { items = [], scale = 1.0, onImageClick = null } = $props();
 
 	let canvasRef = $state();
 	let activeItem = $state(null);
@@ -878,7 +878,11 @@
 	});
 
 	function handleButtonClick() {
-		if (activeItem?.link) window.open(activeItem.link, '_blank');
+		if (onImageClick && activeItem) {
+			onImageClick(activeItem);
+		} else if (activeItem?.link) {
+			window.open(activeItem.link, '_blank');
+		}
 	}
 </script>
 

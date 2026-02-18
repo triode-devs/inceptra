@@ -1,6 +1,8 @@
 <script>
 	import { onMount, tick } from 'svelte';
+	import { fade } from 'svelte/transition';
 	import { gsap } from 'gsap';
+	import { Maximize2, X } from 'lucide-svelte';
 
 	/**
 	 * @typedef {Object} MasonryItem
@@ -33,7 +35,7 @@
 		'(min-width:1500px)',
 		'(min-width:1000px)',
 		'(min-width:600px)',
-		'(min-width:400px)'
+		'(min-width:300px)'
 	];
 	const values = [5, 4, 3, 2];
 	const defaultValue = 1;
@@ -211,6 +213,7 @@
 
 	function openLightbox(img) {
 		selectedImage = img;
+		dismissHint();
 		tick().then(() => {
 			gsap.fromTo(
 				'.lightbox-overlay',
@@ -231,6 +234,23 @@
 			duration: 0.3,
 			onComplete: () => (selectedImage = null)
 		});
+	}
+	let showHint = $state(false);
+
+	onMount(() => {
+		if (typeof window !== 'undefined' && !sessionStorage.getItem('gallery-informed')) {
+			showHint = true;
+			setTimeout(() => {
+				dismissHint();
+			}, 4000);
+		}
+	});
+
+	function dismissHint() {
+		showHint = false;
+		if (typeof window !== 'undefined') {
+			sessionStorage.setItem('gallery-informed', 'true');
+		}
 	}
 </script>
 
@@ -293,4 +313,18 @@
 			/>
 		</div>
 	</div>
+	{#if showHint}
+		<button
+			class="fixed bottom-8 left-1/2 z-[999] flex -translate-x-1/2 items-center gap-3 rounded-full border border-white/10 bg-zinc-900/90 px-6 py-3 shadow-2xl backdrop-blur-md transition-all hover:scale-105 active:scale-95"
+			transition:fade={{ duration: 300 }}
+			onclick={dismissHint}
+		>
+			<Maximize2 size={16} class="text-[#8c2bee]" />
+			<span class="text-sm font-bold tracking-wide text-white">Click to Enlarge</span>
+			<div class="ml-2 flex items-center justify-center rounded-full bg-white/10 p-1">
+				<X size={12} class="text-white/70" />
+			</div>
+		</button>
+	{/if}
 {/if}
+```
