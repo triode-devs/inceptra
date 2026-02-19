@@ -53,6 +53,12 @@
 						>
 							Cultural
 						</a>
+						<a
+							href="/hackathon"
+							class="block rounded-xl px-4 py-3 text-sm font-bold text-gray-700 transition-colors hover:bg-emerald-50 hover:text-emerald-600"
+						>
+							Hackathon
+						</a>
 					</div>
 				</div>
 			</div>
@@ -89,7 +95,7 @@
 		class="pointer-events-auto flex items-center gap-2 rounded-full border border-white/40 bg-white/80 px-4 py-2 shadow-lg shadow-black/5 backdrop-blur-lg"
 	>
 		<img src={tecLogo} alt="TEC Logo" class="h-6 w-auto object-contain" />
-		
+
 		<span class="text-sm font-bold tracking-wide">INCEPTRA </span>
 		<span class="text-sm font-bold tracking-wide text-[#8c2bee]">26</span>
 	</a>
@@ -120,19 +126,16 @@
 				</div>
 				<span class="text-xl font-black tracking-tight">MENU</span>
 			</div>
-			<button
-				class="rounded-full bg-white p-3 shadow-sm transition-colors hover:bg-gray-100"
-			>
+			<button class="rounded-full bg-white p-3 shadow-sm transition-colors hover:bg-gray-100">
 				<X size={24} />
 			</button>
 		</div>
 
 		<!-- Links -->
 		<nav class="flex flex-1 flex-col justify-center gap-6 px-8">
-			{#each [{ name: 'Home', link: '/' }, { name: 'Symposium', link: '/symposium' }, { name: 'Cultural', link: '/cultural' }, { name: 'Gallery', link: '/gallery' }, { name: 'About', link: '/about' }] as item, i}
+			{#each [{ name: 'Home', link: '/' }, { name: 'Symposium', link: '/symposium' }, { name: 'Hackathon', link: '/hackathon' }, { name: 'Cultural', link: '/cultural' }, { name: 'Gallery', link: '/gallery' }, { name: 'About', link: '/about' }] as item, i}
 				<a
 					href={item.link}
-					
 					class="group flex items-center gap-4 text-4xl font-black text-[#141118] transition-colors hover:text-[#8c2bee]"
 					in:fly={{ y: 20, duration: 400, delay: 100 + i * 50, easing: quintOut }}
 				>

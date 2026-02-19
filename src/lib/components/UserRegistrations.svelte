@@ -50,7 +50,12 @@
 				college: reg.college, // Assuming this exists in the fetched data, otherwise might need to be added to API or ignored
 				// email: ... might not be in the list endpoint, check if needed.
 				// Based on previous file, reg has: id, name, dept, registration_type, technical_events, etc.
-				dept: reg.dept,
+				dept: reg.target_dept || reg.student_dept || reg.dept,
+				target_dept: reg.target_dept,
+				student_dept: reg.student_dept,
+				email: reg.email,
+				phone: reg.phone,
+				year: reg.year,
 				events: [
 					...(reg.technical_events || []),
 					...(reg.non_technical_events || []),
@@ -192,7 +197,9 @@
 						<!-- Details Grid -->
 						<div class="mb-4 w-full text-center">
 							<span class="block text-[8px] font-bold text-gray-500 uppercase">Department</span>
-							<span class="text-xs font-bold">{reg.dept || 'General'}</span>
+							<span class="text-xs font-bold"
+								>{reg.target_dept || reg.student_dept || reg.dept || 'General'}</span
+							>
 						</div>
 
 						<!-- Events -->
