@@ -125,39 +125,72 @@ const rawCseRules = {
 
 const rawEeeRules = {
     department: 'Electrical & Electronics Engineering',
-    general_instructions: {
-        id_card: 'College ID is mandatory for all participants.',
-        team_size_general: 'Maximum 3 members per team.',
-        punctuality: 'Teams must report 15 minutes before the event starts.',
-        decorum: "Judge's decisions are final. Malpractice leads to immediate disqualification."
-    },
+    general_instructions: [
+        'A participant cannot take part in more than three events.',
+        'Spot Registration is permitted only if prior intimation is given.',
+        'Lunch and snacks will be provided.',
+        'All participants shall bring their college ID card and bonafide certificate duly signed by the HoD or Principal.',
+        'Dress code - Strictly formals.',
+        'All participants should report at registration counter at 9.00 AM.',
+        'Prelims will be conducted for all the events, if needed, depending on the entries.',
+        'Accommodation, TA and DA will not be provided.',
+        'In all events decision of the judges will be final and obligatory.'
+    ],
     technical_events: [
         {
             id: 'eee-paper',
             event_name: 'Paperbestowment (Paper Presentation)',
-            rules: ['Detailed rules will be updated soon.']
+            rules: [
+                'Maximum 2 participants per paper are allowed.',
+                'The paper should be in IEEE document format.',
+                'Soft-copy + abstract submission on or before 10th March 3:45 PM.',
+                'Topics can be on any domain in EEE.',
+                'Front page must include team names, contact, email, college, and title.',
+                'Bring two hardcopies on the day of the event.',
+                'Presentation: 10 mins + 2 mins query session.',
+                'Time limit should be strictly followed.'
+            ]
         },
         {
             id: 'eee-quiz',
-            event_name: 'Technical Brain Blast (Quiz)',
-            rules: ['Detailed rules will be updated soon.']
+            event_name: 'Technical Brain Blast (Technical Quiz)',
+            rules: [
+                'Maximum 2 participants per team.',
+                'Two rounds: Preliminary and Final.',
+                'Questions based on core concepts in Electrical and Electronics Engineering.',
+                'Decision of the judges will be final.'
+            ]
         },
         {
             id: 'eee-debugging',
             event_name: 'Circuit Debugging',
-            rules: ['Detailed rules will be updated soon.']
+            rules: [
+                'Individual participation only.',
+                'Circuits from either electrical or electronics engineering.',
+                'Spot the errors and debug the circuit within 5 minutes.',
+                'Decision of the judges will be final.'
+            ]
         },
         {
             id: 'eee-expo',
             event_name: 'Trade Show (Project Expo)',
-            rules: ['Detailed rules will be updated soon.']
+            rules: [
+                'Maximum 2 participants per team.',
+                'Hardware Project Kit is required.',
+                'Projects should be Social-Oriented or based on Recent Trends.',
+                'Decision of the judges will be final.'
+            ]
         }
     ],
     non_technical_events: [
         {
             id: 'eee-recreation',
             event_name: 'Recreational Events',
-            rules: ['Detailed rules will be updated soon.']
+            rules: [
+                'Each team consists of 2 participants.',
+                'Focus on thinking ability and decision making.',
+                'Decision of the judges will be final.'
+            ]
         }
     ]
 };
@@ -421,11 +454,11 @@ export const rawCulturalRules = [
             'Each participant should carry identity card.',
             'Spot registration is not permitted.',
             'Punctuality will be appreciated.',
-            'Please do not carry sharp objects, inflammable objects or any other that might be potentially dangerous.',
-            'Please do not carry/consume any intoxicant, liquor, any narcotics drugs, cigarettes or additives; smoking is strictly prohibited within the campus.',
-            'Students should refrain from abusive or revealing costumes during the competitions, failing which they will be disqualified.',
+            'Please do not carry sharp objects; inflammable objects or any other that might be potentially dangerous.',
+            'Please do not carry/consume any intoxicant, liquor, any narcotics drugs, cigarettes or additives or any sort smoking in strictly prohibited within the campus.',
+            'Students should refrain from abusive revealing costumes during the competitions, failing which they will be disqualified.',
             'Participants should go through the event rules and adhere to the specifics.',
-            'Any form of vulgarity or obscenity is strictly prohibited and such behavior will call for immediate disqualification.',
+            'Any form of vulgarity or obscenity is strictly prohibited and any such behaviors on or offstage will call for immediate disqualification of the team.',
             'Participants must maintain decorum inside the campus. Any misbehavior will be dealt with severely.'
         ]
     },
@@ -438,16 +471,17 @@ export const rawCulturalRules = [
         color: 'from-pink-500 to-rose-500',
         rules: [
             'Any dance form is accepted.',
+            'Theme: RETRO TO MODERN (old to new generation) (or) CLASSICAL WITH HIP HOP FUSION. You can choose any one theme.',
             'Minimum 6 to maximum 8 participants.',
-            'Vulgarity of any kind with respect to moves or costumes will lead to disqualification.',
-            'Time allocated: 5 minutes.',
+            'Vulgarity of any kind with respect to dance moves, costumes etc, will lead to disqualification.',
+            'Time allocated to 5 minutes.',
             'No use of fire onstage.',
             'The dance should not end with a negative emotion.',
             'Can use decent film songs.',
             'Only one minute will be provided for setup.',
-            'Soundtrack must be in MP3 format in a pen drive or CD (no mobile phones).',
-            'Each participant must carry college ID for verification.',
-            'Failure to adhere to rules leads to disqualification.',
+            'The sound track should be handed over in MP3 format in a pen drive or a CD, in person before the event begins. Soundtracks on mobile phones are not permitted.',
+            'Each participant must carry their college ID for verification purpose.',
+            'Failure to adhere to the rules will lead to disqualification.',
             'The decision made by judges shall be final & binding.'
         ]
     },
@@ -460,14 +494,15 @@ export const rawCulturalRules = [
         color: 'from-violet-500 to-purple-500',
         rules: [
             'Any dance form is accepted.',
-            'Vulgarity in moves or costumes will lead to disqualification.',
-            'Time allocated: 5 minutes.',
+            'Vulgarity of any kind with respect to dance moves, costumes etc, will lead to disqualification.',
+            'Time allocated to 5 minutes.',
             'No use of fire onstage.',
             'The dance should not end with a negative emotion.',
             'Can use decent film songs.',
             'Only one minute will be provided for setup.',
-            'Soundtrack must be in MP3 format in a pen drive or CD (no mobile phones).',
-            'Each participant must carry college ID for verification.',
+            'The sound track should be handed over in MP3 format in a pen drive or a CD, in person before the event begins. Soundtracks on mobile phones are not permitted.',
+            'Each participant must carry their college ID for verification purpose.',
+            'Failure to adhere to the rules will lead to disqualification.',
             'The decision made by judges shall be final & binding.'
         ]
     },
@@ -479,26 +514,23 @@ export const rawCulturalRules = [
         icon: Mic,
         color: 'from-blue-500 to-cyan-500',
         rules: [
-            'Maximum of 3 minutes per participant.',
+            'Each participant can sing for a maximum of 3 minutes.',
             'Only Karaoke based singing is allowed.',
-            'Exceeding time limit leads to negative marking.',
-            'One extra minute for setup.',
-            'Can sing mainstream Bollywood, semi-classical, classical, or folk songs.',
-            'Original compositions fetch bonus points.',
-            'Performances can be solo or group.'
+            'Exceeding this time limit would lead to negative marking. An extra minute will be given for setup.',
+            'Participants may sing any mainstream Bollywood songs or any songs that might be semi-classical, classical, folk composition. Performing an original composition will fetch bonus points.',
+            'Participants in singing can be either solo or group performances.'
         ]
     },
     {
         id: 'rhythm-strings',
         name: 'RHYTHM STRINGS (INSTRUMENTAL MUSIC)',
         type: 'Instrumental Music',
-        image:
-            'https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2000&auto=format&fit=crop',
         icon: Music,
         color: 'from-amber-400 to-orange-500',
         rules: [
-            'Solo instrumental performance.',
-            'Only instrumental music allowed (no vocals).',
+            'This is a solo instrumental performance.',
+            'Only instrumental music is allowed (no vocals).',
             'Time limit: 3–5 minutes (including setup).',
             'Participants must bring their own instruments.',
             'Pre-recorded backing tracks are not allowed.',
@@ -532,13 +564,13 @@ export const rawCulturalRules = [
         icon: Shirt,
         color: 'from-fuchsia-500 to-pink-500',
         rules: [
-            'Theme: Indian Traditional wear (state-wise).',
+            'Theme: FASHION THROUGH THE ERAS (70s, 80s, 90s to 2026 trends).',
             'Team event: 6-12 members.',
             'Time limit: 8 minutes.',
-            'Vulgarity/obscenity leads to debarring.',
-            'Tracks must be in pen drive submitted in advance.',
-            'Negative marking for exceeding time limit.',
-            'Judged on costumes, theme, walking stance, attitude, and tagline.'
+            'Vulgarity is strongly prohibited. Any form of obscenity will lead to debarring.',
+            'Should carry tracks in pen drive and submit in advance.',
+            'Negative marking if participants exceed time limit.',
+            'Teams will be judged based on: costumes, theme, walking stance, attitude and tagline.'
         ]
     },
     {
@@ -550,26 +582,26 @@ export const rawCulturalRules = [
         color: 'from-indigo-500 to-blue-600',
         rules: [
             'Individual event.',
-            'Time allotted: 3 minutes.',
-            'No abusive or foul language permitted.',
-            'No inappropriate comments regarding religion, race, sex, or culture.',
-            'May mimic machine sounds or speeches of well-known persons.'
+            'Time allotted 3 minutes.',
+            'No use of abusive languages/foul language is permitted.',
+            'No inappropriate comments that could hurt community sentiments (religious, race, sex, culture).',
+            'Participants may mimic sound of machines and speeches of well-known persons including film personalities.'
         ]
     },
     {
         id: 'cinebuzz',
         name: 'CINEBUZZ (SHORT FILM)',
         type: 'Short Film',
-        image:
-            'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2000&auto=format&fit=crop',
         icon: Video,
         color: 'from-red-500 to-orange-600',
         rules: [
             'Individual event.',
-            'Time limit: 5 to 10 minutes.',
-            'Should aim for a professional look.',
-            'Must be in MP4 format and shot using DSLR Camera only.',
-            'Judges’ decision is final.'
+            'Theme of the short film: HONESTY.',
+            'Time: 5 to 10 minutes.',
+            'Try your best to give your short movie a professional look.',
+            'It should be in MP4 format and should be shot using DSLR Camera only.',
+            'Judges decision should be final.'
         ]
     }
 ];
