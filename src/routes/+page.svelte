@@ -93,25 +93,30 @@
 </script>
 
 <svelte:head>
-	<title>INCEPTRA '26 | College Symposium & Cultural Festival | TEC</title>
+	<title
+		>INCEPTRA '26 | National Level Technical Symposium & Cultural Fest | Trichy Engineering College</title
+	>
 	<meta
 		name="description"
-		content="INCEPTRA '26 at Trichy Engineering College. A massive 2-day event featuring Technical Symposiums and Cultural Festivals on March 17 & 18, 2026."
+		content="Official website of INCEPTRA '26 at Trichy Engineering College (TEC). A premier 2-day National Level Technical Symposium and Cultural Festival on March 17 & 18, 2026. Join for Hackathons, Workshops, and Stage Performances."
 	/>
 	<meta
 		name="keywords"
-		content="Inceptra 2026, College Symposium, Cultural Festival, Trichy Engineering College, TEC, Engineering Events, College Fest"
+		content="Inceptra 2026, Inceptra TEC, Trichy Engineering College events, National Level Technical Symposium Trichy, College Cultural Fest 2026, Engineering Symposium Tamil Nadu, TEC Inceptra registration, Project Tech Feast Hackathon, college festival Trichy"
 	/>
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://inceptra-tec.pages.dev/" />
-	<meta property="og:title" content="INCEPTRA '26 | Innovation Meets Art" />
+	<meta property="og:url" content="https://inceptra.trichyengg.ac.in/" />
+	<meta
+		property="og:title"
+		content="INCEPTRA '26 | Trichy Engineering College | Innovation Meets Art"
+	/>
 	<meta
 		property="og:description"
-		content="Join the ultimate college symposium and cultural festival. 2 days of tech, music, dance, and creativity."
+		content="The biggest National Level Technical Symposium and Cultural Festival in Trichy. Experience 2 days of innovation, technology, and art at TEC."
 	/>
-	<meta property="og:image" content="/og-image.jpg" />
+	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
@@ -147,7 +152,7 @@
 					"addressCountry": "IN"
 				}
 			},
-			"image": ["https://inceptra-tec.pages.dev/og-image.jpg"],
+			"image": ["https://inceptra.trichyengg.ac.in/og-image.png"],
 			"description": "The ultimate college symposium and cultural festival. Two days of tech, music, dance, and creativity.",
 			"organizer": {
 				"@type": "Organization",

@@ -95,34 +95,34 @@
 	<title>Gallery | INCEPTRA '26 | Photo Archive | Trichy Engineering College</title>
 	<meta
 		name="description"
-		content="Browse through stunning moments from INCEPTRA '26 - Trichy Engineering College's premier symposium and cultural festival. Visual archives of technical events, cultural performances, and unforgettable memories."
+		content="Explore the vibrant moments of INCEPTRA '26 at Trichy Engineering College. Visual records of project expos, cultural performances, and technical challenges."
 	/>
 	<meta
 		name="keywords"
-		content="Inceptra Gallery, College Fest Photos, TEC Event Photos, Symposium Gallery, Cultural Fest Photos, Trichy Events, Engineering College Gallery"
+		content="Inceptra Gallery, TEC event photos, Trichy Engineering College fest memories, symposium photos, cultural festival gallery Trichy"
 	/>
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://inceptra.pages.dev/gallery" />
-	<meta property="og:title" content="Gallery | INCEPTRA '26 | Photo Archive" />
+	<meta property="og:url" content="https://inceptra.trichyengg.ac.in/gallery" />
+	<meta property="og:title" content="Gallery | INCEPTRA '26 | Trichy Engineering College" />
 	<meta
 		property="og:description"
-		content="Browse stunning moments from INCEPTRA '26 - visual archives of technical events and cultural performances at Trichy Engineering College."
+		content="Experience the energy of INCEPTRA '26 through our visual archives. Technical and cultural highlights from TEC."
 	/>
-	<meta property="og:image" content="https://inceptra.pages.dev/og-image.jpg" />
+	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
-	<meta property="twitter:url" content="https://inceptra.pages.dev/gallery" />
+	<meta property="twitter:url" content="https://inceptra.trichyengg.ac.in/gallery" />
 	<meta property="twitter:title" content="Gallery | INCEPTRA '26 | Photo Archive" />
 	<meta
 		property="twitter:description"
-		content="Browse stunning moments from INCEPTRA '26 - visual archives of technical events and cultural performances."
+		content="Visual archives of the biggest college fest in Trichy - INCEPTRA '26."
 	/>
-	<meta property="twitter:image" content="https://inceptra.pages.dev/og-image.jpg" />
+	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 
-	<link rel="canonical" href="https://inceptra.pages.dev/gallery" />
+	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/gallery" />
 </svelte:head>
 
 <div class="min-h-screen bg-[#0a0a0b] text-white">

@@ -6,34 +6,34 @@
 	<title>About INCEPTRA '26 | Our Mission & Vision | Trichy Engineering College</title>
 	<meta
 		name="description"
-		content="Learn more about INCEPTRA '26 at Trichy Engineering College. Discover our legacy since 2010, mission to ignite minds, and the passionate team behind the biggest college fest in the region."
+		content="Learn about the history and vision of INCEPTRA, the flagship National Level Technical Symposium and Cultural Festival of Trichy Engineering College (TEC)."
 	/>
 	<meta
 		name="keywords"
-		content="About Inceptra, TEC Fest History, College Fest Mission, Engineering Symposium Vision, Cultural Festival, Trichy Engineering College"
+		content="About Inceptra, TEC Fest history, Trichy Engineering College symposium, college festival vision, engineering events legacy Trichy"
 	/>
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://inceptra.pages.dev/about" />
+	<meta property="og:url" content="https://inceptra.trichyengg.ac.in/about" />
 	<meta property="og:title" content="About INCEPTRA '26 | Our Mission & Vision" />
 	<meta
 		property="og:description"
-		content="Learn about INCEPTRA '26 at Trichy Engineering College. Our legacy, mission to ignite minds, and the team behind the biggest college fest in the region."
+		content="Discover the legacy of INCEPTRA at Trichy Engineering College. Since 2010, we've been igniting minds and celebrating culture."
 	/>
-	<meta property="og:image" content="https://inceptra.pages.dev/og-image.jpg" />
+	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
-	<meta property="twitter:url" content="https://inceptra.pages.dev/about" />
+	<meta property="twitter:url" content="https://inceptra.trichyengg.ac.in/about" />
 	<meta property="twitter:title" content="About INCEPTRA '26 | Our Mission & Vision" />
 	<meta
 		property="twitter:description"
-		content="Learn about INCEPTRA '26 - our legacy, mission, and the team behind TEC's biggest college fest."
+		content="Learn about INCEPTRA '26 - the legacy, mission, and the team behind TEC's biggest fest."
 	/>
-	<meta property="twitter:image" content="https://inceptra.pages.dev/og-image.jpg" />
+	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 
-	<link rel="canonical" href="https://inceptra.pages.dev/about" />
+	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/about" />
 	<link
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet"

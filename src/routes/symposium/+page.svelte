@@ -24,19 +24,20 @@
 </script>
 
 <svelte:head>
-	<title>Technical Symposium | INCEPTRA '26 | TEC</title>
+	<title>Technical Symposium | INCEPTRA '26 | Trichy Engineering College</title>
 	<meta
 		name="description"
-		content="Explore Technical Symposium events at INCEPTRA '26. Paper presentations, coding challenges, project expos, and more across all engineering departments."
+		content="Participate in the National Level Technical Symposium at INCEPTRA '26. Paper presentations, coding challenges, and project expos across CSE, ECE, EEE, Mechanical, and Civil departments at TEC."
 	/>
 	<meta
 		name="keywords"
-		content="Technical Symposium, Engineering Events, CSE Events, EEE Events, ECE Events, Mechanical Events, Civil Events, Paper Presentation"
+		content="Technical Symposium Trichy, CSE events, ECE symposium, EEE technical fest, Mechanical engineering events, Civil engineering symposium, Paper Presentation Trichy, INCEPTRA TEC symposium"
 	/>
 	<link
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet"
 	/>
+	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/symposium" />
 </svelte:head>
 
 <div class="min-h-screen bg-[#f7f6f8] px-4 py-12 font-['Lexend'] text-[#141118] md:px-20">

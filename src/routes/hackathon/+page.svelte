@@ -14,41 +14,47 @@
 </script>
 
 <svelte:head>
-	<title>Project Tech Feast | Hackathon | INCEPTRA '26 | Sustainable Tech</title>
+	<title>Project Tech Feast | National Level Hackathon | INCEPTRA '26</title>
 	<meta
 		name="description"
-		content="Join Project Tech Feast - A 24-hour sustainability hackathon at INCEPTRA '26. Build innovative solutions for green energy and environmental challenges. March 18, 2026."
+		content="Join Project Tech Feast, the flagship 24-hour National Level Hackathon at INCEPTRA '26, Trichy Engineering College. Build sustainable tech solutions for green energy."
 	/>
 	<meta
 		name="keywords"
-		content="Hackathon, Project Tech Feast, Sustainable Tech, Green Energy, INCEPTRA 2026, Trichy Engineering College, Innovation Challenge"
+		content="National Level Hackathon, Project Tech Feast, Sustainable Tech Hackathon, Green Energy Challenge, INCEPTRA 2026 Hackathon, Trichy Engineering College events"
 	/>
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://inceptra.pages.dev/hackathon" />
-	<meta property="og:title" content="Project Tech Feast | Sustainability Hackathon" />
+	<meta property="og:url" content="https://inceptra.trichyengg.ac.in/hackathon" />
+	<meta
+		property="og:title"
+		content="Project Tech Feast | National Level Hackathon | INCEPTRA '26"
+	/>
 	<meta
 		property="og:description"
-		content="24-hour innovation challenge focused on sustainable technology and green energy solutions."
+		content="A 24-hour innovation challenge at TEC. Build the future of sustainable technology."
 	/>
-	<meta property="og:image" content="https://inceptra.pages.dev/og-image.jpg" />
+	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
-	<meta property="twitter:url" content="https://inceptra.pages.dev/hackathon" />
-	<meta property="twitter:title" content="Project Tech Feast | Sustainability Hackathon" />
+	<meta property="twitter:url" content="https://inceptra.trichyengg.ac.in/hackathon" />
+	<meta
+		property="twitter:title"
+		content="Project Tech Feast | National Level Hackathon | INCEPTRA '26"
+	/>
 	<meta
 		property="twitter:description"
-		content="Join the 24-hour sustainable tech hackathon at INCEPTRA '26"
+		content="Join the 24-hour sustainable tech hackathon at INCEPTRA '26 (TEC)."
 	/>
-	<meta property="twitter:image" content="https://inceptra.pages.dev/og-image.jpg" />
+	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 
 	<link
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet"
 	/>
-	<link rel="canonical" href="https://inceptra.pages.dev/hackathon" />
+	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/hackathon" />
 </svelte:head>
 
 <div class="min-h-screen bg-[#f7f6f8] pt-24 pb-20 font-['Lexend'] text-[#141118]">

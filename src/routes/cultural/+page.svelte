@@ -25,15 +25,37 @@
 </script>
 
 <svelte:head>
-	<title>Cultural Fest | INCEPTRA '26 | Music, Dance & Drama</title>
+	<title>Cultural Fest | INCEPTRA '26 | Music, Dance & Drama | Trichy Engineering College</title>
 	<meta
 		name="description"
-		content="Get ready for the biggest Cultural Fest at INCEPTRA '26. Solo/Group Dance, Singing, Fashion Show, Short Film, and more."
+		content="Experience the energy of the National Level Cultural Fest at INCEPTRA '26. Exciting competitions in Dance, Music, Mime, Fashion Show, and Short Film at TEC."
 	/>
 	<meta
 		name="keywords"
-		content="Cultural Festival, College Dance Competition, Singing Competition, Fashion Show, Short Film Contest, MIME, College Fest Trichy"
+		content="Cultural Fest Trichy, College Dance Competition 2026, Music Fest engineering college, Fashion Show college event, Short Film Contest Trichy, INCEPTRA cultural events"
 	/>
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://inceptra.trichyengg.ac.in/cultural" />
+	<meta property="og:title" content="Cultural Fest | INCEPTRA '26 | Innovation Meets Art" />
+	<meta
+		property="og:description"
+		content="Unleash your creativity at TEC's biggest cultural festival. Joining us for music, dance, and drama."
+	/>
+	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content="https://inceptra.trichyengg.ac.in/cultural" />
+	<meta property="twitter:title" content="Cultural Fest | INCEPTRA '26 | Music, Dance & Drama" />
+	<meta
+		property="twitter:description"
+		content="Witness the spectacular cultural performances at INCEPTRA '26 (TEC)."
+	/>
+	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+
+	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/cultural" />
 </svelte:head>
 
 <div

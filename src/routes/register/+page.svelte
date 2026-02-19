@@ -19,37 +19,37 @@
 	>
 	<meta
 		name="description"
-		content="Register now for technical symposium and cultural events at INCEPTRA '26 - March 17 & 18, 2026. Join 10,000+ students at Trichy Engineering College's premier festival. Secure your spot today!"
+		content="Register now for National Level Technical Symposium and Cultural events at INCEPTRA '26. Secure your entry for Hackathons, Paper Presentations, and Stage Performances at TEC."
 	/>
 	<meta
 		name="keywords"
-		content="Inceptra Registration, College Event Registration, Technical Symposium Registration, Cultural Fest Registration, TEC Events 2026, Online Registration"
+		content="Inceptra 2026 registration, college fest online registration, TEC symposium entry, cultural fest passes Trichy, engineering events registration"
 	/>
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://inceptra.pages.dev/register" />
+	<meta property="og:url" content="https://inceptra.trichyengg.ac.in/register" />
 	<meta property="og:title" content="Register for INCEPTRA '26 | Symposium & Cultural Events" />
 	<meta
 		property="og:description"
-		content="Register now for INCEPTRA '26 - March 17 & 18, 2026. Join 10,000+ students at Trichy Engineering College's premier festival. Secure your spot!"
+		content="Join 10,000+ students at Trichy Engineering College's premier festival. Register now for technical and cultural challenges."
 	/>
-	<meta property="og:image" content="https://inceptra.pages.dev/og-image.jpg" />
+	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
-	<meta property="twitter:url" content="https://inceptra.pages.dev/register" />
+	<meta property="twitter:url" content="https://inceptra.trichyengg.ac.in/register" />
 	<meta
 		property="twitter:title"
 		content="Register for INCEPTRA '26 | Symposium & Cultural Events"
 	/>
 	<meta
 		property="twitter:description"
-		content="Register now for INCEPTRA '26 - March 17 & 18, 2026. Join 10,000+ students at TEC's premier festival!"
+		content="Secure your spot at INCEPTRA '26 - Trichy Engineering College's flagship National Level Fest."
 	/>
-	<meta property="twitter:image" content="https://inceptra.pages.dev/og-image.jpg" />
+	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 
-	<link rel="canonical" href="https://inceptra.pages.dev/register" />
+	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/register" />
 </svelte:head>
 
 <div class="min-h-screen bg-[#f7f6f8] pt-24 pb-12">
