@@ -405,7 +405,7 @@
 		if (formData.events.cultural.includes(event)) {
 			formData.events.cultural = formData.events.cultural.filter((e) => e !== event);
 		} else {
-			if (formData.events.cultural.length < 2) {
+			if (formData.events.cultural.length < 4) {
 				formData.events.cultural = [...formData.events.cultural, event];
 			} else {
 				error = 'Maximum 2 Cultural events allowed.';
