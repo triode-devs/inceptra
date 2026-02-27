@@ -408,7 +408,7 @@
 			if (formData.events.cultural.length < 4) {
 				formData.events.cultural = [...formData.events.cultural, event];
 			} else {
-				error = 'Maximum 2 Cultural events allowed.';
+				error = 'Maximum 4 Cultural events allowed.';
 				setTimeout(() => (error = null), 3000);
 			}
 		}
@@ -417,7 +417,7 @@
 	// --- Validation ---
 	$: isHackathonValid = formData.hackathonTopic && formData.hackathonType;
 
-	$: isCulturalValid = formData.events.cultural.length > 0 && formData.events.cultural.length <= 2;
+	$: isCulturalValid = formData.events.cultural.length > 0 && formData.events.cultural.length <= 4;
 
 	// Defensive reactive check to enforce limits if data is restored from old drafts
 	$: if (formData.events.technical.length > 2) {
@@ -426,8 +426,8 @@
 	$: if (formData.events.nonTechnical.length > 1) {
 		formData.events.nonTechnical = formData.events.nonTechnical.slice(0, 1);
 	}
-	$: if (formData.events.cultural.length > 2) {
-		formData.events.cultural = formData.events.cultural.slice(0, 2);
+	$: if (formData.events.cultural.length > 4) {
+		formData.events.cultural = formData.events.cultural.slice(0, 4);
 	}
 
 	$: isSymposiumValid = (() => {
@@ -996,43 +996,32 @@
 
 							<!-- CULTURAL SELECTION -->
 							{#if registrationType === 'cultural' && currentStep === 1}
-								<div in:fade>
-									<div class="mb-4 rounded-lg bg-[#ee2b8c]/5 p-3 text-xs font-bold text-[#ee2b8c]">
-										Note: You can participate in a maximum of 2 cultural events.
-									</div>
-									<div class="grid grid-cols-1 gap-3">
-										{#each culturalEvents as event}
-											{@const isSelected = formData.events.cultural.includes(event)}
-											{@const isLimitReached = formData.events.cultural.length >= 2}
-											<label
-												class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 transition-all
-                      {isSelected
-													? 'border-[#ee2b8c] bg-white'
-													: 'border-transparent bg-[#f8f6f7] hover:border-[#ee2b8c]/30'}
-                      {!isSelected && isLimitReached ? 'cursor-not-allowed opacity-50' : ''}
-                    "
-											>
-												<input
-													type="checkbox"
-													class="h-5 w-5 rounded border-gray-300 text-[#ee2b8c] focus:ring-[#ee2b8c]"
-													checked={isSelected}
-													disabled={!isSelected && isLimitReached}
-													onchange={() => toggleCulturalEvent(event)}
-												/>
-												<div class="flex-1">
-													<div class="flex items-center gap-2">
-														<span class="text-sm font-extrabold">{event}</span>
-														<span
-															class="rounded-full bg-[#ee2b8c]/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#ee2b8c] uppercase"
-															>Cultural</span
-														>
-													</div>
-												</div>
-											</label>
-										{/each}
-									</div>
-								</div>
-							{/if}
+    <div in:fade>
+        <div class="mb-4 rounded-lg bg-[#ee2b8c]/5 p-3 text-xs font-bold text-[#ee2b8c]">
+            Note: You can participate in a maximum of 4 cultural events.
+        </div>
+        
+        <div class="grid grid-cols-1 gap-3">
+            {#each culturalEvents as event}
+                {@const isSelected = formData.events.cultural.includes(event)}
+                {@const isLimitReached = formData.events.cultural.length >= 4}
+                
+                <label class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 transition-all
+                    {isSelected ? 'border-[#ee2b8c] bg-white' : 'border-transparent bg-[#f8f6f7] hover:border-[#ee2b8c]/30'}
+                    {!isSelected && isLimitReached ? 'cursor-not-allowed opacity-50' : ''}">
+                    
+                    <input
+                        type="checkbox"
+                        class="h-5 w-5 rounded border-gray-300 text-[#ee2b8c] focus:ring-[#ee2b8c]"
+                        checked={isSelected}
+                        disabled={!isSelected && isLimitReached}
+                        onchange={() => toggleCulturalEvent(event)}
+                    />
+                    </label>
+            {/each}
+        </div>
+    </div>
+{/if}
 
 							<!-- HACKATHON SELECTION -->
 							{#if registrationType === 'hackathon' && currentStep === 1}
