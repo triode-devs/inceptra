@@ -996,32 +996,43 @@
 
 							<!-- CULTURAL SELECTION -->
 							{#if registrationType === 'cultural' && currentStep === 1}
-    <div in:fade>
-        <div class="mb-4 rounded-lg bg-[#ee2b8c]/5 p-3 text-xs font-bold text-[#ee2b8c]">
-            Note: You can participate in a maximum of 4 cultural events.
-        </div>
-        
-        <div class="grid grid-cols-1 gap-3">
-            {#each culturalEvents as event}
-                {@const isSelected = formData.events.cultural.includes(event)}
-                {@const isLimitReached = formData.events.cultural.length >= 4}
-                
-                <label class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 transition-all
-                    {isSelected ? 'border-[#ee2b8c] bg-white' : 'border-transparent bg-[#f8f6f7] hover:border-[#ee2b8c]/30'}
-                    {!isSelected && isLimitReached ? 'cursor-not-allowed opacity-50' : ''}">
-                    
-                    <input
-                        type="checkbox"
-                        class="h-5 w-5 rounded border-gray-300 text-[#ee2b8c] focus:ring-[#ee2b8c]"
-                        checked={isSelected}
-                        disabled={!isSelected && isLimitReached}
-                        onchange={() => toggleCulturalEvent(event)}
-                    />
-                    </label>
-            {/each}
-        </div>
-    </div>
-{/if}
+								<div in:fade>
+									<div class="mb-4 rounded-lg bg-[#ee2b8c]/5 p-3 text-xs font-bold text-[#ee2b8c]">
+										Note: You can participate in a maximum of 4 cultural events.
+									</div>
+									<div class="grid grid-cols-1 gap-3">
+										{#each culturalEvents as event}
+											{@const isSelected = formData.events.cultural.includes(event)}
+											{@const isLimitReached = formData.events.cultural.length >= 4}
+											<label
+												class="group relative flex cursor-pointer items-center gap-4 rounded-xl border-2 p-4 transition-all
+                      {isSelected
+													? 'border-[#ee2b8c] bg-white'
+													: 'border-transparent bg-[#f8f6f7] hover:border-[#ee2b8c]/30'}
+                      {!isSelected && isLimitReached ? 'cursor-not-allowed opacity-50' : ''}
+                    "
+											>
+												<input
+													type="checkbox"
+													class="h-5 w-5 rounded border-gray-300 text-[#ee2b8c] focus:ring-[#ee2b8c]"
+													checked={isSelected}
+													disabled={!isSelected && isLimitReached}
+													onchange={() => toggleCulturalEvent(event)}
+												/>
+												<div class="flex-1">
+													<div class="flex items-center gap-2">
+														<span class="text-sm font-extrabold">{event}</span>
+														<span
+															class="rounded-full bg-[#ee2b8c]/10 px-2 py-0.5 text-[10px] font-bold tracking-wider text-[#ee2b8c] uppercase"
+															>Cultural</span
+														>
+													</div>
+												</div>
+											</label>
+										{/each}
+									</div>
+								</div>
+							{/if}
 
 							<!-- HACKATHON SELECTION -->
 							{#if registrationType === 'hackathon' && currentStep === 1}
