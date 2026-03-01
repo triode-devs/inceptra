@@ -1,11 +1,12 @@
 <script>
 	import { loginAdmin } from '$lib/adminAuth';
-	import { KeyRound, User, Sparkles, ShieldCheck } from 'lucide-svelte';
+	import { KeyRound, User, Sparkles, ShieldCheck, Eye, EyeOff } from 'lucide-svelte';
 	import tecLogo from '$lib/assets/tec svg.svg';
 	import { fade } from 'svelte/transition';
 
 	let id = $state('');
 	let password = $state('');
+	let showPassword = $state(false);
 	let error = $state('');
 	let loading = $state(false);
 
@@ -69,7 +70,7 @@
 							bind:value={id}
 							required
 							autocomplete="username"
-							placeholder="e.g. cse_admin"
+							placeholder="admin"
 							class="w-full rounded-2xl border-2 border-gray-100 bg-gray-50 py-4 pr-4 pl-12 font-bold transition-all outline-none focus:border-[#8c2bee] focus:bg-white"
 						/>
 					</div>
@@ -83,13 +84,24 @@
 						<KeyRound class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400" size={18} />
 						<input
 							id="admin-pass"
-							type="password"
+							type={showPassword ? 'text' : 'password'}
 							bind:value={password}
 							required
 							autocomplete="current-password"
 							placeholder="••••••••"
-							class="w-full rounded-2xl border-2 border-gray-100 bg-gray-50 py-4 pr-4 pl-12 font-bold transition-all outline-none focus:border-[#8c2bee] focus:bg-white"
+							class="w-full rounded-2xl border-2 border-gray-100 bg-gray-50 py-4 pr-12 pl-12 font-bold transition-all outline-none focus:border-[#8c2bee] focus:bg-white"
 						/>
+						<button
+							type="button"
+							class="absolute top-1/2 right-4 -translate-y-1/2 text-gray-400 transition-colors hover:text-[#8c2bee]"
+							onclick={() => (showPassword = !showPassword)}
+						>
+							{#if showPassword}
+								<EyeOff size={18} />
+							{:else}
+								<Eye size={18} />
+							{/if}
+						</button>
 					</div>
 				</div>
 
