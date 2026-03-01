@@ -32,15 +32,17 @@ export async function load({ params, fetch }) {
         const allRegistrations = data.registrations || [];
 
         const filteredRegistrations = allRegistrations.filter((reg) => {
+            // Support both snake_case and camelCase field names from different backends
+            const regType = (reg.registration_type || reg.registrationType || '').toLowerCase();
             if (dept === 'cultural') {
-                return reg.registration_type === 'cultural';
+                return regType === 'cultural';
             }
             if (dept === 'hackathon') {
-                return reg.registration_type === 'hackathon';
+                return regType === 'hackathon';
             }
-            // For symposium departments, check target_dept
-            // Also ensure it's a symposium registration to be safe, though target_dept implies it usually
-            return deptConfig && reg.target_dept === deptConfig?.name;
+            // For symposium departments, check target_dept (case-insensitive)
+            const targetDept = (reg.target_dept || reg.targetDept || '').toLowerCase();
+            return deptConfig && targetDept === deptConfig.name.toLowerCase();
         });
 
         return {

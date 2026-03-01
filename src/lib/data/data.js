@@ -618,6 +618,10 @@ export const symposiumData = [
         image: cseBg,
         hasRules: true,
         rulesData: rawCseRules,
+        staff: [
+            { name: 'Mr. K. Kalaiyarasan - HoD/CSE', phone: '+919940803835' },
+            { name: 'Mr. N. Amunchakravarthi - HoD/(AI&DS)', phone: '+917402149820' }
+        ],
         categories: [
             {
                 title: 'Technical',

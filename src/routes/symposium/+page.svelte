@@ -1,5 +1,5 @@
 <script>
-	import { ArrowRight, ClipboardList, X, Cpu, Radio, Settings } from 'lucide-svelte';
+	import { ArrowRight, ClipboardList, X, Cpu, Radio, Settings, Phone } from 'lucide-svelte';
 	import { fade, scale } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { symposiumData } from '$lib/data/data';
@@ -113,11 +113,28 @@
 							{#if dept.staff}
 								<div class="mb-2 flex flex-wrap gap-2">
 									{#each dept.staff as staff}
-										<span
-											class="inline-block rounded-lg border border-gray-100 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-600"
-										>
-											{staff}
-										</span>
+										{#if typeof staff === 'string'}
+											<span
+												class="inline-block rounded-lg border border-gray-100 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-600"
+											>
+												{staff}
+											</span>
+										{:else}
+											<div
+												class="flex items-center gap-2 rounded-lg border border-gray-100 bg-gray-50 px-3 py-1 text-xs font-semibold text-gray-600"
+											>
+												<span>{staff.name}</span>
+												{#if staff.phone}
+													<a
+														href="tel:{staff.phone}"
+														class="inline-flex items-center justify-center rounded-full bg-[#8c2bee]/10 p-1.5 text-[#8c2bee] transition-colors hover:bg-[#8c2bee] hover:text-white"
+														title="Call Coordinator"
+													>
+														<Phone size={12} />
+													</a>
+												{/if}
+											</div>
+										{/if}
 									{/each}
 								</div>
 							{/if}

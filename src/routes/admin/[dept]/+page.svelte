@@ -20,12 +20,31 @@
 		Radio,
 		Building,
 		Sparkles,
-		ScanLine
+		ScanLine,
+		RefreshCw,
+		ChevronDown
 	} from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
 	import { API_BASE_URL } from '$lib/index';
 	import { Html5Qrcode } from 'html5-qrcode';
 	import { onDestroy } from 'svelte';
+	import { invalidateAll } from '$app/navigation';
+
+	let isRefreshing = $state(false);
+
+	let openIds = $state(new Set());
+	function toggleOpen(id) {
+		const next = new Set(openIds);
+		if (next.has(id)) next.delete(id);
+		else next.add(id);
+		openIds = next;
+	}
+
+	async function refreshData() {
+		isRefreshing = true;
+		await invalidateAll();
+		isRefreshing = false;
+	}
 
 	let { data } = $props();
 
@@ -221,6 +240,15 @@
 					Viewing all registrations for the {deptFullName} department.
 				</p>
 			</div>
+			<button
+				onclick={refreshData}
+				disabled={isRefreshing}
+				class="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-700 shadow-sm transition-all hover:border-[#8c2bee]/30 hover:bg-[#8c2bee]/5 hover:text-[#8c2bee] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
+				title="Refresh data"
+			>
+				<RefreshCw size={16} class={isRefreshing ? 'animate-spin' : ''} />
+				{isRefreshing ? 'Refreshing...' : 'Refresh'}
+			</button>
 		</div>
 
 		<!-- Stats Grid -->
@@ -308,126 +336,183 @@
 		</div>
 	</div>
 
-	<!-- Table -->
-	<div
-		class="overflow-hidden rounded-3xl border border-gray-50 bg-white shadow-xl shadow-purple-100/20"
-	>
-		<div class="overflow-x-auto">
-			<table class="w-full text-left">
-				<thead>
-					<tr
-						class="border-b border-gray-50 bg-gray-50/50 text-xs font-black tracking-widest text-gray-400 uppercase"
+	<!-- Accordion List -->
+	<div class="flex flex-col gap-3">
+		{#each filteredRegistrations as reg (reg.id)}
+			{@const StatusIcon = getStatusIcon(reg.payment_status)}
+			{@const isOpen = openIds.has(reg.id)}
+			<div
+				class="overflow-hidden rounded-2xl border bg-white shadow-sm transition-all {isOpen
+					? 'border-[#8c2bee]/30 shadow-md shadow-purple-100'
+					: 'border-gray-100 hover:border-gray-200'}"
+			>
+				<!-- Accordion Header -->
+				<button
+					type="button"
+					onclick={() => toggleOpen(reg.id)}
+					class="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors {isOpen
+						? 'bg-[#8c2bee]/5'
+						: 'hover:bg-gray-50/80'}"
+				>
+					<!-- Avatar -->
+					<div
+						class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#8c2bee] to-[#ee2b8c] text-sm font-black text-white"
 					>
-						<th class="px-6 py-4">Participant</th>
-						<th class="px-6 py-4">Events / Topic</th>
-						<th class="px-6 py-4">Paper / Details</th>
-						<th class="px-6 py-4">Amount</th>
-						<th class="px-6 py-4">Status</th>
-						<th class="px-6 py-4">Date</th>
-					</tr>
-				</thead>
-				<tbody class="divide-y divide-gray-50">
-					{#each filteredRegistrations as reg (reg.id)}
-						{@const StatusIcon = getStatusIcon(reg.payment_status)}
-						<tr class="group transition-colors hover:bg-gray-50/30">
-							<td class="px-6 py-4">
-								<div class="flex flex-col">
-									<span class="font-bold text-gray-900">{reg?.name || 'Unknown'}</span>
-									<span class="text-[10px] font-bold tracking-tight text-gray-400 uppercase"
-										>{reg?.college_id || 'N/A'}</span
+						{(reg?.name || '?')[0].toUpperCase()}
+					</div>
+					<!-- Name + College -->
+					<div class="min-w-0 flex-1">
+						<div class="flex flex-wrap items-center gap-2">
+							<span class="font-bold text-gray-900">{reg?.name || 'Unknown'}</span>
+							<span
+								class="rounded-md bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-500 uppercase"
+								>{reg?.college_id || 'N/A'}</span
+							>
+							<span
+								class="rounded-md px-2 py-0.5 text-[10px] font-bold capitalize
+								{reg.registration_type === 'hackathon'
+									? 'bg-emerald-50 text-emerald-700'
+									: reg.registration_type === 'cultural'
+										? 'bg-pink-50 text-pink-700'
+										: 'bg-blue-50 text-blue-700'}"
+							>
+								{reg.registration_type || 'N/A'}
+							</span>
+						</div>
+						<p class="mt-0.5 truncate text-xs text-gray-400">{reg.college || ''}</p>
+					</div>
+					<!-- Right: amount + status + chevron -->
+					<div class="flex flex-shrink-0 items-center gap-3">
+						<span class="hidden text-sm font-black text-gray-800 sm:block">₹{reg.amount || 0}</span>
+						<div
+							class="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase {getStatusColor(
+								reg.payment_status
+							)}"
+						>
+							<StatusIcon size={11} />{reg.payment_status}
+						</div>
+						<ChevronDown
+							size={18}
+							class="text-gray-400 transition-transform duration-200 {isOpen ? 'rotate-180' : ''}"
+						/>
+					</div>
+				</button>
+
+				<!-- Accordion Body -->
+				{#if isOpen}
+					<div
+						transition:slide={{ duration: 200 }}
+						class="border-t border-gray-100 bg-gray-50/50 px-5 py-5"
+					>
+						<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+							<!-- Contact -->
+							<div class="flex flex-col gap-1">
+								<p class="mb-1 text-[10px] font-black tracking-widest text-gray-400 uppercase">
+									Contact
+								</p>
+								{#if reg.phone}
+									<a
+										href="tel:{reg.phone}"
+										class="flex items-center gap-1.5 text-sm font-semibold text-[#8c2bee] hover:underline"
+										><Phone size={13} />{reg.phone}</a
 									>
-								</div>
-							</td>
-							<td class="px-6 py-4">
-								<div class="flex max-w-[200px] flex-wrap gap-1">
+								{/if}
+								{#if reg.email}
+									<a
+										href="mailto:{reg.email}"
+										class="flex items-center gap-1.5 text-sm font-semibold text-blue-500 hover:underline"
+										><Mail size={13} />{reg.email}</a
+									>
+								{/if}
+								{#if reg.college}
+									<p class="flex items-center gap-1.5 text-xs text-gray-500">
+										<Building2 size={12} />{reg.college}
+									</p>
+								{/if}
+							</div>
+
+							<!-- Events -->
+							<div class="flex flex-col gap-1">
+								<p class="mb-1 text-[10px] font-black tracking-widest text-gray-400 uppercase">
+									Events / Topic
+								</p>
+								<div class="flex flex-wrap gap-1">
 									{#if reg.registration_type === 'hackathon'}
-										<span class="text-xs font-bold text-emerald-600">{reg.hackathon_topic}</span>
-									{:else if reg.registration_type === 'cultural'}
-										{#each reg.cultural_events || [] as e}
-											<span
-												class="rounded bg-pink-50 px-1.5 py-0.5 text-[10px] font-bold text-pink-600"
-												>{e}</span
-											>
-										{/each}
-									{:else}
-										{#each [...(reg.technical_events || []), ...(reg.non_technical_events || [])] as e}
-											<span
-												class="rounded bg-purple-50 px-1.5 py-0.5 text-[10px] font-bold text-[#8c2bee]"
-												>{e}</span
-											>
-										{/each}
-									{/if}
-								</div>
-							</td>
-							<td class="px-6 py-4">
-								<div class="flex flex-col gap-1">
-									{#if reg.paper_title}
-										<div class="flex max-w-[200px] flex-col gap-1">
-											<span class="text-xs font-bold text-gray-700">{reg.paper_title}</span>
-											{#if reg.paper_file}
-												<div class="flex flex-wrap gap-2">
-													<a
-														href="{API_BASE_URL}/api/image/{reg.paper_file}"
-														target="_blank"
-														class="flex items-center gap-1 text-[10px] font-bold text-blue-600 hover:underline"
-														title="View Paper"
-													>
-														<ExternalLink size={12} /> View
-													</a>
-													<a
-														href="{API_BASE_URL}/api/image/{reg.paper_file}"
-														download
-														class="flex items-center gap-1 text-[10px] font-bold text-[#8c2bee] hover:underline"
-														title="Download Paper"
-													>
-														<Download size={12} /> Download
-													</a>
-												</div>
-											{/if}
-										</div>
-									{:else if reg.registration_type === 'hackathon'}
-										<span class="text-[10px] font-bold text-gray-400 uppercase"
+										<span
+											class="rounded bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-emerald-700"
+											>{reg.hackathon_topic}</span
+										>
+										<span
+											class="rounded bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-gray-500 uppercase"
 											>{reg.hackathon_type}</span
 										>
+									{:else if reg.registration_type === 'cultural'}
+										{#each reg.cultural_events || [] as e}{#if e}<span
+													class="rounded bg-pink-50 px-2 py-0.5 text-[11px] font-bold text-pink-600"
+													>{e}</span
+												>{/if}{/each}
 									{:else}
-										<span class="text-xs text-gray-400">—</span>
+										{#each [...(reg.technical_events || []), ...(reg.non_technical_events || [])] as e}{#if e}<span
+													class="rounded bg-purple-50 px-2 py-0.5 text-[11px] font-bold text-[#8c2bee]"
+													>{e}</span
+												>{/if}{/each}
 									{/if}
 								</div>
-							</td>
-							<td class="px-6 py-4">
-								<div class="flex flex-col">
-									<span class="font-black text-gray-900">₹{reg.amount}</span>
-									{#if reg.transaction_id}
-										<span class="text-[9px] font-medium text-gray-400"
-											>UTR: {reg.transaction_id}</span
-										>
+							</div>
+
+							<!-- Payment -->
+							<div class="flex flex-col gap-1">
+								<p class="mb-1 text-[10px] font-black tracking-widest text-gray-400 uppercase">
+									Payment
+								</p>
+								<span class="text-xl font-black text-gray-900">₹{reg.amount || 0}</span>
+								{#if reg.transaction_id && reg.transaction_id !== 'OFFLINE'}
+									<p class="text-[10px] font-medium text-gray-400">UTR: {reg.transaction_id}</p>
+								{/if}
+								<p class="text-[10px] font-medium text-gray-400">
+									{reg.payment_mode === 'offline' || reg.payment_screenshot_key === 'OFFLINE'
+										? '🏢 Counter / Offline'
+										: '📱 Online (UPI)'}
+								</p>
+								<p class="text-[10px] text-gray-400">{formatDate(reg.created_at)}</p>
+							</div>
+
+							<!-- Paper -->
+							{#if reg.paper_title}
+								<div class="flex flex-col gap-1">
+									<p class="mb-1 text-[10px] font-black tracking-widest text-gray-400 uppercase">
+										Paper
+									</p>
+									<p class="text-sm font-bold text-gray-800">{reg.paper_title}</p>
+									{#if reg.paper_file}
+										<div class="flex gap-2">
+											<a
+												href="{API_BASE_URL}/api/image/{reg.paper_file}"
+												target="_blank"
+												class="flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:underline"
+												><ExternalLink size={11} />View</a
+											>
+											<a
+												href="{API_BASE_URL}/api/image/{reg.paper_file}"
+												download
+												class="flex items-center gap-1 text-[11px] font-bold text-[#8c2bee] hover:underline"
+												><Download size={11} />Download</a
+											>
+										</div>
 									{/if}
 								</div>
-							</td>
-							<td class="px-6 py-4">
-								<div
-									class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[10px] font-extrabold uppercase {getStatusColor(
-										reg.payment_status
-									)}"
-								>
-									<StatusIcon size={12} />
-									{reg.payment_status}
-								</div>
-							</td>
-							<td class="px-6 py-4 text-xs font-bold text-gray-400 uppercase"
-								>{formatDate(reg.created_at)}</td
-							>
-						</tr>
-					{:else}
-						<tr>
-							<td colspan="6" class="px-6 py-20 text-center font-bold text-gray-400">
-								No records found.
-							</td>
-						</tr>
-					{/each}
-				</tbody>
-			</table>
-		</div>
+							{/if}
+						</div>
+					</div>
+				{/if}
+			</div>
+		{:else}
+			<div
+				class="rounded-2xl border border-gray-100 bg-white py-20 text-center font-bold text-gray-400"
+			>
+				No records found.
+			</div>
+		{/each}
 	</div>
 </div>
 

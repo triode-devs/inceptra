@@ -1291,25 +1291,29 @@
 													<div
 														class="rounded-2xl border border-purple-50 bg-white p-4 shadow-sm transition-all hover:scale-[1.02]"
 													>
-														<span class="block font-black text-gray-800">Mr. K. Vijayakumar</span>
+														<span class="block font-black text-gray-800">Mr. K. Kalaiyarasan</span>
+														<span class="text-[10px] font-bold text-gray-400">HoD / CSE</span>
 														<a
-															href="tel:+919944103066"
+															href="tel:+919940803835"
 															class="mt-2 inline-flex items-center gap-2 font-bold text-[#8c2bee] hover:underline"
 														>
 															<Phone size={12} />
-															99441 03066
+															99408 03835
 														</a>
 													</div>
 													<div
 														class="rounded-2xl border border-purple-50 bg-white p-4 shadow-sm transition-all hover:scale-[1.02]"
 													>
-														<span class="block font-black text-gray-800">Mrs. L. Kokila</span>
+														<span class="block font-black text-gray-800"
+															>Mr. N. Amunchakravarthi</span
+														>
+														<span class="text-[10px] font-bold text-gray-400">HoD / (AI&DS)</span>
 														<a
-															href="tel:+919566386316"
+															href="tel:+917402149820"
 															class="mt-2 inline-flex items-center gap-2 font-bold text-[#8c2bee] hover:underline"
 														>
 															<Phone size={12} />
-															95663 86316
+															74021 49820
 														</a>
 													</div>
 												</div>
