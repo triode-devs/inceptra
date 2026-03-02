@@ -33,9 +33,17 @@
 	/>
 	<meta
 		property="og:description"
-		content="A 24-hour innovation challenge at TEC. Build the future of sustainable technology."
+		content="A 24-hour innovation challenge at TEC. Build the future of sustainable technology and win exciting cash prizes."
 	/>
 	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta
+		property="og:image:alt"
+		content="Project Tech Feast – National Level Hackathon at INCEPTRA '26"
+	/>
+	<meta property="og:site_name" content="INCEPTRA '26" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
@@ -46,9 +54,13 @@
 	/>
 	<meta
 		property="twitter:description"
-		content="Join the 24-hour sustainable tech hackathon at INCEPTRA '26 (TEC)."
+		content="Join the 24-hour sustainable tech hackathon at INCEPTRA '26 (TEC). Win Cash Prizes upto ₹1 Lakh+."
 	/>
 	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta
+		property="twitter:image:alt"
+		content="Project Tech Feast – National Level Hackathon at INCEPTRA '26"
+	/>
 
 	<link
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
@@ -97,6 +109,22 @@
 					sustainability enthusiasts for an intense 24-hour hackathon focused on creating a greener
 					future.
 				</p>
+
+				<!-- Prize Callout -->
+				<div
+					class="mt-8 inline-flex items-center gap-3 rounded-2xl border border-emerald-600/25 bg-gradient-to-r from-emerald-600/10 to-teal-500/10 px-6 py-3 backdrop-blur-sm"
+				>
+					<span class="text-xl">🏆</span>
+					<span class="text-sm font-bold text-[#141118] md:text-base">
+						Participate &amp; Win Exciting Cash Prizes upto
+						<span
+							class="bg-gradient-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent"
+						>
+							₹1 Lakh+
+						</span>
+					</span>
+					<span class="text-xl">✨</span>
+				</div>
 
 				<!-- CTA Buttons -->
 				<div class="mt-10 flex flex-col gap-4 sm:flex-row">

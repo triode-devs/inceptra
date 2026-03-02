@@ -35,6 +35,14 @@
 		content="Join 10,000+ students at Trichy Engineering College's premier festival. Register now for technical and cultural challenges."
 	/>
 	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta
+		property="og:image:alt"
+		content="Register for INCEPTRA '26 – Win Cash Prizes upto ₹1 Lakh+"
+	/>
+	<meta property="og:site_name" content="INCEPTRA '26" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
@@ -48,6 +56,10 @@
 		content="Secure your spot at INCEPTRA '26 - Trichy Engineering College's flagship National Level Fest."
 	/>
 	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta
+		property="twitter:image:alt"
+		content="Register for INCEPTRA '26 – Win Cash Prizes upto ₹1 Lakh+"
+	/>
 
 	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/register" />
 </svelte:head>

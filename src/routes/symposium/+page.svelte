@@ -37,6 +37,41 @@
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet"
 	/>
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://inceptra.trichyengg.ac.in/symposium" />
+	<meta
+		property="og:title"
+		content="Technical Symposium | INCEPTRA '26 | Trichy Engineering College"
+	/>
+	<meta
+		property="og:description"
+		content="Showcase your technical prowess at INCEPTRA '26. Paper presentations, coding challenges, and project expos across all engineering departments."
+	/>
+	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta
+		property="og:image:alt"
+		content="INCEPTRA '26 Technical Symposium – Win Cash Prizes upto ₹1 Lakh+"
+	/>
+	<meta property="og:site_name" content="INCEPTRA '26" />
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image" />
+	<meta property="twitter:url" content="https://inceptra.trichyengg.ac.in/symposium" />
+	<meta property="twitter:title" content="Technical Symposium | INCEPTRA '26 | Win Cash Prizes" />
+	<meta
+		property="twitter:description"
+		content="Compete in technical events across CSE, ECE, EEE, Mech & Civil at INCEPTRA '26 (TEC). Win Cash Prizes upto ₹1 Lakh+."
+	/>
+	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta
+		property="twitter:image:alt"
+		content="INCEPTRA '26 Technical Symposium – Win Cash Prizes upto ₹1 Lakh+"
+	/>
+
 	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/symposium" />
 </svelte:head>
 
@@ -50,10 +85,24 @@
 				<span class="text-xs font-bold tracking-widest uppercase">Department Events</span>
 			</div>
 			<h1 class="mb-4 text-4xl font-black md:text-5xl">Technical Symposium</h1>
-			<p class="mx-auto mb-8 max-w-2xl text-lg text-[#756189]">
+			<p class="mx-auto mb-6 max-w-2xl text-lg text-[#756189]">
 				Showcase your technical prowess in a series of challenges designed by our core engineering
 				departments.
 			</p>
+
+			<!-- Prize Callout -->
+			<div
+				class="mb-8 inline-flex items-center gap-3 rounded-2xl border border-[#8c2bee]/25 bg-gradient-to-r from-[#8c2bee]/10 to-[#ee2b8c]/10 px-6 py-3 backdrop-blur-sm"
+			>
+				<span class="text-xl">🏆</span>
+				<span class="text-sm font-bold text-[#141118] md:text-base">
+					Participate &amp; Win Exciting Cash Prizes upto
+					<span class="bg-gradient-to-r from-[#8c2bee] to-[#ee2b8c] bg-clip-text text-transparent">
+						₹1 Lakh+
+					</span>
+				</span>
+				<span class="text-xl">✨</span>
+			</div>
 
 			<a
 				href="/register"

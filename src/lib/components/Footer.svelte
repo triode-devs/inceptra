@@ -14,7 +14,7 @@
 	import tecLogo from '$lib/assets/tec svg.svg';
 </script>
 
-<footer class="relative overflow-hidden bg-[#141118] pt-20 pb-10 font-['Lexend'] text-white">
+<footer class="relative overflow-hidden bg-[#141118] pt-20 pb-15 font-['Lexend'] text-white">
 	<!-- Decorative Gradient Blur -->
 	<div
 		class="pointer-events-none absolute top-0 left-1/2 h-64 w-64 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#8c2bee] opacity-20 blur-[100px]"

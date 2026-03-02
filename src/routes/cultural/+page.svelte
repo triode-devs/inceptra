@@ -44,6 +44,14 @@
 		content="Unleash your creativity at TEC's biggest cultural festival. Joining us for music, dance, and drama."
 	/>
 	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta
+		property="og:image:alt"
+		content="INCEPTRA '26 Cultural Fest – Dance, Music & Drama at TEC"
+	/>
+	<meta property="og:site_name" content="INCEPTRA '26" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
@@ -54,6 +62,10 @@
 		content="Witness the spectacular cultural performances at INCEPTRA '26 (TEC)."
 	/>
 	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta
+		property="twitter:image:alt"
+		content="INCEPTRA '26 Cultural Fest – Dance, Music & Drama at TEC"
+	/>
 
 	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/cultural" />
 </svelte:head>
@@ -79,6 +91,20 @@
 			<p class="mx-auto max-w-2xl text-lg text-[#756189] md:text-xl">
 				Unleash your creativity and set the stage on fire with music, dance, and drama.
 			</p>
+
+			<!-- Prize Callout -->
+			<div
+				class="mt-6 inline-flex items-center gap-3 rounded-2xl border border-[#ee2b8c]/25 bg-gradient-to-r from-[#ee2b8c]/10 to-[#8c2bee]/10 px-6 py-3 backdrop-blur-sm"
+			>
+				<span class="text-xl">🏆</span>
+				<span class="text-sm font-bold text-[#141118] md:text-base">
+					Participate &amp; Win Exciting Cash Prizes upto
+					<span class="bg-gradient-to-r from-[#ee2b8c] to-[#8c2bee] bg-clip-text text-transparent">
+						₹1 Lakh+
+					</span>
+				</span>
+				<span class="text-xl">✨</span>
+			</div>
 		</div>
 
 		<!-- Events Grid -->

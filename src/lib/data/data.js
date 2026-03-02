@@ -619,8 +619,7 @@ export const symposiumData = [
         hasRules: true,
         rulesData: rawCseRules,
         staff: [
-            { name: 'Mr. K. Kalaiyarasan - HoD/CSE', phone: '+919940803835' },
-            { name: 'Mr. N. Amunchakravarthi - HoD/(AI&DS)', phone: '+917402149820' }
+            { name: 'T. Gopala Krishna, AP/CSE (Coordinator)', phone: '+918760459788' }
         ],
         categories: [
             {
@@ -637,34 +636,7 @@ export const symposiumData = [
             nonTechnical: rawCseRules.non_technical_events.map((e) => e.event_name)
         }
     },
-    {
-        id: 'eee',
-        name: 'Electrical & Electronics',
-        dept: rawEeeRules.department,
-        fullName: rawEeeRules.department,
-        icon: Zap,
-        color: 'text-yellow-600',
-        bg: 'bg-yellow-50',
-        image: eeeBg,
-        hasRules: true,
-        rulesData: rawEeeRules,
-        staff: ['Mr. M. Prasath, AP', 'Mr. C. Karthick, AP'],
-        categories: [
-            {
-                title: 'Technical Symposium',
-                items: rawEeeRules.technical_events.map((e) => e.event_name)
-            },
-            {
-                title: 'Non-Technical',
-                items: rawEeeRules.non_technical_events.map((e) => e.event_name)
-            }
-        ],
-        events: {
-            technical: rawEeeRules.technical_events.map((e) => e.event_name),
-            nonTechnical: rawEeeRules.non_technical_events.map((e) => e.event_name)
-        }
-    },
-    {
+        {
         id: 'ece',
         name: 'Electronics & Comm',
         dept: rawEceRules.department,
@@ -675,6 +647,9 @@ export const symposiumData = [
         image: eceBg,
         hasRules: true,
         rulesData: rawEceRules,
+        staff: [
+            { name: 'Kalai Selvan, AP/ECE (Coordinator)', phone: '+919786419540' }
+        ],
         categories: [
             {
                 title: 'Technical',
@@ -691,6 +666,35 @@ export const symposiumData = [
         }
     },
     {
+        id: 'eee',
+        name: 'Electrical & Electronics',
+        dept: rawEeeRules.department,
+        fullName: rawEeeRules.department,
+        icon: Zap,
+        color: 'text-yellow-600',
+        bg: 'bg-yellow-50',
+        image: eeeBg,
+        hasRules: true,
+        rulesData: rawEeeRules,
+        staff: [
+            { name: 'M. Prasath, AP/EEE (Coordinator)', phone: '+919787486211' }
+        ],
+        categories: [
+            {
+                title: 'Technical Symposium',
+                items: rawEeeRules.technical_events.map((e) => e.event_name)
+            },
+            {
+                title: 'Non-Technical',
+                items: rawEeeRules.non_technical_events.map((e) => e.event_name)
+            }
+        ],
+        events: {
+            technical: rawEeeRules.technical_events.map((e) => e.event_name),
+            nonTechnical: rawEeeRules.non_technical_events.map((e) => e.event_name)
+        }
+    },
+    {
         id: 'mech',
         name: 'Mech & Mechatronics',
         dept: rawMechRules.department,
@@ -701,6 +705,9 @@ export const symposiumData = [
         image: mechBg,
         hasRules: true,
         rulesData: rawMechRules,
+        staff: [
+            { name: 'V. Vimal, AP/Mech (Coordinator)', phone: '+918248924282' }
+        ],
         categories: [
             {
                 title: 'Technical',
@@ -727,6 +734,9 @@ export const symposiumData = [
         image: civilBg,
         hasRules: true,
         rulesData: rawCivilRules,
+        staff: [
+            { name: 'M. Shakila Banu, AP/Civil (Coordinator)', phone: '+919566946375' }
+        ],
         categories: [
             {
                 title: 'Events',

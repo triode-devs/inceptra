@@ -111,6 +111,11 @@
 		content="Experience the energy of INCEPTRA '26 through our visual archives. Technical and cultural highlights from TEC."
 	/>
 	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="INCEPTRA '26 Photo Gallery – Trichy Engineering College" />
+	<meta property="og:site_name" content="INCEPTRA '26" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
@@ -121,6 +126,10 @@
 		content="Visual archives of the biggest college fest in Trichy - INCEPTRA '26."
 	/>
 	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta
+		property="twitter:image:alt"
+		content="INCEPTRA '26 Photo Gallery – Trichy Engineering College"
+	/>
 
 	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/gallery" />
 </svelte:head>

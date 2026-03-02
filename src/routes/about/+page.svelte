@@ -22,6 +22,11 @@
 		content="Discover the legacy of INCEPTRA at Trichy Engineering College. Since 2010, we've been igniting minds and celebrating culture."
 	/>
 	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta property="og:image:type" content="image/png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta property="og:image:alt" content="INCEPTRA '26 – National Level Fest at TEC" />
+	<meta property="og:site_name" content="INCEPTRA '26" />
 
 	<!-- Twitter -->
 	<meta property="twitter:card" content="summary_large_image" />
@@ -32,8 +37,10 @@
 		content="Learn about INCEPTRA '26 - the legacy, mission, and the team behind TEC's biggest fest."
 	/>
 	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
+	<meta property="twitter:image:alt" content="INCEPTRA '26 – National Level Fest at TEC" />
 
 	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/about" />
+
 	<link
 		href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800;900&display=swap"
 		rel="stylesheet"
