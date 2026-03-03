@@ -648,7 +648,9 @@ export const symposiumData = [
         hasRules: true,
         rulesData: rawCseRules,
         staff: [
-            { name: 'T. Gopala Krishna, AP/CSE (Coordinator)', phone: '+918760459788' }
+            { name: 'T. Gopala Krishna, AP/CSE (Coordinator)', phone: '+918760459788' },
+            { name: 'Sheik. S (Student Coordinator)', phone: '+918489058847' },
+            { name: 'Rahini. S. R (Student Coordinator)', phone: '+919789511980' }
         ],
         categories: [
             {
@@ -677,7 +679,9 @@ export const symposiumData = [
         hasRules: true,
         rulesData: rawEceRules,
         staff: [
-            { name: 'Kalai Selvan, AP/ECE (Coordinator)', phone: '+919786419540' }
+            { name: 'Kalai Selvan, AP/ECE (Coordinator)', phone: '+919786419540' },
+            { name: 'Joyson Samuvel K (Student Coordinator)', phone: '+919677643898' },
+            { name: 'Sathasivam K (Student Coordinator)', phone: '+916381778196' }
         ],
         categories: [
             {
