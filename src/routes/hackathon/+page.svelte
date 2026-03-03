@@ -11,6 +11,7 @@
 		Lightbulb
 	} from 'lucide-svelte';
 	import { fade } from 'svelte/transition';
+	import { rawHackathonRules } from '$lib/data/data.js';
 </script>
 
 <svelte:head>
@@ -315,34 +316,30 @@
 					</div>
 				</div>
 
-				<div class="rounded-[2.5rem] border border-gray-100 bg-white p-10 shadow-xl md:p-12">
-					<h3 class="mb-8 text-3xl font-black text-[#141118]">Team Guidelines</h3>
-					<ul class="space-y-5">
-						<li class="flex items-start gap-4">
-							<div class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
-							<span class="font-bold text-[#5a4d6b]">Teams of 2-4 members</span>
-						</li>
-						<li class="flex items-start gap-4">
-							<div class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
-							<span class="font-bold text-[#5a4d6b]">Open to all college students</span>
-						</li>
-						<li class="flex items-start gap-4">
-							<div class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
-							<span class="font-bold text-[#5a4d6b]">Bring your own laptops</span>
-						</li>
-						<li class="flex items-start gap-4">
-							<div class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
-							<span class="font-bold text-[#5a4d6b]">Internet & power provided</span>
-						</li>
-						<li class="flex items-start gap-4">
-							<div class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
-							<span class="font-bold text-[#5a4d6b]">No pre-built solutions allowed</span>
-						</li>
-						<li class="flex items-start gap-4">
-							<div class="mt-1 h-2 w-2 rounded-full bg-emerald-500"></div>
-							<span class="font-bold text-[#5a4d6b]">Use any technology stack</span>
-						</li>
-					</ul>
+				<div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+					<div class="rounded-[2.5rem] border border-gray-100 bg-white p-10 shadow-xl md:p-12">
+						<h3 class="mb-8 text-3xl font-black text-[#141118]">Team Guidelines</h3>
+						<ul class="space-y-5">
+							{#each rawHackathonRules.general_rules as rule}
+								<li class="flex items-start gap-4">
+									<div class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-emerald-500"></div>
+									<span class="font-bold text-[#5a4d6b]">{rule}</span>
+								</li>
+							{/each}
+						</ul>
+					</div>
+
+					<div class="rounded-[2.5rem] border border-gray-100 bg-white p-10 shadow-xl md:p-12">
+						<h3 class="mb-8 text-3xl font-black text-[#141118]">Submission Requirements</h3>
+						<ul class="space-y-5">
+							{#each rawHackathonRules.submission_requirements as req}
+								<li class="flex items-start gap-4">
+									<div class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-teal-500"></div>
+									<span class="font-bold text-[#5a4d6b]">{req}</span>
+								</li>
+							{/each}
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>

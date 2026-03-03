@@ -446,6 +446,35 @@ const rawCivilRules = {
     non_technical_events: []
 };
 
+export const rawHackathonRules = {
+    name: 'Project Tech Feast',
+    theme: 'Sustainable Tech (Green Energy)',
+    duration: '24 Hours',
+    team_size: '2–4 members',
+    general_rules: [
+        'Each team must have 2–4 members.',
+        'Cross-department teams are allowed (CSE, EEE, ECE, Mechanical, etc).',
+        'One member must be designated as the Team Leader.',
+        'Only one idea submission per team.',
+        'Hackathon duration: 12-24 hours.(As per our current Plan)',
+        'Internet access is allowed.',
+        'Pre-built libraries and APIs are allowed.',
+        'Pre-developed code is NOT allowed (except open-source components).',
+        'Teams must develop the core idea during hackathon hours.'
+    ],
+    submission_requirements: [
+        'Source Code',
+        'Working prototype / demo',
+        'PPT presentation (maximum 10 slides)',
+        'Problem Statement',
+        'Solution architecture',
+        'Impact analysis',
+        'Cost estimation',
+        'Future scope'
+    ]
+};
+
+
 export const rawCulturalRules = [
     {
         id: 'general',
@@ -636,7 +665,7 @@ export const symposiumData = [
             nonTechnical: rawCseRules.non_technical_events.map((e) => e.event_name)
         }
     },
-        {
+    {
         id: 'ece',
         name: 'Electronics & Comm',
         dept: rawEceRules.department,
