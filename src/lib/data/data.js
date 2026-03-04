@@ -30,7 +30,7 @@ import fashionImg from '../assets/events/fashion.webp';
 import mimixImg from '../assets/events/mimix.webp';
 
 const rawCseRules = {
-    department: 'Computer Science & Engineering',
+    department: 'Computer Science & Engineering, AIML and AI&DS',
     general_instructions: [
         'Participants must carry valid College ID Card',
         'Reporting time must be strictly followed',
