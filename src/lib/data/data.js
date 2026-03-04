@@ -710,7 +710,9 @@ export const symposiumData = [
         hasRules: true,
         rulesData: rawEeeRules,
         staff: [
-            { name: 'M. Prasath, AP/EEE (Coordinator)', phone: '+919787486211' }
+            { name: 'M. Prasath, AP/EEE (Coordinator)', phone: '+919787486211' },
+            { name: 'Mr.N.Siranjeevi (Student Coordinator)', phone: '+918072396250' },
+            { name: 'Mr.G.Shafiya (Student Coordinator)', phone: '+919043672589' }
         ],
         categories: [
             {
@@ -739,7 +741,8 @@ export const symposiumData = [
         hasRules: true,
         rulesData: rawMechRules,
         staff: [
-            { name: 'V. Vimal, AP/Mech (Coordinator)', phone: '+918248924282' }
+            { name: 'V. Vimal, AP/Mech (Coordinator)', phone: '+918248924282' },
+            { name: 'M. Gowtham (Student Coordinator)', phone: '+919361457050' }
         ],
         categories: [
             {

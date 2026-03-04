@@ -123,10 +123,18 @@
 
 	// Reactively handle deptId changes (e.g. navigation)
 	$: if (deptId) {
-		const index = symposiumData.findIndex((d) => d.id === deptId);
-		if (index !== -1) {
+		if (deptId.toLowerCase() === 'cultural') {
+			registrationType = 'cultural';
+		} else if (deptId.toLowerCase() === 'hackathon') {
+			registrationType = 'hackathon';
+		} else if (deptId.toLowerCase() === 'symposium') {
 			registrationType = 'symposium';
-			selectedDeptIndex = index;
+		} else {
+			const index = symposiumData.findIndex((d) => d.id === deptId);
+			if (index !== -1) {
+				registrationType = 'symposium';
+				selectedDeptIndex = index;
+			}
 		}
 	}
 

@@ -130,7 +130,7 @@
 				<!-- CTA Buttons -->
 				<div class="mt-10 flex flex-col gap-4 sm:flex-row">
 					<a
-						href="/register"
+						href="/register/hackathon"
 						class="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-600/20 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-600/30"
 					>
 						Register Now <ArrowRight size={20} />

@@ -105,7 +105,7 @@
 			</div>
 
 			<a
-				href="/register"
+				href="/register/symposium"
 				class="inline-flex items-center gap-2 rounded-xl bg-[#8c2bee] px-8 py-3 font-bold text-white shadow-lg shadow-[#8c2bee]/20 transition-transform hover:-translate-y-1"
 			>
 				<span>Register for Symposium</span>

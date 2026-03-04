@@ -156,12 +156,13 @@
 										<ClipboardList size={14} />
 										<span>Rules & Regulations</span>
 									</button>
-									<button
+									<a
+										href="/register/cultural"
 										class="flex w-full items-center justify-center gap-2 rounded-xl bg-white py-2.5 text-xs font-bold text-black transition-all hover:bg-white/90 active:scale-95"
 									>
 										<Ticket size={14} />
 										<span>Register Now</span>
-									</button>
+									</a>
 								</div>
 							</div>
 						</div>
