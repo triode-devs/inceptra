@@ -63,7 +63,7 @@
 				</div>
 			</div>
 
-			{#each [{ name: 'Gallery', link: '/gallery' }, { name: 'About', link: '/about' }, { name: 'Admin', link: '/admin' }] as item}
+			{#each [{ name: 'Gallery', link: '/gallery' }, { name: 'Social', link: '/social' }, { name: 'About', link: '/about' }, { name: 'Admin', link: '/admin' }] as item}
 				<a
 					href={item.link}
 					class="rounded-full px-5 py-2 text-sm font-semibold text-[#756189] transition-all duration-300 hover:bg-white hover:text-[#141118] hover:shadow-sm"
@@ -133,7 +133,7 @@
 
 		<!-- Links -->
 		<nav class="flex flex-1 flex-col justify-center gap-6 px-8">
-			{#each [{ name: 'Home', link: '/' }, { name: 'Symposium', link: '/symposium' }, { name: 'Hackathon', link: '/hackathon' }, { name: 'Cultural', link: '/cultural' }, { name: 'Gallery', link: '/gallery' }, { name: 'About', link: '/about' }, { name: 'Admin', link: '/admin' }] as item, i}
+			{#each [{ name: 'Home', link: '/' }, { name: 'Symposium', link: '/symposium' }, { name: 'Hackathon', link: '/hackathon' }, { name: 'Cultural', link: '/cultural' }, { name: 'Gallery', link: '/gallery' }, { name: 'Social', link: '/social' }, { name: 'About', link: '/about' }, { name: 'Admin', link: '/admin' }] as item, i}
 				<a
 					href={item.link}
 					class="group flex items-center gap-4 text-4xl font-black text-[#141118] transition-colors hover:text-[#8c2bee]"

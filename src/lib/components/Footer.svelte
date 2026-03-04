@@ -78,7 +78,7 @@
 			<div>
 				<h3 class="mb-6 text-lg font-bold">Quick Links</h3>
 				<ul class="flex flex-col items-center gap-4 text-gray-400 lg:items-start">
-					{#each [{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }, { name: 'Symposium', url: '/symposium' }, { name: 'Cultural', url: '/cultural' }] as link}
+					{#each [{ name: 'Home', url: '/' }, { name: 'About', url: '/about' }, { name: 'Symposium', url: '/symposium' }, { name: 'Cultural', url: '/cultural' }, { name: 'Social', url: '/social' }] as link}
 						<li>
 							<a href={link.url} class="transition-colors hover:text-[#ee2b8c]">{link.name}</a>
 						</li>
@@ -158,14 +158,11 @@
 			class="flex flex-col items-center justify-between gap-6 pt-10 text-sm text-gray-500 md:flex-row"
 		>
 			<p>&copy; 2026 Inceptra Festival Committee. All Rights Reserved.</p>
-			<div class=" items-center gap-1 flex">
+			<div class=" flex items-center gap-1">
 				<span>Made with</span>
 				<Heart size={14} class="fill-red-500 text-red-500" />
 				<span
-					>by <a
-						href="/devs"
-						class="font-bold text-[#8c2bee] hover:underline">Triode Devs</a
-					></span
+					>by <a href="/devs" class="font-bold text-[#8c2bee] hover:underline">Triode Devs</a></span
 				>
 			</div>
 		</div>

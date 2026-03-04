@@ -110,13 +110,15 @@
 		<!-- Events Grid -->
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
 			{#each culturalEvents as event}
+				{@const Icon = event.icon}
 				<div
 					class="group relative h-[400px] overflow-hidden rounded-[2rem] bg-white transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl hover:shadow-black/10"
 				>
 					<!-- Background Image -->
 					<div
-						class="absolute inset-0 h-full w-full bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+						class="absolute inset-0 h-full w-full bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105"
 						style="background-image: url('{event.image}');"
+						loading="lazy"
 					>
 						<div
 							class="absolute inset-0 bg-black/40 transition-opacity group-hover:bg-black/50"
@@ -130,9 +132,9 @@
 						<!-- Icon -->
 						<!-- Icon -->
 						<div
-							class="absolute top-6 right-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-md transition-transform duration-500 group-hover:scale-110"
+							class="absolute top-6 right-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 transition-transform duration-500 group-hover:scale-110"
 						>
-							<event.icon size={24} />
+							<Icon size={24} />
 						</div>
 
 						<!-- Badge -->
@@ -145,13 +147,13 @@
 						<h3 class="mb-2 text-2xl leading-tight font-black">{event.name}</h3>
 
 						<div
-							class="mt-4 grid grid-rows-[1fr] transition-all duration-500 md:grid-rows-[0fr] md:group-hover:grid-rows-[1fr]"
+							class="mt-4 transform overflow-hidden opacity-100 transition-all duration-300 md:max-h-0 md:-translate-y-2 md:opacity-0 md:group-hover:max-h-32 md:group-hover:translate-y-0 md:group-hover:opacity-100"
 						>
-							<div class="overflow-hidden">
+							<div>
 								<div class="flex flex-col gap-2 pb-2">
 									<button
 										onclick={() => openRules(event.id)}
-										class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 py-2.5 text-xs font-bold text-white backdrop-blur-md transition-all hover:bg-white/20 active:scale-95"
+										class="flex w-full items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/20 py-2.5 text-xs font-bold text-white transition-all hover:bg-white/30 active:scale-95"
 									>
 										<ClipboardList size={14} />
 										<span>Rules & Regulations</span>

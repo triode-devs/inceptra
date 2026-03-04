@@ -554,7 +554,7 @@ export const rawCulturalRules = [
         id: 'rhythm-strings',
         name: 'RHYTHM STRINGS (INSTRUMENTAL MUSIC)',
         type: 'Instrumental Music',
-        image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=80&w=2000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?q=70&w=600&auto=format&fit=crop',
         icon: Music,
         color: 'from-amber-400 to-orange-500',
         rules: [
@@ -621,7 +621,7 @@ export const rawCulturalRules = [
         id: 'cinebuzz',
         name: 'CINEBUZZ (SHORT FILM)',
         type: 'Short Film',
-        image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=2000&auto=format&fit=crop',
+        image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?q=70&w=600&auto=format&fit=crop',
         icon: Video,
         color: 'from-red-500 to-orange-600',
         rules: [
