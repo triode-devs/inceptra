@@ -292,7 +292,13 @@ const rawMechRules = {
                 'Must wear Identity card',
                 'Prizes: Total of 3 prizes. 1st prize gets reward with certificate, 2nd and 3rd get certificate only',
                 'Participants must be on time in the allotted venue',
-                'Final decision based on judges result'
+                'Final decision based on judges result',
+                'TOPICS: 3D Printing',
+'Modern Robotics advancements in Industries',
+'Application of AI in Manufacturing',
+'Advances in Intelligent Mechatronics systems',
+'Ethical considerations in Drone Delivery system',
+'CAD modeling'
             ]
         },
         {
