@@ -18,7 +18,7 @@
 	<title>Project Tech Feast | National Level Hackathon | INCEPTRA '26</title>
 	<meta
 		name="description"
-		content="Join Project Tech Feast, the flagship 24-hour National Level Hackathon at INCEPTRA '26, Trichy Engineering College. Build sustainable tech solutions for green energy."
+		content="Join Project Tech Feast, the flagship 5-hour National Level Hackathon at INCEPTRA '26, Trichy Engineering College. Build sustainable tech solutions for green energy."
 	/>
 	<meta
 		name="keywords"
@@ -34,7 +34,7 @@
 	/>
 	<meta
 		property="og:description"
-		content="A 24-hour innovation challenge at TEC. Build the future of sustainable technology and win exciting cash prizes."
+		content="A 5-hour innovation challenge at TEC. Build the future of sustainable technology and win exciting cash prizes."
 	/>
 	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 	<meta property="og:image:type" content="image/png" />
@@ -55,7 +55,7 @@
 	/>
 	<meta
 		property="twitter:description"
-		content="Join the 24-hour sustainable tech hackathon at INCEPTRA '26 (TEC). Win Cash Prizes upto ₹1 Lakh+."
+		content="Join the 5-hour sustainable tech hackathon at INCEPTRA '26 (TEC). Win Cash Prizes upto ₹1 Lakh+."
 	/>
 	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
 	<meta
@@ -86,7 +86,7 @@
 						<span class="relative inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
 					</span>
 					<span class="text-xs font-bold tracking-[0.2em] text-emerald-700 uppercase"
-						>24-Hour Innovation Challenge</span
+						>5-Hour Innovation Challenge</span
 					>
 				</div>
 
@@ -160,8 +160,8 @@
 						<Calendar size={28} />
 					</div>
 					<h3 class="mb-2 text-2xl font-black text-[#141118]">When</h3>
-					<p class="text-lg font-bold text-[#5a4d6b]">March 18, 2026</p>
-					<p class="mt-1 text-sm font-medium text-gray-400">24 hours non-stop</p>
+					<p class="text-lg font-bold text-[#5a4d6b]">March 17, 2026</p>
+					<p class="mt-1 text-sm font-medium text-gray-400">5 hours non-stop</p>
 				</div>
 
 				<!-- Location -->
