@@ -107,7 +107,7 @@
 				</p>
 				<p class="mx-auto max-w-3xl text-lg leading-relaxed font-medium text-[#5a4d6b] md:text-xl">
 					Build innovative solutions for environmental challenges. Join innovators, developers, and
-					sustainability enthusiasts for an intense 24-hour hackathon focused on creating a greener
+					sustainability enthusiasts for an intense 5-hour hackathon focused on creating a greener
 					future.
 				</p>
 
