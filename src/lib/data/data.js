@@ -462,7 +462,7 @@ export const rawHackathonRules = {
         'Cross-department teams are allowed (CSE, EEE, ECE, Mechanical, etc).',
         'One member must be designated as the Team Leader.',
         'Only one idea submission per team.',
-        'Hackathon duration: 12-24 hours.(As per our current Plan)',
+        'Hackathon duration: 5 hours.(As per our current Plan)',
         'Internet access is allowed.',
         'Pre-built libraries and APIs are allowed.',
         'Pre-developed code is NOT allowed (except open-source components).',
