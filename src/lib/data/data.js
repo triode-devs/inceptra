@@ -643,6 +643,31 @@ export const rawCulturalRules = [
 
 export const symposiumData = [
     {
+        id: 'civil',
+        name: 'Civil Engineering',
+        dept: rawCivilRules.department,
+        fullName: rawCivilRules.department,
+        icon: Building,
+        color: 'text-emerald-600',
+        bg: 'bg-emerald-50',
+        image: civilBg,
+        hasRules: true,
+        rulesData: rawCivilRules,
+        staff: [
+            { name: 'M. Shakila Banu, AP/Civil (Coordinator)', phone: '+919566946375' }
+        ],
+        categories: [
+            {
+                title: 'Events',
+                items: rawCivilRules.technical_events.map((e) => e.event_name)
+            }
+        ],
+        events: {
+            technical: rawCivilRules.technical_events.map((e) => e.event_name),
+            nonTechnical: rawCivilRules.non_technical_events?.map((e) => e.event_name) || []
+        }
+    },
+    {
         id: 'cse',
         name: 'Computer Science',
         dept: rawCseRules.department,
@@ -671,37 +696,6 @@ export const symposiumData = [
         events: {
             technical: rawCseRules.technical_events.map((e) => e.event_name),
             nonTechnical: rawCseRules.non_technical_events.map((e) => e.event_name)
-        }
-    },
-    {
-        id: 'ece',
-        name: 'Electronics & Comm',
-        dept: rawEceRules.department,
-        fullName: rawEceRules.department,
-        icon: Radio,
-        color: 'text-purple-600',
-        bg: 'bg-purple-50',
-        image: eceBg,
-        hasRules: true,
-        rulesData: rawEceRules,
-        staff: [
-            { name: 'Kalai Selvan, AP/ECE (Coordinator)', phone: '+919786419540' },
-            { name: 'Joyson Samuvel K (Student Coordinator)', phone: '+919677643898' },
-            { name: 'Sathasivam K (Student Coordinator)', phone: '+916381778196' }
-        ],
-        categories: [
-            {
-                title: 'Technical',
-                items: rawEceRules.technical_events.map((e) => e.event_name)
-            },
-            {
-                title: 'Non-Technical',
-                items: rawEceRules.non_technical_events.map((e) => e.event_name)
-            }
-        ],
-        events: {
-            technical: rawEceRules.technical_events.map((e) => e.event_name),
-            nonTechnical: rawEceRules.non_technical_events.map((e) => e.event_name)
         }
     },
     {
@@ -736,6 +730,37 @@ export const symposiumData = [
         }
     },
     {
+        id: 'ece',
+        name: 'Electronics & Comm',
+        dept: rawEceRules.department,
+        fullName: rawEceRules.department,
+        icon: Radio,
+        color: 'text-purple-600',
+        bg: 'bg-purple-50',
+        image: eceBg,
+        hasRules: true,
+        rulesData: rawEceRules,
+        staff: [
+            { name: 'Kalai Selvan, AP/ECE (Coordinator)', phone: '+919786419540' },
+            { name: 'Joyson Samuvel K (Student Coordinator)', phone: '+919677643898' },
+            { name: 'Sathasivam K (Student Coordinator)', phone: '+916381778196' }
+        ],
+        categories: [
+            {
+                title: 'Technical',
+                items: rawEceRules.technical_events.map((e) => e.event_name)
+            },
+            {
+                title: 'Non-Technical',
+                items: rawEceRules.non_technical_events.map((e) => e.event_name)
+            }
+        ],
+        events: {
+            technical: rawEceRules.technical_events.map((e) => e.event_name),
+            nonTechnical: rawEceRules.non_technical_events.map((e) => e.event_name)
+        }
+    },
+    {
         id: 'mech',
         name: 'Mech & Mechatronics',
         dept: rawMechRules.department,
@@ -764,32 +789,8 @@ export const symposiumData = [
             technical: rawMechRules.technical_events.map((e) => e.event_name),
             nonTechnical: rawMechRules.non_technical_events.map((e) => e.event_name)
         }
-    },
-    {
-        id: 'civil',
-        name: 'Civil Engineering',
-        dept: rawCivilRules.department,
-        fullName: rawCivilRules.department,
-        icon: Building,
-        color: 'text-emerald-600',
-        bg: 'bg-emerald-50',
-        image: civilBg,
-        hasRules: true,
-        rulesData: rawCivilRules,
-        staff: [
-            { name: 'M. Shakila Banu, AP/Civil (Coordinator)', phone: '+919566946375' }
-        ],
-        categories: [
-            {
-                title: 'Events',
-                items: rawCivilRules.technical_events.map((e) => e.event_name)
-            }
-        ],
-        events: {
-            technical: rawCivilRules.technical_events.map((e) => e.event_name),
-            nonTechnical: rawCivilRules.non_technical_events?.map((e) => e.event_name) || []
-        }
     }
+    
 ];
 
 export const culturalData = rawCulturalRules.filter((item) => item.id !== 'general');
