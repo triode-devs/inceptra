@@ -40,12 +40,9 @@
 
 	let { data } = $props();
 
-	let openIds = $state(new Set());
+	let openIds = $state({});
 	function toggleOpen(id) {
-		const next = new Set(openIds);
-		if (next.has(id)) next.delete(id);
-		else next.add(id);
-		openIds = next;
+		openIds = { ...openIds, [id]: !openIds[id] };
 	}
 
 	// Safe data access with defaults
@@ -147,6 +144,79 @@
 			return matchesSearch && matchesStatus && matchesDept && matchesType && matchesPayment;
 		})
 	);
+
+	function exportToCSV() {
+		let headers = [
+			'Name',
+			'College ID',
+			'Email',
+			'Phone',
+			'Year',
+			'College',
+			'City',
+			'Food',
+			'Student Dept',
+			'Registration Type',
+			'Target Dept',
+			'Technical Events',
+			'Non Technical Events',
+			'Cultural Events',
+			'Hackathon Topic',
+			'Hackathon Type'
+		];
+
+		if (isSuperAdmin) {
+			headers = headers.concat(['Payment Mode', 'Payment Status', 'Amount', 'Transaction ID']);
+		}
+
+		headers.push('Date');
+
+		const rows = filteredRegistrations.map((r) => {
+			const rowData = [
+				r.name || '',
+				r.college_id || '',
+				r.email || '',
+				r.phone || '',
+				r.year || '',
+				r.college || '',
+				r.address || '',
+				r.food || '',
+				r.student_dept || r.dept || '',
+				r.registration_type || '',
+				r.target_dept || '',
+				Array.isArray(r.technical_events) ? r.technical_events.join('; ') : '',
+				Array.isArray(r.non_technical_events) ? r.non_technical_events.join('; ') : '',
+				Array.isArray(r.cultural_events) ? r.cultural_events.join('; ') : '',
+				r.registration_type === 'hackathon' ? r.hackathon_topic || '' : '',
+				r.registration_type === 'hackathon' ? r.hackathon_type || '' : ''
+			];
+			if (isSuperAdmin) {
+				rowData.push(
+					r.payment_mode || '',
+					r.payment_status || '',
+					r.amount || '',
+					r.transaction_id || ''
+				);
+			}
+			rowData.push(formatDate(r.created_at));
+			return rowData;
+		});
+
+		const csvContent = [
+			headers.join(','),
+			...rows.map((row) => row.map((field) => `"${String(field).replace(/"/g, '""')}"`).join(','))
+		].join('\n');
+
+		const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.setAttribute('href', url);
+		link.setAttribute('download', 'Admin_Registrations.csv');
+		link.style.display = 'none';
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
 
 	let selectedReg = $state(null);
 	let viewImage = $state(null);
@@ -301,34 +371,44 @@
 	<title>Admin Panel | Inceptra '26</title>
 </svelte:head>
 
-<div class="min-h-screen bg-[#f7f6f8] pt-24 pb-12 font-['Lexend'] text-[#141118]">
-	<div class="mx-auto max-w-[1400px] px-6">
+<div class="min-h-screen bg-[#f7f6f8] pt-20 pb-12 font-['Lexend'] text-[#141118]">
+	<div class="mx-auto max-w-[1400px] px-4 sm:px-6">
 		<!-- Header Section -->
 		<div class="mb-10">
 			<div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
 				<div>
-					<h1 class="text-4xl font-black tracking-tight text-[#141118]">
+					<h1 class="text-2xl font-black tracking-tight text-[#141118] sm:text-4xl">
 						Registration <span class="text-[#8c2bee]">Dashboard</span>
 					</h1>
 					<p class="mt-2 text-[#756189]">
 						Manage and verify participant payments for Inceptra '26.
 					</p>
 				</div>
-				<button
-					onclick={refreshData}
-					disabled={isRefreshing}
-					class="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-5 py-3 text-sm font-bold text-gray-700 shadow-sm transition-all hover:border-[#8c2bee]/30 hover:bg-[#8c2bee]/5 hover:text-[#8c2bee] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60"
-					title="Refresh data"
-				>
-					<RefreshCw size={16} class={isRefreshing ? 'animate-spin' : ''} />
-					{isRefreshing ? 'Refreshing...' : 'Refresh'}
-				</button>
+				<div class="flex items-center gap-2 sm:mt-0">
+					<button
+						onclick={exportToCSV}
+						class="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-bold text-gray-700 shadow-sm transition-all hover:border-green-600/30 hover:bg-green-50 hover:text-green-700 hover:shadow-md sm:flex-none sm:px-5"
+						title="Download Excel/CSV"
+					>
+						<Download size={16} />
+						<span class="sm:inline">Export</span>
+					</button>
+					<button
+						onclick={refreshData}
+						disabled={isRefreshing}
+						class="flex flex-1 items-center justify-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm font-bold text-gray-700 shadow-sm transition-all hover:border-[#8c2bee]/30 hover:bg-[#8c2bee]/5 hover:text-[#8c2bee] hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none sm:px-5"
+						title="Refresh data"
+					>
+						<RefreshCw size={16} class={isRefreshing ? 'animate-spin' : ''} />
+						<span>{isRefreshing ? '...' : 'Refresh'}</span>
+					</button>
+				</div>
 			</div>
 
 			<!-- Stats Grid -->
 			<div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 				<div
-					class="rounded-3xl border border-white bg-white p-6 shadow-sm transition-all hover:shadow-md"
+					class="rounded-3xl border border-white bg-white p-4 shadow-sm transition-all hover:shadow-md sm:p-6"
 				>
 					<div class="flex items-center justify-between">
 						<div class="rounded-2xl bg-blue-50 p-3 text-blue-600">
@@ -342,66 +422,68 @@
 					</div>
 				</div>
 
-				<div
-					class="rounded-3xl border border-white bg-white p-6 shadow-sm transition-all hover:shadow-md"
-				>
-					<div class="flex items-center justify-between">
-						<div class="rounded-2xl bg-yellow-50 p-3 text-yellow-600">
-							<Clock size={24} />
+				{#if isSuperAdmin}
+					<div
+						class="rounded-3xl border border-white bg-white p-4 shadow-sm transition-all hover:shadow-md sm:p-6"
+					>
+						<div class="flex items-center justify-between">
+							<div class="rounded-2xl bg-yellow-50 p-3 text-yellow-600">
+								<Clock size={24} />
+							</div>
+							<span class="text-xs font-bold text-gray-400 capitalize">Pending Verification</span>
 						</div>
-						<span class="text-xs font-bold text-gray-400 capitalize">Pending Verification</span>
+						<div class="mt-4">
+							<h3 class="text-3xl font-black">{stats.pending}</h3>
+							<p class="text-xs font-medium text-gray-500">Awaiting your approval</p>
+						</div>
 					</div>
-					<div class="mt-4">
-						<h3 class="text-3xl font-black">{stats.pending}</h3>
-						<p class="text-xs font-medium text-gray-500">Awaiting your approval</p>
-					</div>
-				</div>
 
-				<div
-					class="rounded-3xl border border-white bg-white p-6 shadow-sm transition-all hover:shadow-md"
-				>
-					<div class="flex items-center justify-between">
-						<div class="rounded-2xl bg-green-50 p-3 text-green-600">
-							<CheckCircle2 size={24} />
+					<div
+						class="rounded-3xl border border-white bg-white p-4 shadow-sm transition-all hover:shadow-md sm:p-6"
+					>
+						<div class="flex items-center justify-between">
+							<div class="rounded-2xl bg-green-50 p-3 text-green-600">
+								<CheckCircle2 size={24} />
+							</div>
+							<span class="text-xs font-bold text-gray-400 capitalize">Verified Payments</span>
 						</div>
-						<span class="text-xs font-bold text-gray-400 capitalize">Verified Payments</span>
+						<div class="mt-4">
+							<h3 class="text-3xl font-black">{stats.approved}</h3>
+							<p class="text-xs font-medium text-gray-500">Confirmed registrations</p>
+						</div>
 					</div>
-					<div class="mt-4">
-						<h3 class="text-3xl font-black">{stats.approved}</h3>
-						<p class="text-xs font-medium text-gray-500">Confirmed registrations</p>
-					</div>
-				</div>
 
-				<div
-					class="rounded-3xl border border-white bg-white p-6 shadow-sm transition-all hover:shadow-md"
-				>
-					<div class="flex items-center justify-between">
-						<div class="rounded-2xl bg-purple-50 p-3 text-purple-600">
-							<Building2 size={24} />
+					<div
+						class="rounded-3xl border border-white bg-white p-4 shadow-sm transition-all hover:shadow-md sm:p-6"
+					>
+						<div class="flex items-center justify-between">
+							<div class="rounded-2xl bg-purple-50 p-3 text-purple-600">
+								<Building2 size={24} />
+							</div>
+							<span class="text-xs font-bold text-gray-400 capitalize">Total Revenue</span>
 						</div>
-						<span class="text-xs font-bold text-gray-400 capitalize">Total Revenue</span>
+						<div class="mt-4">
+							<h3 class="text-3xl font-black">₹{(stats?.revenue || 0).toLocaleString('en-IN')}</h3>
+							<p class="text-xs font-medium text-gray-500">From verified payments</p>
+						</div>
 					</div>
-					<div class="mt-4">
-						<h3 class="text-3xl font-black">₹{(stats?.revenue || 0).toLocaleString('en-IN')}</h3>
-						<p class="text-xs font-medium text-gray-500">From verified payments</p>
-					</div>
-				</div>
+				{/if}
 			</div>
 		</div>
 
 		<!-- Search and Filters -->
-		<div class="mb-8 flex flex-wrap items-center gap-4">
-			<div class="relative min-w-[300px] flex-1">
+		<div class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center">
+			<div class="relative w-full lg:flex-1">
 				<Search class="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400" size={18} />
 				<input
 					type="text"
 					bind:value={searchQuery}
-					placeholder="Search by name, ID, or email..."
-					class="h-12 w-full rounded-xl border border-gray-200 bg-white pr-4 pl-12 outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
+					placeholder="Search name, ID, or email..."
+					class="h-12 w-full rounded-xl border border-gray-200 bg-white pr-4 pl-12 text-sm outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
 				/>
 			</div>
 
-			<div class="flex flex-wrap items-center gap-2">
+			<div class="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-2">
 				<select
 					bind:value={typeFilter}
 					class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
@@ -426,24 +508,26 @@
 					<!-- Overlay or disabled state logic could be here, but 'disabled' attribute works too -->
 				{/if}
 
-				<select
-					bind:value={statusFilter}
-					class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
-				>
-					<option value="all">All Statuses</option>
-					<option value="pending">Pending</option>
-					<option value="approved">Approved</option>
-					<option value="rejected">Rejected</option>
-				</select>
+				{#if isSuperAdmin}
+					<select
+						bind:value={statusFilter}
+						class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
+					>
+						<option value="all">All Statuses</option>
+						<option value="pending">Pending</option>
+						<option value="approved">Approved</option>
+						<option value="rejected">Rejected</option>
+					</select>
 
-				<select
-					bind:value={paymentFilter}
-					class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
-				>
-					<option value="all">Payment Mode</option>
-					<option value="online">Online (UPI)</option>
-					<option value="offline">Offline (Counter)</option>
-				</select>
+					<select
+						bind:value={paymentFilter}
+						class="h-12 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold outline-none focus:ring-2 focus:ring-[#8c2bee]/20"
+					>
+						<option value="all">Payment Mode</option>
+						<option value="online">Online</option>
+						<option value="offline">Offline</option>
+					</select>
+				{/if}
 			</div>
 		</div>
 
@@ -458,7 +542,7 @@
 		<div class="flex flex-col gap-3">
 			{#each filteredRegistrations as reg (reg.id)}
 				{@const StatusIcon = getStatusIcon(reg.payment_status)}
-				{@const isOpen = openIds.has(reg.id)}
+				{@const isOpen = openIds[reg.id]}
 				{@const regType = (reg.registration_type || reg.registrationType || '').toLowerCase()}
 				<div
 					class="overflow-hidden rounded-2xl border bg-white shadow-sm transition-all {isOpen
@@ -469,7 +553,7 @@
 					<button
 						type="button"
 						onclick={() => toggleOpen(reg.id)}
-						class="flex w-full items-center gap-4 px-5 py-4 text-left transition-colors {isOpen
+						class="flex w-full items-center gap-3 px-3 py-4 text-left transition-colors sm:gap-4 sm:px-5 {isOpen
 							? 'bg-[#8c2bee]/5'
 							: 'hover:bg-gray-50/80'}"
 					>
@@ -496,27 +580,38 @@
 											? 'bg-pink-50 text-pink-700'
 											: 'bg-blue-50 text-blue-700'}"
 								>
-									{reg.registration_type || reg.registrationType || 'N/A'}
+									{reg.target_dept || reg.registration_type || reg.registrationType || 'N/A'}
 								</span>
+								{#if reg.student_dept}
+									<span
+										class="rounded-md bg-purple-50 px-2 py-0.5 text-[10px] font-bold text-purple-700 uppercase"
+									>
+										{reg.student_dept}
+									</span>
+								{/if}
 							</div>
 							<p class="mt-0.5 truncate text-xs text-gray-400">
 								{reg.college || ''}
-								{reg.target_dept ? '• ' + reg.target_dept : ''}
 							</p>
 						</div>
 
 						<!-- Right side: amount + status + chevron -->
-						<div class="flex flex-shrink-0 items-center gap-3">
-							<span class="hidden text-sm font-black text-gray-800 sm:block"
-								>₹{reg.amount || 0}</span
-							>
-							<div
-								class="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold capitalize {getStatusColor(
-									reg.payment_status
-								)}"
-							>
-								<StatusIcon size={11} />{reg.payment_status || 'pending'}
-							</div>
+						<div class="flex flex-shrink-0 items-center gap-2 sm:gap-3">
+							{#if isSuperAdmin}
+								<span class="hidden text-sm font-black text-gray-800 sm:block"
+									>₹{reg.amount || 0}</span
+								>
+								<div
+									class="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9px] font-bold capitalize sm:px-2.5 sm:py-1 sm:text-[10px] {getStatusColor(
+										reg.payment_status
+									)}"
+								>
+									<StatusIcon size={10} class="sm:h-[11px] sm:w-[11px]" />
+									<span class="max-w-[50px] truncate sm:max-w-none"
+										>{reg.payment_status || 'pending'}</span
+									>
+								</div>
+							{/if}
 							<ChevronDown
 								size={18}
 								class="text-gray-400 transition-transform duration-200 {isOpen ? 'rotate-180' : ''}"
@@ -557,6 +652,11 @@
 											<Building2 size={12} />{reg.college}
 										</p>
 									{/if}
+									{#if reg.student_dept}
+										<p class="flex items-center gap-1.5 text-xs font-bold text-gray-600">
+											<User size={12} />{reg.student_dept}
+										</p>
+									{/if}
 								</div>
 
 								<!-- Events -->
@@ -592,22 +692,31 @@
 									</div>
 								</div>
 
-								<!-- Payment -->
-								<div class="flex flex-col gap-1">
-									<p class="mb-1 text-[10px] font-black tracking-widest text-gray-400 uppercase">
-										Payment
-									</p>
-									<span class="text-xl font-black text-gray-900">₹{reg.amount || 0}</span>
-									{#if reg.transaction_id && reg.transaction_id !== 'OFFLINE'}
-										<p class="text-[10px] font-medium text-gray-400">UTR: {reg.transaction_id}</p>
-									{/if}
-									<p class="text-[10px] font-medium text-gray-400">
-										{reg.payment_mode === 'offline' || reg.payment_screenshot_key === 'OFFLINE'
-											? '🏢 Counter / Offline'
-											: '📱 Online (UPI)'}
-									</p>
-									<p class="text-[10px] text-gray-400">{formatDate(reg.created_at)}</p>
-								</div>
+								{#if isSuperAdmin}
+									<!-- Payment -->
+									<div class="flex flex-col gap-1">
+										<p class="mb-1 text-[10px] font-black tracking-widest text-gray-400 uppercase">
+											Payment
+										</p>
+										<span class="text-xl font-black text-gray-900">₹{reg.amount || 0}</span>
+										{#if reg.transaction_id && reg.transaction_id !== 'OFFLINE'}
+											<p class="text-[10px] font-medium text-gray-400">UTR: {reg.transaction_id}</p>
+										{/if}
+										<p class="text-[10px] font-medium text-gray-400">
+											{reg.payment_mode === 'offline' || reg.payment_screenshot_key === 'OFFLINE'
+												? '🏢 Counter / Offline'
+												: '📱 Online (UPI)'}
+										</p>
+										<p class="text-[10px] text-gray-400">{formatDate(reg.created_at)}</p>
+									</div>
+								{:else}
+									<div class="flex flex-col gap-1">
+										<p class="mb-1 text-[10px] font-black tracking-widest text-gray-400 uppercase">
+											Registration Date
+										</p>
+										<p class="text-sm font-bold text-gray-800">{formatDate(reg.created_at)}</p>
+									</div>
+								{/if}
 
 								<!-- Paper -->
 								{#if reg.paper_title}
