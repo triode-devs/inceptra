@@ -1143,14 +1143,14 @@
 												class="relative h-64 w-64 overflow-hidden rounded-2xl bg-white p-2 shadow-inner sm:h-80 sm:w-80"
 											>
 												<img
-													src={registrationType === 'symposium' ? symposiumQR : culturalsQR}
+													src={registrationType === 'cultural' ? culturalsQR : symposiumQR}
 													alt="UPI QR Code"
 													class="h-full w-full"
 												/>
 											</div>
 											<div class="flex flex-col gap-4">
 												<a
-													href={registrationType === 'symposium' ? symposiumQR : culturalsQR}
+													href={registrationType === 'cultural' ? culturalsQR : symposiumQR}
 													download="Inceptra_QR_{registrationType}.png"
 													class="flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 text-sm font-bold text-[#8c2bee] shadow-sm transition-all hover:bg-gray-50 active:scale-95"
 												>
