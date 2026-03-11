@@ -297,7 +297,7 @@
 	});
 
 	// Calculate Amount
-	$: totalAmount = 300;
+	$: totalAmount = 250;
 
 	// Calculate Progress
 	$: progress = (() => {
