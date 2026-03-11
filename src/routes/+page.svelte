@@ -480,7 +480,7 @@
 								<p
 									class="mt-1 max-w-2xl text-sm font-medium opacity-90 sm:mt-2 sm:text-base md:text-lg"
 								>
-									Sustainable Tech (Green Energy) - 24-hour innovation challenge to build solutions
+									Sustainable Tech (Green Energy) - 5-hour innovation challenge to build solutions
 									for a sustainable future.
 								</p>
 								<div class="mt-4 flex items-center gap-4">
