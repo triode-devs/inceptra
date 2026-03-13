@@ -576,7 +576,7 @@ export const rawCulturalRules = [
     },
     {
         id: 'silent-symphony',
-        name: 'SILENT SYMPHONY (MIME)',
+        name: 'SILENT SYMPHONY (MIME) / DRAMA',
         type: 'MIME',
         image: mimeImg,
         icon: Smile,
@@ -584,8 +584,6 @@ export const rawCulturalRules = [
         rules: [
             '7 minutes per team. Negative points for exceeding time.',
             'Minimum 5 to maximum 8 students per team.',
-            'Music should only contain instrumental tracks (no lyrics).',
-            'Act should not contain any dialogue or lip sync.',
             'Obscenity will lead to disqualification.',
             'Content should not be political, religious, or include flags.',
             'No offensive, vulgar or obscene language.',
