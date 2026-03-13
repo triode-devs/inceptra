@@ -57,32 +57,43 @@
 		departments.forEach((d) => {
 			counts[d.name] = 0;
 		});
-		counts['Symposium (Total)'] = 0;
 
 		allRegistrations.forEach((r) => {
-			let type = (r.registration_type || '').toLowerCase();
-			if (type === 'cultural') {
+			const type = (r.registration_type || r.registrationType || '').toLowerCase();
+			const rDept = (r.target_dept || r.targetDept || r.dept || '').toLowerCase();
+
+			// Try to match department by name or ID
+			const matched = departments.find(
+				(d) => d.name.toLowerCase() === rDept || d.id.toLowerCase() === rDept
+			);
+
+			if (matched) {
+				counts[matched.name]++;
+			} else if (type === 'cultural') {
 				counts['Cultural']++;
 			} else if (type === 'hackathon') {
 				counts['Hackathon']++;
-			} else {
-				let rDept = (r.target_dept || '').toLowerCase();
-				let matched = departments.find((d) => d.name.toLowerCase() === rDept);
-				if (matched) {
-					counts[matched.name]++;
-					if (matched.id !== 'cultural' && matched.id !== 'hackathon') {
-						counts['Symposium (Total)']++;
-					}
-				}
 			}
 		});
 
-		// Move Symposium (Total) to the top for easy reading
-		let entries = Object.entries(counts).map(([name, count]) => ({ name, count }));
-		let symposium = entries.find((e) => e.name === 'Symposium (Total)');
-		let others = entries.filter((e) => e.name !== 'Symposium (Total)').sort((a, b) => b.count - a.count);
+		// Symposium Total = sum of {civil, cse, eee, ece, mech}
+		const symposiumDeptNames = departments
+			.filter((d) => !['cultural', 'hackathon'].includes(d.id))
+			.map((d) => d.name);
 
-		return [symposium, ...others];
+		let symposiumTotal = 0;
+		symposiumDeptNames.forEach((name) => {
+			symposiumTotal += counts[name] || 0;
+		});
+
+		let entries = Object.entries(counts).map(([name, count]) => ({ name, count }));
+		let sortedEntries = entries.sort((a, b) => b.count - a.count);
+
+		return [
+			{ name: 'Symposium (Total)', count: symposiumTotal, isTotal: true },
+			...sortedEntries,
+			{ name: 'Total Registrations', count: allRegistrations.length, isTotal: true }
+		];
 	});
 
 	// 2. Department Admin Stats: Group by Event
@@ -90,6 +101,18 @@
 		if (isSuperAdmin || !deptFilter) return [];
 
 		let counts = {};
+
+		function safeParse(ev) {
+			if (!ev) return [];
+			if (typeof ev === 'string') {
+				try {
+					return JSON.parse(ev);
+				} catch (e) {
+					return [];
+				}
+			}
+			return Array.isArray(ev) ? ev : [];
+		}
 
 		// Initialize counts with 0 based on data.js events
 		if (deptFilter === 'cultural') {
@@ -110,27 +133,27 @@
 
 		// First filter by dept
 		const deptRegs = allRegistrations.filter((r) => {
-			const rType = (r.registration_type || '').toLowerCase();
+			const rType = (r.registration_type || r.registrationType || '').toLowerCase();
 			if (deptFilter === 'cultural') return rType === 'cultural';
 			if (deptFilter === 'hackathon') return rType === 'hackathon';
 
-			const tgt = (r.target_dept || '').toLowerCase();
-			return tgt === deptFullName.toLowerCase();
+			const tgt = (r.target_dept || r.targetDept || r.dept || '').toLowerCase();
+			return tgt === deptFullName.toLowerCase() || tgt === deptFilter.toLowerCase();
 		});
 
 		deptRegs.forEach((r) => {
 			if (deptFilter === 'cultural') {
-				(r.cultural_events || []).forEach((e) => {
+				safeParse(r.cultural_events).forEach((e) => {
 					counts[e] = (counts[e] || 0) + 1;
 				});
 			} else if (deptFilter === 'hackathon') {
 				const topic = r.hackathon_topic || 'Unknown Topic';
 				counts[topic] = (counts[topic] || 0) + 1;
 			} else {
-				(r.technical_events || []).forEach((e) => {
+				safeParse(r.technical_events).forEach((e) => {
 					counts[e] = (counts[e] || 0) + 1;
 				});
-				(r.non_technical_events || []).forEach((e) => {
+				safeParse(r.non_technical_events).forEach((e) => {
 					counts[e] = (counts[e] || 0) + 1;
 				});
 			}
@@ -145,12 +168,12 @@
 		isSuperAdmin
 			? allRegistrations.length
 			: allRegistrations.filter((r) => {
-					const rType = (r.registration_type || '').toLowerCase();
+					const rType = (r.registration_type || r.registrationType || '').toLowerCase();
 					if (deptFilter === 'cultural') return rType === 'cultural';
 					if (deptFilter === 'hackathon') return rType === 'hackathon';
 
-					const tgt = (r.target_dept || '').toLowerCase();
-					return tgt === deptFullName.toLowerCase();
+					const tgt = (r.target_dept || r.targetDept || r.dept || '').toLowerCase();
+					return tgt === deptFullName.toLowerCase() || tgt === deptFilter.toLowerCase();
 				}).length
 	);
 </script>
@@ -232,13 +255,13 @@
 						</thead>
 						<tbody class="divide-y divide-gray-50">
 							{#each deptCounts as d}
-								<tr class="transition-colors hover:bg-gray-50/50">
-									<td class="py-4 font-bold text-gray-800">{d.name}</td>
-									<td class="py-4 text-right text-lg font-black text-[#8c2bee]">{d.count}</td>
+								<tr class="transition-colors hover:bg-gray-50/50 {d.isTotal ? 'bg-purple-50/50' : ''}">
+									<td class="py-4 font-bold {d.isTotal ? 'text-[#8c2bee]' : 'text-gray-800'}">{d.name}</td>
+									<td class="py-4 text-right text-lg font-black {d.isTotal ? 'text-[#8c2bee]' : 'text-gray-600'}">{d.count}</td>
 									<td class="w-1/2 py-4 pl-4">
 										<div class="h-2 w-full overflow-hidden rounded-full bg-gray-100">
 											<div
-												class="h-full rounded-full bg-gradient-to-r from-[#8c2bee] to-[#ee2b8c]"
+												class="h-full rounded-full {d.isTotal ? 'bg-[#8c2bee]' : 'bg-gradient-to-r from-[#8c2bee] to-[#ee2b8c]'}"
 												style="width: {totalFiltered > 0 ? (d.count / totalFiltered) * 100 : 0}%;"
 											></div>
 										</div>
