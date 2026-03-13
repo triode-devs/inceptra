@@ -1343,6 +1343,8 @@
 								<div class="text-sm leading-relaxed font-medium text-[#8c2bee]/90">
 									Registration fee covers entry to the campus, participant kit, and lunch. Ensure
 									you have your college ID card on the day of the event.
+
+									All team members are required to register individually.
 								</div>
 							</div>
 
