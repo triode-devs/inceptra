@@ -467,6 +467,7 @@ export const rawHackathonRules = {
         'Pre-built libraries and APIs are allowed.',
         'Pre-developed code is NOT allowed (except open-source components).',
         'Teams must develop the core idea during hackathon hours.'
+        'All team members are required to register individually through the registration form.'
     ],
     submission_requirements: [
         'Source Code',
