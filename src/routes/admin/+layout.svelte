@@ -140,16 +140,16 @@
 					{#if $page.url.pathname.includes('stats')}
 						<a
 							href={getDashboardUrl($adminUser)}
-							class="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-2 text-xs font-bold text-gray-600 transition-all hover:bg-[#8c2bee]/10 hover:text-[#8c2bee]"
+							class="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-2 text-xs font-bold text-gray-600 transition-all hover:bg-[#8c2bee]/10 hover:text-[#8c2bee] sm:px-4"
 						>
-							<span class="hidden sm:inline">Records</span>
+							<span>Records</span>
 						</a>
 					{:else}
 						<a
 							href="/admin/stats"
-							class="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-2 text-xs font-bold text-gray-600 transition-all hover:bg-[#8c2bee]/10 hover:text-[#8c2bee]"
+							class="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-2 text-xs font-bold text-gray-600 transition-all hover:bg-[#8c2bee]/10 hover:text-[#8c2bee] sm:px-4"
 						>
-							<span class="hidden sm:inline">Stats</span>
+							<span>Stats</span>
 						</a>
 					{/if}
 

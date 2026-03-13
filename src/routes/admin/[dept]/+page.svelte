@@ -26,7 +26,7 @@
 	} from 'lucide-svelte';
 	import { fade, slide } from 'svelte/transition';
 	import { API_BASE_URL } from '$lib/index';
-	import { Html5Qrcode } from 'html5-qrcode';
+	// import { Html5Qrcode } from 'html5-qrcode'; // Moved to dynamic import to fix SSR error
 	import { onDestroy } from 'svelte';
 	import { invalidateAll } from '$app/navigation';
 
@@ -149,8 +149,9 @@
 		scanError = null;
 
 		// Delay to allow modal DOM to render
-		setTimeout(() => {
-			const html5QrCode = new Html5Qrcode('reader');
+		setTimeout(async () => {
+			const { Html5Qrcode: Html5QrcodeClass } = await import('html5-qrcode');
+			const html5QrCode = new Html5QrcodeClass('reader');
 			scanner = html5QrCode;
 
 			const config = {
@@ -159,7 +160,7 @@
 				useBarCodeDetectorIfSupported: true
 			};
 
-			Html5Qrcode.getCameras()
+			Html5QrcodeClass.getCameras()
 				.then((devices) => {
 					if (devices && devices.length) {
 						const cameraId = devices[devices.length - 1].id;

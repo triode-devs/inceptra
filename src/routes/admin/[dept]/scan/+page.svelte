@@ -1,6 +1,6 @@
 <script>
 	import { onMount, onDestroy } from 'svelte';
-	import { Html5Qrcode } from 'html5-qrcode';
+	// import { Html5Qrcode } from 'html5-qrcode'; // Moved to dynamic import to fix SSR error
 	import { page } from '$app/stores';
 	import {
 		ArrowLeft,
@@ -25,8 +25,9 @@
 		error = null;
 
 		// Slight delay to ensure DOM is ready
-		setTimeout(() => {
-			const html5QrCode = new Html5Qrcode('reader');
+		setTimeout(async () => {
+			const { Html5Qrcode: Html5QrcodeClass } = await import('html5-qrcode');
+			const html5QrCode = new Html5QrcodeClass('reader');
 			scanner = html5QrCode;
 
 			const config = {
@@ -36,7 +37,7 @@
 			};
 
 			// Explicitly request camera permissions
-			Html5Qrcode.getCameras()
+			Html5QrcodeClass.getCameras()
 				.then((devices) => {
 					if (devices && devices.length) {
 						// Prefer back camera
