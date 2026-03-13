@@ -12,7 +12,7 @@ export const ADMIN_CREDENTIALS = {
         name: 'Super Admin'
     },
     'cse': {
-        password: 'inceptra@cse',
+        password: 'paper@cse',
         department: 'Computer Science',
         role: 'deptadmin',
         name: 'CSE Admin'
