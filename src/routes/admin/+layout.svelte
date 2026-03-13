@@ -18,7 +18,7 @@
 		if (user.role === 'superadmin') return true;
 
 		// If it's a department page, check if IDs match
-		if (currentDeptId && currentDeptId !== 'registrations') {
+		if (currentDeptId && currentDeptId !== 'registrations' && currentDeptId !== 'stats') {
 			// Map common URL IDs to display names if necessary
 			const idMap = {
 				cse: 'Computer Science',
@@ -30,8 +30,8 @@
 			return user.department === idMap[currentDeptId] || user.department === currentDeptId;
 		}
 
-		// Allow all authenticated admins to view the consolidated dashboard
-		if (currentDeptId === 'registrations') {
+		// Allow all authenticated admins to view the consolidated dashboard or stats
+		if (currentDeptId === 'registrations' || currentDeptId === 'stats') {
 			return true;
 		}
 
@@ -40,7 +40,12 @@
 	}
 
 	const currentDeptId = $derived(
-		$page.params.dept || ($page.url.pathname.includes('registrations') ? 'registrations' : null)
+		$page.params.dept ||
+			($page.url.pathname.includes('registrations')
+				? 'registrations'
+				: $page.url.pathname.includes('stats')
+					? 'stats'
+					: null)
 	);
 	const hasPermission = $derived(checkPermission($adminUser, currentDeptId));
 
@@ -131,6 +136,22 @@
 						</div>
 						<span class="text-xs font-bold text-gray-600">{$adminUser.name}</span>
 					</div>
+
+					{#if $page.url.pathname.includes('stats')}
+						<a
+							href={getDashboardUrl($adminUser)}
+							class="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-2 text-xs font-bold text-gray-600 transition-all hover:bg-[#8c2bee]/10 hover:text-[#8c2bee]"
+						>
+							<span class="hidden sm:inline">Records</span>
+						</a>
+					{:else}
+						<a
+							href="/admin/stats"
+							class="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-2 text-xs font-bold text-gray-600 transition-all hover:bg-[#8c2bee]/10 hover:text-[#8c2bee]"
+						>
+							<span class="hidden sm:inline">Stats</span>
+						</a>
+					{/if}
 
 					<button
 						onclick={handleLogout}

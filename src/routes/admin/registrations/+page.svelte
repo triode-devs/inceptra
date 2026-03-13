@@ -38,40 +38,6 @@
 		isRefreshing = false;
 	}
 
-	let isUpdating = $state(false);
-
-	async function handlePaymentUpdate(status) {
-		if (!selectedReg) return;
-
-		isUpdating = true;
-		try {
-			const res = await fetch(`${API_BASE_URL}/api/admin/verify-payment`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
-					id: selectedReg.id,
-					status: status
-				})
-			});
-
-			if (!res.ok) {
-				const errorData = await res.json().catch(() => ({}));
-				throw new Error(errorData.message || 'Failed to update payment status');
-			}
-
-			// Update successful
-			selectedReg = null;
-			await refreshData();
-		} catch (error) {
-			console.error('Error updating status:', error);
-			alert(error.message || 'Error updating payment status');
-		} finally {
-			isUpdating = false;
-		}
-	}
-
 	let { data } = $props();
 
 	let openIds = $state({});
@@ -279,7 +245,7 @@
 
 	function getStatusColor(status) {
 		switch (status) {
-			case 'verified':
+			case 'approved':
 				return 'bg-green-100 text-green-700 border-green-200';
 			case 'rejected':
 				return 'bg-red-100 text-red-700 border-red-200';
@@ -290,7 +256,7 @@
 
 	function getStatusIcon(status) {
 		switch (status) {
-			case 'verified':
+			case 'approved':
 				return CheckCircle2;
 			case 'rejected':
 				return XCircle;
@@ -309,11 +275,11 @@
 			? statsRegistrations.filter((r) => r && r.payment_status === 'pending').length
 			: 0,
 		approved: Array.isArray(statsRegistrations)
-			? statsRegistrations.filter((r) => r && r.payment_status === 'verified').length
+			? statsRegistrations.filter((r) => r && r.payment_status === 'approved').length
 			: 0,
 		revenue: Array.isArray(statsRegistrations)
 			? statsRegistrations
-					.filter((r) => r && r.payment_status === 'verified')
+					.filter((r) => r && r.payment_status === 'approved')
 					.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0)
 			: 0
 	});
@@ -440,7 +406,7 @@
 			</div>
 
 			<!-- Stats Grid -->
-			<div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+			<div class="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
 				<div
 					class="rounded-3xl border border-white bg-white p-4 shadow-sm transition-all hover:shadow-md sm:p-6"
 				>
@@ -907,7 +873,7 @@
 							>Payment Status</span
 						>
 						<div class="mt-2 flex items-center gap-2">
-							{#if scanResult.paymentStatus === 'verified'}
+							{#if scanResult.paymentStatus === 'approved'}
 								<div
 									class="flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-black text-green-700 uppercase"
 								>
@@ -1085,26 +1051,36 @@
 					</div>
 				</div>
 
-				<div class="grid grid-cols-2 gap-4">
+				<form
+					method="POST"
+					action="?/updateStatus"
+					use:enhance={() => {
+						return async ({ result }) => {
+							if (result.type === 'success') {
+								selectedReg = null;
+							}
+						};
+					}}
+					class="grid grid-cols-2 gap-4"
+				>
+					<input type="hidden" name="id" value={selectedReg.id} />
 					<button
-						type="button"
-						onclick={() => handlePaymentUpdate('verified')}
-						disabled={isUpdating}
-						class="flex h-12 items-center justify-center gap-2 rounded-xl bg-green-600 font-bold text-white shadow-lg shadow-green-600/20 transition-colors hover:bg-green-700 disabled:opacity-50"
+						type="submit"
+						name="status"
+						value="approved"
+						class="flex h-12 items-center justify-center gap-2 rounded-xl bg-green-600 font-bold text-white shadow-lg shadow-green-600/20 transition-colors hover:bg-green-700"
 					>
-						<CheckCircle2 size={18} />
-						{isUpdating ? 'Wait...' : 'Approve'}
+						<CheckCircle2 size={18} /> Approve
 					</button>
 					<button
-						type="button"
-						onclick={() => handlePaymentUpdate('rejected')}
-						disabled={isUpdating}
-						class="flex h-12 items-center justify-center gap-2 rounded-xl bg-red-600 font-bold text-white shadow-lg shadow-red-600/20 transition-colors hover:bg-red-700 disabled:opacity-50"
+						type="submit"
+						name="status"
+						value="rejected"
+						class="flex h-12 items-center justify-center gap-2 rounded-xl bg-red-600 font-bold text-white shadow-lg shadow-red-600/20 transition-colors hover:bg-red-700"
 					>
-						<XCircle size={18} />
-						{isUpdating ? 'Wait...' : 'Reject'}
+						<XCircle size={18} /> Reject
 					</button>
-				</div>
+				</form>
 			</div>
 		</div>
 	</div>

@@ -681,6 +681,7 @@ export const symposiumData = [
         staff: [
             { name: 'T. Gopala Krishna, AP/CSE (Coordinator)', phone: '+918760459788' },
             { name: 'Sheik. S (Student Coordinator)', phone: '+918489058847' },
+            { name: 'Aathi (Student Coordinator)', phone: '+91638076382' },
             { name: 'Rahini. S. R (Student Coordinator)', phone: '+919789511980' }
         ],
         categories: [

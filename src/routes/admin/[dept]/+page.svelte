@@ -108,7 +108,7 @@
 
 	function getStatusColor(status) {
 		switch (status) {
-			case 'approved':
+			case 'verified':
 				return 'bg-green-100 text-green-700 border-green-200';
 			case 'rejected':
 				return 'bg-red-100 text-red-700 border-red-200';
@@ -119,7 +119,7 @@
 
 	function getStatusIcon(status) {
 		switch (status) {
-			case 'approved':
+			case 'verified':
 				return CheckCircle2;
 			case 'rejected':
 				return XCircle;
@@ -130,10 +130,10 @@
 
 	const stats = $derived({
 		total: (registrations || []).length,
-		pending: (registrations || []).filter((r) => r.payment_status === 'pending').length,
-		approved: (registrations || []).filter((r) => r.payment_status === 'approved').length,
+		pending: (registrations || []).filter((r) => r && r.payment_status === 'pending').length,
+		approved: (registrations || []).filter((r) => r && r.payment_status === 'verified').length,
 		revenue: (registrations || [])
-			.filter((r) => r.payment_status === 'approved')
+			.filter((r) => r && r.payment_status === 'verified')
 			.reduce((acc, curr) => acc + (Number(curr.amount) || 0), 0)
 	});
 
@@ -252,7 +252,7 @@
 		</div>
 
 		<!-- Stats Grid -->
-		<div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
 			<div class="rounded-3xl border border-white bg-white p-6 shadow-sm shadow-purple-100/50">
 				<div class="flex items-center justify-between">
 					<div class="rounded-2xl bg-blue-50 p-3 text-blue-600">
@@ -322,7 +322,7 @@
 			>
 				<option value="all">Progress: All</option>
 				<option value="pending">Pending</option>
-				<option value="approved">Approved</option>
+				<option value="verified">Verified</option>
 				<option value="rejected">Rejected</option>
 			</select>
 			<select
@@ -609,7 +609,7 @@
 							>Payment Status</span
 						>
 						<div class="mt-2 flex items-center gap-2">
-							{#if scanResult.paymentStatus === 'approved'}
+							{#if scanResult.paymentStatus === 'verified'}
 								<div
 									class="flex items-center gap-1.5 rounded-full bg-green-100 px-3 py-1 text-xs font-black text-green-700 uppercase"
 								>
