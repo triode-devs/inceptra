@@ -98,7 +98,7 @@
 	>
 	<meta
 		name="description"
-		content="Official website of INCEPTRA '26 at Trichy Engineering College (TEC). A premier 2-day National Level Technical Symposium and Cultural Festival on March 17 & 18, 2026. Join for Hackathons, Workshops, and Stage Performances."
+		content="Official website of INCEPTRA '26 at Trichy Engineering College (TEC). A premier 2-day National Level Technical Symposium and Cultural Festival on March 17, 2026. Join for Hackathons, Workshops, and Stage Performances."
 	/>
 	<meta
 		name="keywords"
@@ -148,7 +148,7 @@
 			"@type": "Event",
 			"name": "INCEPTRA '26",
 			"startDate": "2026-03-17T09:00",
-			"endDate": "2026-03-18T18:00",
+			"endDate": "2026-03-17T18:00",
 			"eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
 			"eventStatus": "https://schema.org/EventScheduled",
 			"location": {
@@ -193,7 +193,7 @@
 							class="inline-flex w-fit items-center gap-2 rounded-full border border-[#8c2bee]/10 bg-[#8c2bee]/5 px-4 py-2 text-[#8c2bee]"
 						>
 							<Calendar size={16} />
-							<span class="text-xs font-bold tracking-widest uppercase">March 17 & 18, 2026</span>
+							<span class="text-xs font-bold tracking-widest uppercase">March 17, 2026</span>
 						</div>
 						<h1
 							class="text-4xl leading-[1.1] font-black tracking-tight text-[#141118] sm:text-5xl md:text-7xl"
@@ -419,7 +419,7 @@
 										class="flex items-center gap-1 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
 									>
 										<Calendar size={14} />
-										March 18
+										March 17
 									</div>
 								</div>
 								<h3 class="text-3xl font-black sm:text-4xl md:text-5xl">Cultural</h3>
@@ -445,7 +445,7 @@
 							Special Event
 						</h2>
 						<p class="mt-2 font-medium text-[#5a4d6b]">
-							Join our flagship hackathon on March 18, 2026
+							Join our flagship hackathon on March 78, 2026
 						</p>
 					</div>
 					<a
@@ -473,7 +473,7 @@
 										class="flex items-center gap-2 rounded-full bg-white/20 px-3 py-1 text-[10px] font-bold uppercase backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-xs"
 									>
 										<Calendar size={14} />
-										March 18, 2026
+										March 17, 2026
 									</div>
 								</div>
 								<h3 class="text-3xl font-black sm:text-4xl md:text-5xl">Project Tech Feast</h3>

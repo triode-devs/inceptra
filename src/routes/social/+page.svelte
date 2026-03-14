@@ -15,6 +15,42 @@
 			type: 'instagram',
 			url: 'https://www.instagram.com/p/DVLQciSE9V2/embed',
 			title: 'Inceptra Event Launch'
+		},
+		{
+			id: 3,
+			type: 'instagram',
+			url: 'https://www.instagram.com/p/DV23hNnk07Q/embed',
+			title: 'Inceptra Highlights'
+		},
+		{
+			id: 4,
+			type: 'instagram-reel',
+			url: 'https://www.instagram.com/reel/DVu9Q0AkcuS/embed',
+			title: 'Event Vibe'
+		},
+		{
+			id: 5,
+			type: 'instagram-reel',
+			url: 'https://www.instagram.com/reel/DVsuyFXkQdh/embed',
+			title: 'Inceptra Moments'
+		},
+		{
+			id: 6,
+			type: 'instagram-reel',
+			url: 'https://www.instagram.com/reel/DVsuXxjkYAS/embed',
+			title: 'Behind the Scenes'
+		},
+		{
+			id: 7,
+			type: 'instagram-reel',
+			url: 'https://www.instagram.com/reel/DVk9XtIERBC/embed',
+			title: 'Technical Highlights'
+		},
+		{
+			id: 8,
+			type: 'instagram-reel',
+			url: 'https://www.instagram.com/reel/DViPpfpEQqm/embed',
+			title: 'Cultural Highlights'
 		}
 	];
 </script>
