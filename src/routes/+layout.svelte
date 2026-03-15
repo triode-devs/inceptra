@@ -8,7 +8,7 @@
 	import { browser } from '$app/environment';
 
 	let { children } = $props();
-	const isAdmin = $derived($page.url.pathname.startsWith('/admin'));
+	const hideLayout = $derived($page.url.pathname.startsWith('/admin') || $page.url.pathname.startsWith('/ece'));
 
 	// Register service worker for image caching
 	onMount(() => {
@@ -46,12 +46,12 @@
 	})}<\/script>`}
 </svelte:head>
 
-{#if !isAdmin}
+{#if !hideLayout}
 	<NavBar />
 {/if}
 
 <!-- Prize Announcement Banner (fixed bottom) -->
-{#if !isAdmin}
+{#if !hideLayout}
 	<div class="prize-banner">
 		<div class="prize-banner__track">
 			{#each Array(3) as _}
@@ -84,7 +84,7 @@
 	{@render children()}
 </div>
 
-{#if !isAdmin}
+{#if !hideLayout}
 	<Footer />
 {/if}
 
