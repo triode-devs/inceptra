@@ -156,6 +156,13 @@
 			const data = await res.json();
 			if (data.success) {
 				result = { correct, wrong, attended, mark, total: 20 };
+				if (typeof localStorage !== 'undefined') {
+					localStorage.setItem('ece_quiz_last_result', JSON.stringify({
+						...result,
+						user: { ...user },
+						completedAt: new Date().toISOString()
+					}));
+				}
 				gameState = 'result';
 			}
 		} catch (e) {
@@ -365,6 +372,7 @@
 				{#each Array(20) as _, i}
 					<button 
 						onclick={() => currentIndex = i}
+						aria-label={`Go to question ${i + 1}`}
 						class={`h-2.5 flex-1 rounded-full transition-all md:h-2
 							${currentIndex === i ? 'bg-blue-500 scale-y-125' : answers[i] ? 'bg-white/40' : 'bg-white/10'}`}
 					></button>
@@ -392,40 +400,30 @@
 			</div>
 
 			<div class="p-8 md:p-12">
-				<div class="grid grid-cols-2 gap-4">
-					<div class="flex flex-col items-center rounded-3xl bg-white/5 p-6 border border-white/5">
-						<span class="text-xs font-bold text-slate-500 uppercase mb-2">Total Score</span>
-						<span class="text-4xl font-black text-blue-400">{result.mark}</span>
-					</div>
-					<div class="flex flex-col items-center rounded-3xl bg-white/5 p-6 border border-white/5">
-						<span class="text-xs font-bold text-slate-500 uppercase mb-2">Accuracy</span>
-						<span class="text-4xl font-black text-green-400">{Math.round((result.correct/20)*100)}%</span>
+				<div class="flex flex-col items-center text-center gap-6">
+					<p class="text-slate-400 font-medium">
+						Thank you for participating in the <span class="text-blue-400 font-bold">INCEPTRA '26</span> quiz. 
+						Your responses have been securely submitted to the server.
+					</p>
+
+					<div class="h-px w-full bg-white/10"></div>
+
+					<div class="grid w-full grid-cols-1 gap-4">
+						<button 
+							onclick={() => goto('/ece-quiz/view')}
+							class="flex h-16 w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 font-black text-white shadow-xl shadow-blue-600/20 transition-all hover:bg-blue-500 hover:scale-[1.02] active:scale-95"
+						>
+							VIEW DETAILED SCORE <ArrowRight size={20} />
+						</button>
+						
+						<button 
+							onclick={() => location.reload()}
+							class="h-16 w-full rounded-2xl border border-white/10 bg-white/5 font-black text-white transition-all hover:bg-white/10 active:scale-95"
+						>
+							CLOSE SESSION
+						</button>
 					</div>
 				</div>
-
-				<div class="mt-8 space-y-4">
-					<div class="flex justify-between items-center rounded-2xl bg-white/5 px-6 py-4">
-						<div class="flex items-center gap-3">
-							<CheckCircle2 class="text-green-500" size={18} />
-							<span class="text-sm font-bold text-slate-400">Correct Answers</span>
-						</div>
-						<span class="font-black">{result.correct}</span>
-					</div>
-					<div class="flex justify-between items-center rounded-2xl bg-white/5 px-6 py-4">
-						<div class="flex items-center gap-3">
-							<XCircle class="text-red-500" size={18} />
-							<span class="text-sm font-bold text-slate-400">Wrong Answers</span>
-						</div>
-						<span class="font-black">{result.wrong}</span>
-					</div>
-				</div>
-
-				<button 
-					onclick={() => location.reload()}
-					class="mt-12 w-full h-16 rounded-2xl bg-white font-black text-black transition-all hover:scale-105 active:scale-95"
-				>
-					CLOSE SESSION
-				</button>
 			</div>
 		</div>
 	{/if}
