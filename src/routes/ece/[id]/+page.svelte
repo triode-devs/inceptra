@@ -9,6 +9,7 @@
 		UserX, 
 		Pencil, 
 		ChevronUp, 
+		ChevronDown,
 		Trash2, 
 		X, 
 		ArrowRight, 
@@ -20,7 +21,15 @@
 		CheckCircle,
 		LogOut,
 		UserPlus,
-		LayoutGrid
+		LayoutGrid,
+		Mail,
+		Phone,
+		School,
+		Calendar,
+		User,
+		Clock,
+		Hash,
+		MapPin
 	} from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 
@@ -48,6 +57,11 @@
 		email: '',
 		event_ids: [] 
 	});
+	let expandedRollNo = $state(null);
+
+	function toggleAccordion(roll_no) {
+		expandedRollNo = expandedRollNo === roll_no ? null : roll_no;
+	}
 
 	async function fetchEvents() {
 		try {
@@ -404,7 +418,163 @@
 						<UserX size={40} class="mb-2 opacity-50" />
 						<p class="text-sm">No students found matching your search.</p>
 					</div>
+				{:else if eventId === 'all'}
+					<!-- Accordion Format for /ece/all -->
+					<div class="flex flex-col gap-4" in:fade={{ duration: 200 }}>
+						{#each filteredStudents as student (student.roll_no)}
+							{@const isExpanded = expandedRollNo === student.roll_no}
+							<div 
+								class={`overflow-hidden rounded-3xl border border-white/60 bg-white/40 shadow-sm backdrop-blur-md transition-all
+								${isExpanded ? 'ring-2 ring-blue-500/20 shadow-lg' : 'hover:bg-white/60'}`}
+							>
+								<!-- Accordion Header -->
+								<div 
+									onclick={() => toggleAccordion(student.roll_no)}
+									class="flex w-full cursor-pointer items-center justify-between p-4 text-left md:p-5 transition-colors hover:bg-black/5"
+									role="button"
+									tabindex="0"
+									onkeydown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleAccordion(student.roll_no); } }}
+								>
+									<div class="flex items-center gap-4">
+										<div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-zinc-900 font-bold text-white shadow-lg">
+											{getInitials(student.name)}
+										</div>
+										<div>
+											<h3 class="text-base font-bold text-zinc-900">{student.name}</h3>
+											<div class="flex items-center gap-2">
+												<p class="text-[10px] font-medium text-gray-400">{student.roll_no}</p>
+												<span class="h-1 w-1 rounded-full bg-gray-300"></span>
+												<p class="text-[10px] font-black text-blue-500 uppercase tracking-tight">{student.college || 'No College'}</p>
+											</div>
+										</div>
+									</div>
+									<div class="flex items-center gap-3">
+										<button 
+											onclick={(e) => { e.stopPropagation(); deleteStudent(student.roll_no); }}
+											class="flex h-9 w-9 items-center justify-center rounded-xl bg-red-50 text-red-500 transition-all hover:bg-red-500 hover:text-white"
+											title="Delete Student"
+										>
+											<Trash2 size={16} />
+										</button>
+										<div class={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+											<ChevronDown size={20} class="text-gray-400" />
+										</div>
+									</div>
+								</div>
+
+								<!-- Accordion Content -->
+								{#if isExpanded}
+									<div transition:slide={{ duration: 300, easing: quintOut }} class="border-t border-dashed border-gray-100 bg-white/40 p-5 md:p-6">
+										<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+											<!-- Personal Details -->
+											<div class="space-y-4">
+												<h4 class="text-[10px] font-black uppercase tracking-widest text-gray-400">Personal Details</h4>
+												<div class="flex flex-col gap-3">
+													<div class="flex items-center gap-3">
+														<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-500">
+															<Hash size={14} />
+														</div>
+														<div>
+															<p class="text-[9px] font-bold uppercase text-gray-400">System ID</p>
+															<p class="text-xs font-bold text-zinc-800">{student.id}</p>
+														</div>
+													</div>
+													<div class="flex items-center gap-3">
+														<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-50 text-purple-500">
+															<Calendar size={14} />
+														</div>
+														<div>
+															<p class="text-[9px] font-bold uppercase text-gray-400">Year & Dept</p>
+															<p class="text-xs font-bold text-zinc-800">{student.year} Year, {student.department}</p>
+														</div>
+													</div>
+													<div class="flex items-center gap-3">
+														<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-orange-50 text-orange-500">
+															<School size={14} />
+														</div>
+														<div>
+															<p class="text-[9px] font-bold uppercase text-gray-400">College</p>
+															<p class="text-xs font-bold text-zinc-800">{student.college || 'Not Specified'}</p>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<!-- Contact Info -->
+											<div class="space-y-4">
+												<h4 class="text-[10px] font-black uppercase tracking-widest text-gray-400">Contact Information</h4>
+												<div class="flex flex-col gap-3">
+													<div class="flex items-center gap-3">
+														<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-green-50 text-green-500">
+															<Phone size={14} />
+														</div>
+														<div>
+															<p class="text-[9px] font-bold uppercase text-gray-400">Phone</p>
+															<a href="tel:{student.phone}" class="text-xs font-bold text-blue-600 hover:underline">{student.phone}</a>
+														</div>
+													</div>
+													<div class="flex items-center gap-3">
+														<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-50 text-cyan-500">
+															<Mail size={14} />
+														</div>
+														<div>
+															<p class="text-[9px] font-bold uppercase text-gray-400">Email</p>
+															<a href="mailto:{student.email}" class="text-xs font-bold text-blue-600 hover:underline">{student.email}</a>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<!-- Registration Info -->
+											<div class="space-y-4">
+												<h4 class="text-[10px] font-black uppercase tracking-widest text-gray-400">Registration Logs</h4>
+												<div class="flex flex-col gap-3">
+													<div class="flex items-center gap-3">
+														<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 text-amber-500">
+															<User size={14} />
+														</div>
+														<div>
+															<p class="text-[9px] font-bold uppercase text-gray-400">Enrolled By</p>
+															<p class="text-xs font-bold text-zinc-800">{student.enrolled_by || 'Self'}</p>
+														</div>
+													</div>
+													<div class="flex items-center gap-3">
+														<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-rose-50 text-rose-500">
+															<Clock size={14} />
+														</div>
+														<div>
+															<p class="text-[9px] font-bold uppercase text-gray-400">Timestamp</p>
+															<p class="text-[10px] font-bold text-zinc-800">{student.enrolled_at || 'Recently'}</p>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<!-- Events Selected -->
+											<div class="md:col-span-2 lg:col-span-3 space-y-4 pt-2">
+												<h4 class="text-[10px] font-black uppercase tracking-widest text-gray-400">Enrolled Events</h4>
+												<div class="flex flex-wrap gap-2">
+													{#each (student.events || student.event_ids || []) as e}
+														{@const eventObj = typeof e === 'object' ? e : { id: e, name: getEventName(e), type: getEventType(e) }}
+														<div class={`flex items-center gap-2 rounded-2xl border px-4 py-2 shadow-xs
+															${eventObj.type === 'technical' ? 'bg-blue-50 border-blue-100 text-blue-700' : 'bg-pink-50 border-pink-100 text-pink-700'}`}>
+															<div class={`h-2 w-2 rounded-full ${eventObj.type === 'technical' ? 'bg-blue-400' : 'bg-pink-400'}`}></div>
+															<span class="text-xs font-bold">{eventObj.name}</span>
+															<span class="text-[8px] font-black uppercase opacity-50 tracking-tighter">{eventObj.type}</span>
+														</div>
+													{:else}
+														<p class="text-xs font-medium text-gray-400 italic">No events selected</p>
+													{/each}
+												</div>
+											</div>
+										</div>
+									</div>
+								{/if}
+							</div>
+						{/each}
+					</div>
 				{:else}
+					<!-- Grid Format for Attendance Marking -->
 					<div class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" in:fade={{ duration: 200 }}>
 						{#each filteredStudents as student (student.roll_no)}
 							{@const isStaged = stagedChanges[student.roll_no]}
