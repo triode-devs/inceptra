@@ -1,9 +1,8 @@
 <script>
-	import Register from '$lib/components/Register.svelte';
 	import Login from '$lib/components/Login.svelte';
 	import UserRegistrations from '$lib/components/UserRegistrations.svelte';
 	import { user, authLoaded } from '$lib/authStore';
-	import { LogOut, User as UserIcon } from 'lucide-svelte';
+	import { LogOut, User as UserIcon, XCircle, Calendar, MapPin } from 'lucide-svelte';
 	import { auth } from '$lib/firebase';
 	import { fade } from 'svelte/transition';
 
@@ -15,53 +14,11 @@
 </script>
 
 <svelte:head>
-	<title>Register for INCEPTRA '26 | Symposium & Cultural Events | Trichy Engineering College</title
-	>
+	<title>Registration Closed | INCEPTRA '26 | Trichy Engineering College</title>
 	<meta
 		name="description"
-		content="Register now for National Level Technical Symposium and Cultural events at INCEPTRA '26. Secure your entry for Hackathons, Paper Presentations, and Stage Performances at TEC."
+		content="Online registration for INCEPTRA '26 is now closed. Check your previous registrations or join us at Trichy Engineering College for the event."
 	/>
-	<meta
-		name="keywords"
-		content="Inceptra 2026 registration, college fest online registration, TEC symposium entry, cultural fest passes Trichy, engineering events registration"
-	/>
-
-	<!-- Open Graph / Facebook -->
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content="https://inceptra.trichyengg.ac.in/register" />
-	<meta property="og:title" content="Register for INCEPTRA '26 | Symposium & Cultural Events" />
-	<meta
-		property="og:description"
-		content="Join 10,000+ students at Trichy Engineering College's premier festival. Register now for technical and cultural challenges."
-	/>
-	<meta property="og:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
-	<meta property="og:image:type" content="image/png" />
-	<meta property="og:image:width" content="1200" />
-	<meta property="og:image:height" content="630" />
-	<meta
-		property="og:image:alt"
-		content="Register for INCEPTRA '26 – Win Cash Prizes upto ₹1 Lakh+"
-	/>
-	<meta property="og:site_name" content="INCEPTRA '26" />
-
-	<!-- Twitter -->
-	<meta property="twitter:card" content="summary_large_image" />
-	<meta property="twitter:url" content="https://inceptra.trichyengg.ac.in/register" />
-	<meta
-		property="twitter:title"
-		content="Register for INCEPTRA '26 | Symposium & Cultural Events"
-	/>
-	<meta
-		property="twitter:description"
-		content="Secure your spot at INCEPTRA '26 - Trichy Engineering College's flagship National Level Fest."
-	/>
-	<meta property="twitter:image" content="https://inceptra.trichyengg.ac.in/og-image.png" />
-	<meta
-		property="twitter:image:alt"
-		content="Register for INCEPTRA '26 – Win Cash Prizes upto ₹1 Lakh+"
-	/>
-
-	<link rel="canonical" href="https://inceptra.trichyengg.ac.in/register" />
 </svelte:head>
 
 <div class="min-h-screen bg-[#f7f6f8] pt-24 pb-12">
@@ -72,7 +29,38 @@
 			></div>
 		</div>
 	{:else if !$user}
-		<div in:fade>
+		<div in:fade class="flex flex-col gap-8">
+			<!-- Registration Closed Message for Unauthenticated Users -->
+			<div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+				<div
+					class="rounded-[2.5rem] border border-red-100 bg-white p-8 text-center shadow-xl shadow-red-500/5 sm:p-12"
+				>
+					<div
+						class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-red-50 text-red-500 sm:h-20 sm:w-20"
+					>
+						<XCircle size={40} />
+					</div>
+					<h2 class="text-2xl font-black text-gray-900 sm:text-3xl">
+						Registration <span class="text-red-500">Closed</span>
+					</h2>
+					<p class="mx-auto mt-4 max-w-xl text-base font-medium text-gray-600 sm:text-lg">
+						Online registrations for <span class="font-bold text-[#8c2bee]">INCEPTRA '26</span> have
+						successfully concluded. Thank you for the overwhelming response!
+					</p>
+					<div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+						<div
+							class="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-2 text-sm font-bold text-gray-600"
+						>
+							<Calendar size={16} class="text-[#8c2bee]" /> March 17, 2026
+						</div>
+						<div
+							class="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-2 text-sm font-bold text-gray-600"
+						>
+							<MapPin size={16} class="text-[#ee2b8c]" /> TEC Campus, Trichy
+						</div>
+					</div>
+				</div>
+			</div>
 			<Login />
 		</div>
 	{:else}
@@ -106,8 +94,36 @@
 			<UserRegistrations userId={$user?.uid} />
 		</div>
 
-		<div in:fade>
-			<Register settings={data.settings} userEmail={$user?.email} userId={$user?.uid} />
+		<div class="mx-auto max-w-7xl px-4 pb-20 sm:px-6 lg:px-8" in:fade>
+			<div
+				class="rounded-[2.5rem] border border-red-100 bg-white p-12 text-center shadow-xl shadow-red-500/5"
+			>
+				<div
+					class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-50 text-red-500"
+				>
+					<XCircle size={40} />
+				</div>
+				<h2 class="text-3xl font-black text-gray-900">
+					Registration <span class="text-red-500">Closed</span>
+				</h2>
+				<p class="mx-auto mt-4 max-w-2xl text-lg font-medium text-gray-600">
+					Online registrations for <span class="font-bold text-[#8c2bee]">INCEPTRA '26</span> have
+					successfully concluded. Thank you for the overwhelming response!
+				</p>
+				<div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+					<div
+						class="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-2 text-sm font-bold text-gray-600"
+					>
+						<Calendar size={16} class="text-[#8c2bee]" /> March 17, 2026
+					</div>
+					<div
+						class="flex items-center gap-2 rounded-xl bg-gray-50 px-4 py-2 text-sm font-bold text-gray-600"
+					>
+						<MapPin size={16} class="text-[#ee2b8c]" /> TEC Campus, Trichy
+					</div>
+				</div>
+			</div>
 		</div>
 	{/if}
 </div>
+

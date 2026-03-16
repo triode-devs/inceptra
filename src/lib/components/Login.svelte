@@ -33,7 +33,7 @@
 				<span class="text-xs font-black tracking-widest uppercase">Participant Access</span>
 			</div>
 			<h2 class="mt-4 text-3xl font-black">INCEPTRA <span class="text-[#8c2bee]">26</span></h2>
-			<p class="mt-2 text-sm text-gray-400">Please sign in to continue with your registration.</p>
+			<p class="mt-2 text-sm text-gray-400">Please sign in to view your previous registrations.</p>
 		</div>
 
 		<div class="p-10">

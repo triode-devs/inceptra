@@ -8,7 +8,7 @@
 	import { browser } from '$app/environment';
 
 	let { children } = $props();
-	const hideLayout = $derived($page.url.pathname.startsWith('/admin') || $page.url.pathname.startsWith('/ece'));
+	const hideLayout = $derived($page.url.pathname.startsWith('/admin') || $page.url.pathname.startsWith('/ece') || $page.url.pathname.startsWith('/ece-quiz'));
 
 	// Register service worker for image caching
 	onMount(() => {

@@ -1,7 +1,7 @@
 <script>
 	import { ECE_ADMIN_PASS } from '$lib/index';
 	import { goto } from '$app/navigation';
-	import { Lock, ArrowRight, ShieldCheck, Sparkles } from 'lucide-svelte';
+	import { Lock, ArrowRight, ShieldCheck, Sparkles, Trophy } from 'lucide-svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 
@@ -122,6 +122,17 @@
 						<p class="text-[10px] font-bold uppercase tracking-widest opacity-60">Attendance Hub</p>
 					</div>
 					<ArrowRight size={24} class="opacity-20 group-hover:opacity-100" />
+				</button>
+
+				<button 
+					onclick={() => goto('/ece/quiz')}
+					class="group flex h-24 items-center justify-between rounded-3xl border border-white bg-white/70 px-8 shadow-xl shadow-slate-200/40 backdrop-blur-xl transition-all hover:bg-purple-600 hover:text-white active:scale-95"
+				>
+					<div class="flex flex-col items-start translate-x-0 transition-transform group-hover:translate-x-2">
+						<h2 class="text-xl font-black">Quiz</h2>
+						<p class="text-[10px] font-bold uppercase tracking-widest opacity-60">Leaderboard & Results</p>
+					</div>
+					<Trophy size={24} class="opacity-20 group-hover:opacity-100" />
 				</button>
 			</div>
 		{/if}
