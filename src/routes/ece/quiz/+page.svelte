@@ -54,7 +54,14 @@
 	function formatDate(dateStr) {
 		if (!dateStr) return 'N/A';
 		const date = new Date(dateStr);
-		return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+	}
+
+	function formatDuration(seconds) {
+		if (seconds === undefined || seconds === null) return 'N/A';
+		const mins = Math.floor(seconds / 60);
+		const secs = seconds % 60;
+		return `${mins}m ${secs}s`;
 	}
 </script>
 
@@ -127,44 +134,51 @@
 					<p class="text-sm text-slate-400">Try adjusting your search query.</p>
 				</div>
 			{:else}
-				{#each filteredLeaderboard as entry, i (entry.rank || i)}
+				{#each filteredLeaderboard as entry, i (entry.session_id || i)}
 					<div 
 						class="group relative flex items-center gap-5 overflow-hidden rounded-[2rem] border border-white bg-white p-5 shadow-sm transition-all hover:border-blue-100 hover:shadow-xl hover:shadow-blue-500/5 active:scale-[0.98]"
 						in:fly={{ y: 20, delay: i * 50, duration: 500 }}
 					>
 						<!-- Rank Indicator -->
 						<div class="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl">
-							{#if i === 0}
+							{#if entry.rank === 1}
 								<div class="absolute inset-0 bg-yellow-400 opacity-10"></div>
 								<Trophy class="relative z-10 text-yellow-500" size={28} />
-							{:else if i === 1}
+							{:else if entry.rank === 2}
 								<div class="absolute inset-0 bg-slate-300 opacity-10"></div>
 								<Medal class="relative z-10 text-slate-400" size={28} />
-							{:else if i === 2}
+							{:else if entry.rank === 3}
 								<div class="absolute inset-0 bg-amber-600 opacity-10"></div>
 								<Medal class="relative z-10 text-amber-700" size={28} />
 							{:else}
 								<div class="absolute inset-0 bg-zinc-50"></div>
-								<span class="relative z-10 text-lg font-black text-slate-400">#{entry.rank || i + 1}</span>
+								<span class="relative z-10 text-lg font-black text-slate-400">#{entry.rank}</span>
 							{/if}
 						</div>
 
 						<div class="flex-1 min-w-0">
-							<h3 class="line-clamp-1 text-base font-black text-zinc-900">{entry.name}</h3>
+							<div class="flex items-center gap-2">
+								<h3 class="line-clamp-1 text-base font-black text-zinc-900">{entry.name}</h3>
+								<span class="rounded-md bg-zinc-100 px-1.5 py-0.5 text-[8px] font-bold text-zinc-400 uppercase tracking-tighter">SID: {entry.session_id}</span>
+							</div>
 							<div class="mt-0.5 flex items-center gap-1.5 overflow-hidden whitespace-nowrap">
 								<Building2 size={12} class="shrink-0 text-slate-400" />
 								<p class="truncate text-[10px] font-bold uppercase tracking-wider text-slate-500">{entry.college}</p>
 							</div>
-							<div class="mt-2 flex items-center gap-3">
-								<div class="flex items-center gap-1.5 rounded-full bg-zinc-50 px-2.5 py-1">
-									<Clock size={10} class="text-slate-400" />
-									<span class="text-[9px] font-black text-slate-500 uppercase">{formatDate(entry.end_time)}</span>
+							<div class="mt-2 flex flex-wrap items-center gap-2">
+								<div class="flex items-center gap-1 shiny-badge px-2 py-0.5 rounded-full bg-blue-50/50 border border-blue-100/50">
+									<Clock size={10} class="text-blue-500" />
+									<span class="text-[9px] font-bold text-blue-600">Finished @ {formatDate(entry.end_time)}</span>
+								</div>
+								<div class="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50/50 border border-emerald-100/50">
+									<Clock size={10} class="text-emerald-500" />
+									<span class="text-[9px] font-bold text-emerald-600">{formatDuration(entry.time_taken_seconds)}</span>
 								</div>
 							</div>
 						</div>
 
 						<!-- Score -->
-						<div class="flex flex-col items-end gap-1">
+						<div class="flex flex-col items-end gap-0.5">
 							<div class="text-3xl font-black tracking-tighter text-blue-600">
 								{entry.mark}
 							</div>

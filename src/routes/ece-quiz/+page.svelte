@@ -120,6 +120,40 @@
 		}
 	}
 
+	onMount(() => {
+		// Prevent right click
+		const preventDefault = (e) => e.preventDefault();
+		document.addEventListener('contextmenu', preventDefault);
+		document.addEventListener('copy', preventDefault);
+		document.addEventListener('cut', preventDefault);
+		document.addEventListener('paste', preventDefault);
+		document.addEventListener('selectstart', preventDefault);
+
+		// Prevent keyboard shortcuts
+		const handleKeyDown = (e) => {
+			// Disable Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+U, Ctrl+Shift+I, F12
+			if (
+				(e.ctrlKey && (e.key === 'c' || e.key === 'v' || e.key === 'x' || e.key === 'u' || e.key === 's')) ||
+				(e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
+				e.key === 'F12'
+			) {
+				e.preventDefault();
+				return false;
+			}
+		};
+		window.addEventListener('keydown', handleKeyDown);
+
+		return () => {
+			document.removeEventListener('contextmenu', preventDefault);
+			document.removeEventListener('copy', preventDefault);
+			document.removeEventListener('cut', preventDefault);
+			document.removeEventListener('paste', preventDefault);
+			document.removeEventListener('selectstart', preventDefault);
+			window.removeEventListener('keydown', handleKeyDown);
+			if (timerInterval) clearInterval(timerInterval);
+		};
+	});
+
 	let result = $state(null);
 
 	async function finishQuiz() {
@@ -409,12 +443,12 @@
 					<div class="h-px w-full bg-white/10"></div>
 
 					<div class="grid w-full grid-cols-1 gap-4">
-						<button 
+						<!-- <button 
 							onclick={() => goto('/ece-quiz/view')}
 							class="flex h-16 w-full items-center justify-center gap-2 rounded-2xl bg-blue-600 font-black text-white shadow-xl shadow-blue-600/20 transition-all hover:bg-blue-500 hover:scale-[1.02] active:scale-95"
 						>
 							VIEW DETAILED SCORE <ArrowRight size={20} />
-						</button>
+						</button> -->
 						
 						<button 
 							onclick={() => location.reload()}
@@ -433,6 +467,10 @@
 	:global(body) {
 		margin: 0;
 		background: #020617;
+		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
 	}
 	@keyframes pulse-glow {
 		0%, 100% { opacity: 0.1; transform: scale(1); }
