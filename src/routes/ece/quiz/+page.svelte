@@ -23,7 +23,7 @@
 	async function fetchLeaderboard() {
 		isLoading = true;
 		try {
-			const res = await fetch(`${API_BASE_URL}/quiz/leaderboard?round=R1&limit=50`);
+			const res = await fetch(`${API_BASE_URL}/quiz/leaderboard?round=R1&limit=100`);
 			const data = await res.json();
 			if (data.success) {
 				leaderboard = data.leaderboard;
