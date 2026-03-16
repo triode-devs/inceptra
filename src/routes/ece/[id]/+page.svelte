@@ -25,7 +25,7 @@
 	import { goto } from '$app/navigation';
 
 	const API_BASE_URL = 'https://ece-api.eruthukattu24.workers.dev';
-	let adminName = $state('Event Admin');
+	let adminName = $state('admin_web');
 
 	// --- STATE ---
 	let eventId = $derived(page.params.id);
@@ -42,6 +42,7 @@
 		name: '', 
 		roll_no: '', 
 		department: 'ECE', 
+		college: '',
 		year: 'I', 
 		phone: '', 
 		email: '',
@@ -77,7 +78,7 @@
 			if (data.success) {
 				alert('Student enrolled successfully!');
 				isAddStudentOpen = false;
-				newStudent = { name: '', roll_no: '', department: 'ECE', year: 'I', phone: '', email: '', event_ids: [] };
+				newStudent = { name: '', roll_no: '', department: 'ECE', college: '', year: 'I', phone: '', email: '', event_ids: [] };
 				await loadData();
 			} else {
 				alert('Failed: ' + (data.error || 'Unknown error'));
@@ -102,7 +103,7 @@
 	}
 
 	async function deleteStudent(roll_no) {
-		if (!confirm(`Are you sure you want to delete student ${roll_no}?`)) return;
+		if (!confirm(`Are you sure you want to delete student ${roll_no}? This action is permanent.`)) return;
 		
 		try {
 			const res = await fetch(`${API_BASE_URL}/students/${roll_no}`, {
@@ -110,14 +111,40 @@
 			});
 			const data = await res.json();
 			if (data.success) {
-				alert('Student deleted successfully');
+				alert('Student record deleted successfully');
 				await loadData();
 			} else {
 				alert('Delete failed: ' + (data.error || 'Unknown error'));
 			}
 		} catch (e) {
 			console.error(e);
-			alert('Error deleting student');
+			alert('Error deleting student record');
+		}
+	}
+
+	async function clearAttendance() {
+		if (!eventInfo || eventId === 'all') return;
+		if (!confirm(`Are you sure you want to clear ALL attendance records for ${eventInfo.name}? This action cannot be undone.`)) return;
+		
+		isLoading = true;
+		try {
+			const res = await fetch(`${API_BASE_URL}/attendance`, {
+				method: 'DELETE',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ event_id: eventId })
+			});
+			const data = await res.json();
+			if (data.success) {
+				alert('Attendance cleared successfully');
+				await loadData();
+			} else {
+				alert('Failed to clear attendance: ' + (data.error || 'Unknown error'));
+			}
+		} catch (e) {
+			console.error(e);
+			alert('Error clearing attendance');
+		} finally {
+			isLoading = false;
 		}
 	}
 
@@ -336,6 +363,15 @@
 							<UserPlus size={18} />
 						</button>
 					{/if}
+					{#if eventId !== 'all'}
+						<button 
+							onclick={clearAttendance}
+							class="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-600 shadow-sm transition-all hover:bg-amber-600 hover:text-white"
+							title="Clear All Attendance"
+						>
+							<Trash2 size={18} />
+						</button>
+					{/if}
 					<button onclick={handleLogout} class="flex h-10 w-10 items-center justify-center rounded-xl bg-red-50 text-red-500 shadow-sm transition-all hover:bg-red-500 hover:text-white">
 						<LogOut size={18} />
 					</button>
@@ -397,6 +433,10 @@
 										{displayStatus}
 									</span>
 									
+									{#if student.college}
+										<p class="font-poppins text-[9px] font-bold text-gray-400 mt-1 uppercase tracking-tight line-clamp-1">{student.college}</p>
+									{/if}
+
 									{#if viewOnly && (student.event_ids || student.events)}
 										<div class="mt-2 flex flex-wrap gap-1">
 											{#each (student.events || student.event_ids || []) as e}
@@ -474,10 +514,10 @@
 			<div class="mb-4 flex shrink-0 items-center justify-between">
 				<h2 class="text-xl font-bold text-zinc-900">Pending Updates</h2>
 				<div class="flex gap-2">
-					<button onclick={clearQueue} class="rounded-full bg-red-50 p-2 text-red-500 hover:bg-red-100" title="Clear All">
+					<button onclick={clearQueue} class="rounded-full bg-red-50 p-2 text-red-500 hover:bg-red-100" title="Clear All" aria-label="Clear all pending updates">
 						<Trash2 size={20} />
 					</button>
-					<button onclick={() => (isQueueOpen = false)} class="rounded-full bg-gray-100 p-2 text-zinc-500 hover:bg-gray-200">
+					<button onclick={() => (isQueueOpen = false)} class="rounded-full bg-gray-100 p-2 text-zinc-500 hover:bg-gray-200" aria-label="Close queue">
 						<X size={20} />
 					</button>
 				</div>
@@ -606,28 +646,38 @@
 			<!-- Part 1: Basic Info -->
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Full Name</label>
-					<input type="text" bind:value={newStudent.name} placeholder="e.g. Alice Smith"
+					<label for="student-name" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Full Name</label>
+					<input id="student-name" type="text" bind:value={newStudent.name} placeholder="e.g. Alice Smith"
 						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
 				</div>
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Registration No</label>
-					<input type="text" bind:value={newStudent.roll_no} placeholder="e.g. 20ECE005"
+					<label for="student-roll" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Registration No</label>
+					<input id="student-roll" type="text" bind:value={newStudent.roll_no} placeholder="e.g. 20ECE005"
 						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
 				</div>
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Email Address</label>
-					<input type="email" bind:value={newStudent.email} placeholder="alice@gmail.com"
+					<label for="student-email" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Email Address</label>
+					<input id="student-email" type="email" bind:value={newStudent.email} placeholder="alice@gmail.com"
 						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
 				</div>
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Phone Number</label>
-					<input type="tel" bind:value={newStudent.phone} placeholder="9998887776"
+					<label for="student-phone" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Phone Number</label>
+					<input id="student-phone" type="tel" bind:value={newStudent.phone} placeholder="9998887776"
 						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
 				</div>
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Year of Study</label>
-					<select bind:value={newStudent.year} class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white">
+					<label for="student-college" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">College Name</label>
+					<input id="student-college" type="text" bind:value={newStudent.college} placeholder="e.g. GCE"
+						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
+				</div>
+				<div class="flex flex-col gap-1.5 md:col-span-2">
+					<label for="student-dept" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Department</label>
+					<input id="student-dept" type="text" bind:value={newStudent.department} placeholder="e.g. ECE"
+						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
+				</div>
+				<div class="flex flex-col gap-1.5">
+					<label for="student-year" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Year of Study</label>
+					<select id="student-year" bind:value={newStudent.year} class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white">
 						<option value="I">I Year</option>
 						<option value="II">II Year</option>
 						<option value="III">III Year</option>

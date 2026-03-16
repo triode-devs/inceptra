@@ -139,7 +139,7 @@
 			}
 		});
 
-		const mark = (correct * 1) - (wrong * 0.25);
+		const mark = correct;
 		const attended = Object.keys(answers).length;
 
 		try {
