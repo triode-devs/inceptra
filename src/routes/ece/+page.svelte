@@ -1,7 +1,7 @@
 <script>
 	import { ECE_ADMIN_PASS } from '$lib/index';
 	import { goto } from '$app/navigation';
-	import { Lock, ArrowRight, ShieldCheck, Sparkles, Trophy } from 'lucide-svelte';
+	import { Lock, ArrowRight, ShieldCheck, Sparkles, Trophy, FileSpreadsheet } from 'lucide-svelte';
 	import { fade, fly } from 'svelte/transition';
 	import { onMount } from 'svelte';
 
@@ -11,7 +11,7 @@
 	let isLoggedIn = $state(false);
 
 	onMount(() => {
-		if (typeof window !== 'undefined' && sessionStorage.getItem('ece_session') === 'active') {
+		if (typeof window !== 'undefined' && localStorage.getItem('ece_session') === 'active') {
 			isLoggedIn = true;
 		}
 	});
@@ -23,7 +23,7 @@
 
 		setTimeout(() => {
 			if (password === ECE_ADMIN_PASS) {
-				sessionStorage.setItem('ece_session', 'active');
+				localStorage.setItem('ece_session', 'active');
 				isLoggedIn = true;
 			} else {
 				error = true;
@@ -122,6 +122,17 @@
 						<p class="text-[10px] font-bold uppercase tracking-widest opacity-60">Attendance Hub</p>
 					</div>
 					<ArrowRight size={24} class="opacity-20 group-hover:opacity-100" />
+				</button>
+
+				<button 
+					onclick={() => goto('/ece/dash')}
+					class="group flex h-24 items-center justify-between rounded-3xl border border-white bg-white/70 px-8 shadow-xl shadow-slate-200/40 backdrop-blur-xl transition-all hover:bg-emerald-600 hover:text-white active:scale-95"
+				>
+					<div class="flex flex-col items-start translate-x-0 transition-transform group-hover:translate-x-2">
+						<h2 class="text-xl font-black">Dashboard</h2>
+						<p class="text-[10px] font-bold uppercase tracking-widest opacity-60">Master Attendance & Export</p>
+					</div>
+					<FileSpreadsheet size={24} class="opacity-20 group-hover:opacity-100" />
 				</button>
 
 				<button 

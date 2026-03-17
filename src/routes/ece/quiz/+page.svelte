@@ -37,7 +37,7 @@
 
 	onMount(() => {
 		// Check session
-		if (typeof window !== 'undefined' && sessionStorage.getItem('ece_session') !== 'active') {
+		if (typeof window !== 'undefined' && localStorage.getItem('ece_session') !== 'active') {
 			goto('/ece');
 			return;
 		}

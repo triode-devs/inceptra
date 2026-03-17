@@ -179,7 +179,7 @@
 	}
 
 	onMount(async () => {
-		if (typeof window !== 'undefined' && sessionStorage.getItem('ece_session') !== 'active') {
+		if (typeof window !== 'undefined' && localStorage.getItem('ece_session') !== 'active') {
 			goto('/ece');
 			return;
 		}
@@ -226,7 +226,7 @@
 	}
 
 	function handleLogout() {
-		sessionStorage.removeItem('ece_session');
+		localStorage.removeItem('ece_session');
 		goto('/ece');
 	}
 

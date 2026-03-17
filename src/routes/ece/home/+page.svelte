@@ -14,7 +14,8 @@
 		Users,
 		Award,
 		Zap,
-		ChevronRight
+		ChevronRight,
+		FileSpreadsheet
 	} from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 
@@ -39,7 +40,7 @@
 	});
 
 	onMount(async () => {
-		if (typeof window !== 'undefined' && sessionStorage.getItem('ece_session') !== 'active') {
+		if (typeof window !== 'undefined' && localStorage.getItem('ece_session') !== 'active') {
 			goto('/ece');
 			return;
 		}
@@ -62,7 +63,7 @@
 	}
 
 	function handleLogout() {
-		sessionStorage.removeItem('ece_session');
+		localStorage.removeItem('ece_session');
 		goto('/ece');
 	}
 
@@ -163,7 +164,7 @@
 			<div class="grid grid-cols-2 gap-4">
 				<button 
 					onclick={() => activeTab = 'events'}
-					class={`flex flex-col items-center justify-center gap-2 rounded-[2rem] p-6 transition-all active:scale-95 ${activeTab === 'events' ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/20' : 'bg-white/70 border border-white text-zinc-900 shadow-xl shadow-slate-200/50'}`}
+					class={`flex flex-col items-center justify-center gap-2 rounded-4xl p-6 transition-all active:scale-95 ${activeTab === 'events' ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/20' : 'bg-white/70 border border-white text-zinc-900 shadow-xl shadow-slate-200/50'}`}
 				>
 					<div class={`rounded-full p-3 ${activeTab === 'events' ? 'bg-white/10' : 'bg-zinc-900/5'}`}>
 						<Award size={24} />
@@ -172,7 +173,7 @@
 				</button>
 				<button 
 					onclick={() => activeTab = 'attendance'}
-					class={`flex flex-col items-center justify-center gap-2 rounded-[2rem] p-6 transition-all active:scale-95 ${activeTab === 'attendance' ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/20' : 'bg-white/70 border border-white text-zinc-900 shadow-xl shadow-slate-200/50'}`}
+					class={`flex flex-col items-center justify-center gap-2 rounded-4xl p-6 transition-all active:scale-95 ${activeTab === 'attendance' ? 'bg-zinc-900 text-white shadow-xl shadow-zinc-900/20' : 'bg-white/70 border border-white text-zinc-900 shadow-xl shadow-slate-200/50'}`}
 				>
 					<div class={`rounded-full p-3 ${activeTab === 'attendance' ? 'bg-white/10' : 'bg-zinc-900/5'}`}>
 						<Users size={24} />
@@ -181,16 +182,22 @@
 				</button>
 			</div>
 
-			<div class="flex items-center gap-2 mt-4">
+			<div class="flex flex-wrap items-center gap-2 mt-4">
 				<button 
 					onclick={() => isAddStudentOpen = true}
-					class="flex-1 h-14 rounded-2xl bg-white/60 border border-white shadow-sm flex items-center justify-center gap-2 text-zinc-900 font-bold transition-all hover:bg-zinc-900 hover:text-white"
+					class="flex-1 h-14 rounded-4xl bg-white/60 border border-white shadow-sm flex items-center justify-center gap-2 text-zinc-900 font-bold transition-all hover:bg-zinc-900 hover:text-white"
 				>
 					<UserPlus size={18} /> Enroll Student
 				</button>
 				<button 
+					onclick={() => goto('/ece/dash')}
+					class="h-14 px-6 rounded-4xl bg-emerald-50 border border-emerald-100 shadow-sm flex items-center justify-center gap-2 text-emerald-600 font-bold transition-all hover:bg-emerald-600 hover:text-white"
+				>
+					<FileSpreadsheet size={18} /> Dashboard
+				</button>
+				<button 
 					onclick={() => navigateToEvent('all')}
-					class="h-14 px-6 rounded-2xl bg-white/60 border border-white shadow-sm flex items-center justify-center gap-2 text-zinc-900 font-bold transition-all hover:bg-zinc-900 hover:text-white"
+					class="h-14 px-6 rounded-4xl bg-white/60 border border-white shadow-sm flex items-center justify-center gap-2 text-zinc-900 font-bold transition-all hover:bg-zinc-900 hover:text-white"
 				>
 					<Search size={18} /> View All
 				</button>
@@ -220,7 +227,7 @@
 					{#each filteredEvents as event (event.id)}
 						<button 
 							onclick={() => navigateToEvent(event.id)}
-							class="group relative flex items-center gap-4 overflow-hidden rounded-[2rem] border border-white/60 bg-white/40 p-5 shadow-sm backdrop-blur-md transition-all hover:scale-[1.01] hover:bg-white/70 hover:shadow-lg active:scale-95"
+							class="group relative flex items-center gap-4 overflow-hidden rounded-4xl border border-white/60 bg-white/40 p-5 shadow-sm backdrop-blur-md transition-all hover:scale-[1.01] hover:bg-white/70 hover:shadow-lg active:scale-95"
 						>
 							<div class={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl shadow-inner
 								${event.type === 'technical' ? 'bg-blue-100 text-blue-600' : 'bg-pink-100 text-[#ee2b8c]'}`}>
@@ -271,28 +278,28 @@
 			<!-- Part 1: Basic Info -->
 			<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Full Name</label>
-					<input type="text" bind:value={newStudent.name} placeholder="e.g. Alice Smith"
+					<label for="student-name" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Full Name</label>
+					<input id="student-name" type="text" bind:value={newStudent.name} placeholder="e.g. Alice Smith"
 						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
 				</div>
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Registration No</label>
-					<input type="text" bind:value={newStudent.roll_no} placeholder="e.g. 20ECE005"
+					<label for="student-roll" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Registration No</label>
+					<input id="student-roll" type="text" bind:value={newStudent.roll_no} placeholder="e.g. 20ECE005"
 						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
 				</div>
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Email Address</label>
-					<input type="email" bind:value={newStudent.email} placeholder="alice@gmail.com"
+					<label for="student-email" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Email Address</label>
+					<input id="student-email" type="email" bind:value={newStudent.email} placeholder="alice@gmail.com"
 						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
 				</div>
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Phone Number</label>
-					<input type="tel" bind:value={newStudent.phone} placeholder="9998887776"
+					<label for="student-phone" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Phone Number</label>
+					<input id="student-phone" type="tel" bind:value={newStudent.phone} placeholder="9998887776"
 						class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white" />
 				</div>
 				<div class="flex flex-col gap-1.5">
-					<label class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Year of Study</label>
-					<select bind:value={newStudent.year} class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white">
+					<label for="student-year" class="text-[10px] font-black tracking-widest text-gray-400 uppercase ml-1">Year of Study</label>
+					<select id="student-year" bind:value={newStudent.year} class="h-12 rounded-xl border border-gray-100 bg-gray-50/50 px-4 text-sm font-bold text-zinc-900 outline-none focus:border-blue-500 focus:bg-white">
 						<option value="I">I Year</option>
 						<option value="II">II Year</option>
 						<option value="III">III Year</option>
